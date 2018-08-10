@@ -9,16 +9,17 @@ namespace mahjong
 {
 	void Hand::sort()
 	{
-		std::sort(m_inHandTiles.begin(), m_inHandTiles.end(), [](const Tile& lTile, const Tile& rTile) { return lTile.getData() > rTile.getData(); });
+		std::sort(m_inHandTiles.begin(), m_inHandTiles.end());
 	}
 
-	void Hand::putTileInHand(const Tile& newTile) 
+	void Hand::putTile(const Tile newTile)
 	{
 		m_inHandTiles.push_back(newTile);
 	}
 
 	Tile Hand::getTile(int index)
 	{
+		assert(0 <= index && index < m_inHandTiles.size());
 		return m_inHandTiles[index];
 	}
 }

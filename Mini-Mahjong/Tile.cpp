@@ -24,4 +24,35 @@ namespace mahjong
 	{
 		return m_isDora;
 	}
+
+	// Operator overloading
+	bool Tile::operator==(const Tile& t) const
+	{
+		return m_data == t.getData();
+	}
+
+	bool Tile::operator!=(const Tile& t) const
+	{
+		return m_data != t.getData();
+	}
+
+	bool Tile::operator<(const Tile& t) const
+	{
+		return m_data < t.getData();
+	}
+
+	bool Tile::operator<=(const Tile& t) const
+	{
+		return m_data <= t.getData();
+	}
+
+	bool Tile::operator>(const Tile& t) const
+	{
+		return m_data > t.getData();
+	}
+
+	bool Tile::operator>=(const Tile& t) const
+	{
+		return m_data >= t.getData();
+	}
 }

@@ -13,7 +13,7 @@ namespace mahjong
 	{
 	public:
 		void sort();
-		void putTileInHand(const Tile& newTile);
+		void putTile(const Tile newTile);
 		Tile getTile(int index);
 		
 

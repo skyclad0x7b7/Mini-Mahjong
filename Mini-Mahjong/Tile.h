@@ -18,6 +18,13 @@ namespace mahjong
 		uint8_t getData() const;
 
 		bool isDora() const;
+
+		bool operator==(const Tile& t) const;
+		bool operator!=(const Tile& t) const;
+		bool operator<(const Tile& t) const;
+		bool operator<=(const Tile& t) const;
+		bool operator>(const Tile& t) const;
+		bool operator>=(const Tile& t) const;
 	private:
 		uint8_t m_data;
 		bool m_isDora;

@@ -9,8 +9,8 @@ namespace mahjong
 {
 	/*
 	* TileData : 0b0000XXXX
-	*    - Suzi : (0~9)
-	*    - Special : {East, South, West, North, Hyaku, Patsu, Chun}
+	*    - Suzi : (1~9) 1-base
+	*    - Special : {East, South, West, North, Hyaku, Patsu, Chun} 1-base
 	*/
 
 	/*

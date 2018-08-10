@@ -5,14 +5,22 @@ namespace mahjong
 {
 	Tile::Tile(const TileType tileType, const int data , const bool isDora)
 	{
-		assert(1 <= data && data <= 9);
+		assert( 
+			( (tileType == TileType::Manzu || tileType == TileType::Ponzu || tileType == TileType::Souzu) && 1 <= data && data <= 9) ||
+			( tileType == TileType::Special && 1 <= data && data <= 7 )
+		);
 		m_data = tileType | data;
 		m_isDora = isDora;
 	}
 
 	TileType Tile::getTileType() const
 	{
-		return static_cast<TileType>(m_data & 0xFF000000);
+		return static_cast<TileType>(m_data & 0b11000000);
+	}
+
+	int Tile::getTileNumber() const
+	{
+		return m_data & 0b00001111;
 	}
 
 	uint8_t Tile::getData() const

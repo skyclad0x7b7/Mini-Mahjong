@@ -114,6 +114,7 @@
     <ClInclude Include="Constant.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="TileMountain.h" />
     <ClInclude Include="Hand.h" />
     <ClInclude Include="Mentsu.h" />
     <ClInclude Include="Player.h">
@@ -124,6 +125,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="TileMountain.cpp" />
     <ClCompile Include="Hand.cpp" />
     <ClCompile Include="Mentsu.cpp" />
     <ClCompile Include="Player.cpp" />

@@ -15,6 +15,7 @@ namespace mahjong
 		Tile(const TileType tileType, const int data, const bool isDora);
 		
 		TileType getTileType() const;
+		int getTileNumber() const;
 		uint8_t getData() const;
 
 		bool isDora() const;

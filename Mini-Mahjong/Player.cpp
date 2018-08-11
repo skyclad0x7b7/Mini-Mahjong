@@ -28,7 +28,16 @@ namespace mahjong
 
 	bool Player::canClaim(const Tile& newTile, const Wind& wind) const
 	{
-		// Chi Check
-		// TODO : Wind Check & Operator Overloading or find better way
+		bool canChi  = false;
+		bool canPong = false;
+		bool canKang = false;
+
+		if ((m_wind - 1) == wind)
+			canChi = m_hand.canChi(newTile);
+
+		if((canKang = m_hand.canKang(newTile)) == false)
+			canPong = m_hand.canPong(newTile);
+
+		return canChi || canPong || canKang;
 	}
 }

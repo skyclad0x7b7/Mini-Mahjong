@@ -125,6 +125,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Constant.cpp" />
     <ClCompile Include="TileMountain.cpp" />
     <ClCompile Include="Hand.cpp" />
     <ClCompile Include="Mentsu.cpp" />

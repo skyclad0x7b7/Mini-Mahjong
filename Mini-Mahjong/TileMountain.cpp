@@ -20,8 +20,6 @@ namespace mahjong
 		return &ins;
 	}
 
-	
-
 	void TileMountain::reset()
 	{
 		m_entireTile.clear();

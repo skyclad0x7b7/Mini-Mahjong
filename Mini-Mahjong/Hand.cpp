@@ -8,6 +8,13 @@
 
 namespace mahjong
 {
+	void Hand::initialize()
+	{
+		m_inHandTiles.clear();
+		m_openedMentsu.clear();
+		m_discardedTiles.clear();
+		m_isClaimed = false;
+	}
 
 	void Hand::sort()
 	{
@@ -30,19 +37,19 @@ namespace mahjong
 		return m_inHandTiles.size();
 	}
 
-	Tile Hand::pickTile(TileMountain* pTileMountain)
+	// Should check with Player::canClaim() after this function
+	const Tile Hand::discardTileBefore(const size_t index)
 	{
-		Tile ret = pTileMountain->pickTile();
-		putTile(ret);
+		assert(0 <= index && index < m_inHandTiles.size());
+		const Tile ret = m_inHandTiles[index];
+		m_inHandTiles.erase(std::begin(m_inHandTiles) + index);
 		return ret;
 	}
 
-	Tile Hand::discardTile(const size_t index)
+	// Should check with Player::canClaim() before this function
+	void Hand::discardTileAfter(const Tile newTile)
 	{
-		assert(0 <= index && index < m_inHandTiles.size());
-		Tile ret = m_inHandTiles[index];
-		m_inHandTiles.erase(std::begin(m_inHandTiles) + index);
-		return ret;
+		m_discardedTiles.push_back(newTile);
 	}
 
 	bool Hand::canChi(const Tile & newTile) const

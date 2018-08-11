@@ -18,6 +18,11 @@ namespace mahjong
 		void putTile(const Tile newTile);
 		Tile getTile(size_t index) const;
 		Tile pickTile(TileMountain* pTileMountain);
+		Tile discardTile(const size_t index);
+
+		bool canChi(const Tile& newTile) const;
+		bool canPong(const Tile& newTile) const;
+		bool canKang(const Tile& newTile) const;
 
 		size_t getNumOfTiles() const;
 	private:

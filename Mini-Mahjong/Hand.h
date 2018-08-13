@@ -14,10 +14,18 @@ namespace mahjong
 	class Hand
 	{
 	public:
+		void initialize();
+
 		void sort();
 		void putTile(const Tile newTile);
 		Tile getTile(size_t index) const;
-		Tile pickTile(TileMountain* pTileMountain);
+
+		const Tile discardTileBefore(const size_t index);
+		void discardTileAfter(const Tile newTile);
+
+		bool canChi(const Tile& newTile) const;
+		bool canPong(const Tile& newTile) const;
+		bool canKang(const Tile& newTile) const;
 
 		size_t getNumOfTiles() const;
 	private:

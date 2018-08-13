@@ -37,37 +37,37 @@ void testPrint(const mahjong::Hand& h)
 		switch (h.getTile(i).getTileType())
 		{
 		case mahjong::TileType::Manzu:
-			out = std::to_string(h.getTile(i).getTileNumber()) + "¸¸";
+			out = std::to_string(h.getTile(i).getTileNumber()) + "Ø¿";
 			break;
 		case mahjong::TileType::Ponzu:
-			out = std::to_string(h.getTile(i).getTileNumber()) + "Åë";
+			out = std::to_string(h.getTile(i).getTileNumber()) + "÷Õ";
 			break;
 		case mahjong::TileType::Souzu:
-			out = std::to_string(h.getTile(i).getTileNumber()) + "»è";
+			out = std::to_string(h.getTile(i).getTileNumber()) + "ßã";
 			break;
 		case mahjong::TileType::Special:
 			switch (h.getTile(i).getTileNumber())
 			{
 			case 0b00000001:
-				out = "µ¿";
+				out = "ÔÔ";
 				break;
 			case 0b00000010:
-				out = "³²";
+				out = "Ñõ";
 				break;
 			case 0b00000011:
-				out = "¼­";
+				out = "à¤";
 				break;
 			case 0b00000100:
-				out = "ºÏ";
+				out = "ÝÁ";
 				break;
 			case 0b00000101:
-				out = "¹é";
+				out = "ÛÜ";
 				break;
 			case 0b00000110:
-				out = "¹ß";
+				out = "Û¡";
 				break;
 			case 0b00000111:
-				out = "Áß";
+				out = "ñé";
 				break;
 			default:
 				std::cerr << "Unknown Special Character : " << std::bitset<8>(h.getTile(i).getData()) << std::endl;

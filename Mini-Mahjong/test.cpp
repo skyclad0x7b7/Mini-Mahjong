@@ -3,16 +3,14 @@
 #include <bitset>
 #include <iomanip>
 
+#include "Player.h"
 #include "TileMountain.h"
 #include "Tile.h"
 #include "Hand.h"
 
 
-void testPrint(const mahjong::Hand& h);
-void testCanChi();
-void testCanPong();
-void testCanKang();
-
+void testPrint(const mahjong::Player& p);
+void testCanClaim();
 
 int main()
 {
@@ -30,33 +28,30 @@ int main()
 		testPrint(hand[i]);
 	}
 	*/
-
-	testCanChi();
-	testCanPong();
-	testCanKang();
+	testCanClaim();
 	system("pause");
 	return 0;
 }
 
-void testPrint(const mahjong::Hand& h)
+void testPrint(const mahjong::Player& p)
 {
-	size_t len = h.getNumOfTiles();
+	size_t len = p.getInHandTiles().size();
 	for (unsigned int i = 0; i < len; i++)
 	{
 		std::string out = "";
-		switch (h.getTile(i).getTileType())
+		switch (p.getTile(i).getTileType())
 		{
 		case mahjong::TileType::Manzu:
-			out = std::to_string(h.getTile(i).getTileNumber()) + "Ø¿";
+			out = std::to_string(p.getTile(i).getTileNumber()) + "Ø¿";
 			break;
 		case mahjong::TileType::Ponzu:
-			out = std::to_string(h.getTile(i).getTileNumber()) + "÷Õ";
+			out = std::to_string(p.getTile(i).getTileNumber()) + "÷Õ";
 			break;
 		case mahjong::TileType::Souzu:
-			out = std::to_string(h.getTile(i).getTileNumber()) + "ßã";
+			out = std::to_string(p.getTile(i).getTileNumber()) + "ßã";
 			break;
 		case mahjong::TileType::Special:
-			switch (h.getTile(i).getTileNumber())
+			switch (p.getTile(i).getTileNumber())
 			{
 			case 0b00000001:
 				out = "ÔÔ";
@@ -80,12 +75,12 @@ void testPrint(const mahjong::Hand& h)
 				out = "ñé";
 				break;
 			default:
-				std::cerr << "Unknown Special Character : " << std::bitset<8>(h.getTile(i).getData()) << std::endl;
+				std::cerr << "Unknown Special Character : " << std::bitset<8>(p.getTile(i).getData()) << std::endl;
 				system("pause");
 			}
 			break;
 		default:
-			std::cerr << "Unknown Type : " << std::bitset<8>(h.getTile(i).getData()) << std::endl;
+			std::cerr << "Unknown Type : " << std::bitset<8>(p.getTile(i).getData()) << std::endl;
 			system("pause");
 		}
 		std::cout << std::setw(4) << out;
@@ -93,158 +88,35 @@ void testPrint(const mahjong::Hand& h)
 	std::cout << std::endl;
 }
 
-void testCanChi()
+void testCanClaim()
 {
-	std::cout << " ====== << CanChi >> ====== " << std::endl;
-	mahjong::Hand h;
-	h.putTile(mahjong::Tile(mahjong::TileType::Manzu, 2, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Manzu, 3, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 3, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 5, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Souzu, 5, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Souzu, 6, false));
-
-	// Left Test
-	if (h.canChi(mahjong::Tile(mahjong::TileType::Manzu, 1, false)))
-	{
-		std::cout << "[*] Left Test Passed" << std::endl;
-	}
-	else
-	{
-		std::cout << "[*] Left Test Not Passed" << std::endl;
-	}
-
-	// Center Test
-	if (h.canChi(mahjong::Tile(mahjong::TileType::Ponzu, 4, false)))
-	{
-		std::cout << "[*] Center Test Passed" << std::endl;
-	}
-	else
-	{
-		std::cout << "[*] Center Test Not Passed" << std::endl;
-	}
-
-	// Right Test
-	if (h.canChi(mahjong::Tile(mahjong::TileType::Souzu, 7, false)))
-	{
-		std::cout << "[*] Right Test Passed" << std::endl;
-	}
-	else
-	{
-		std::cout << "[*] Right Test Not Passed" << std::endl;
-	}
-
-	// Special Test
-	if (h.canChi(mahjong::Tile(mahjong::TileType::Special, 1, false)) == false)
-	{
-		std::cout << "[*] Special Test Passed" << std::endl;
-	}
-	else
-	{
-		std::cout << "[*] Special Test Not Passed" << std::endl;
-	}
-}
-
-void testCanPong()
-{
-	std::cout << " ====== << CanPong >> ====== " << std::endl;
-
-	mahjong::Hand h;
-	h.putTile(mahjong::Tile(mahjong::TileType::Manzu, 2, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Manzu, 2, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 3, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 3, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Souzu, 5, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Souzu, 6, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	mahjong::Player player1("P1");
 	
+	player1.initialize(25000, mahjong::Wind::East);
 
-	// Left Test
-	if (h.canPong(mahjong::Tile(mahjong::TileType::Manzu, 2, false)))
-	{
-		std::cout << "[*] Test1 Passed" << std::endl;
-	}
-	else
-	{
-		std::cout << "[*] Test1 Not Passed" << std::endl;
-	}
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Souzu, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Souzu, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Souzu, 2, false));
+	
+	player1.sort();
 
-	// Center Test
-	if (h.canPong(mahjong::Tile(mahjong::TileType::Ponzu, 3, false)))
-	{
-		std::cout << "[*] Test2 Passed" << std::endl;
-	}
-	else
-	{
-		std::cout << "[*] Test2 Not Passed" << std::endl;
-	}
+	if (player1.canClaim(mahjong::Tile(mahjong::TileType::Manzu, 1, false), mahjong::Wind::North) & mahjong::ClaimType::Chi)
+		std::cout << "[*] Test 1 Passed" << std::endl;
 
-	// Right Test
-	if (h.canPong(mahjong::Tile(mahjong::TileType::Souzu, 5, false)) == false)
-	{
-		std::cout << "[*] Test3 Passed" << std::endl;
-	}
-	else
-	{
-		std::cout << "[*] Test3 Not Passed" << std::endl;
-	}
+	if (player1.canClaim(mahjong::Tile(mahjong::TileType::Manzu, 4, false), mahjong::Wind::North) & mahjong::ClaimType::Chi)
+		std::cout << "[*] Test 2 Passed" << std::endl;
 
-	// Special Test
-	if (h.canPong(mahjong::Tile(mahjong::TileType::Special, 5, false)) == false)
-	{
-		std::cout << "[*] Special Test Passed" << std::endl;
-	}
-	else
-	{
-		std::cout << "[*] Special Test Not Passed" << std::endl;
-	}
-}
+	if (player1.canClaim(mahjong::Tile(mahjong::TileType::Manzu, 1, false), mahjong::Wind::West) == mahjong::ClaimType::None)
+		std::cout << "[*] Test 3 Passed" << std::endl;
 
-void testCanKang()
-{
-	std::cout << " ====== << CanKang >> ====== " << std::endl;
+	if (player1.canClaim(mahjong::Tile(mahjong::TileType::Ponzu, 3, false), mahjong::Wind::West) & mahjong::ClaimType::Pong)
+		std::cout << "[*] Test 4 Passed" << std::endl;
 
-	mahjong::Hand h;
-	h.putTile(mahjong::Tile(mahjong::TileType::Manzu, 2, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Manzu, 2, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Manzu, 2, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 3, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 3, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Souzu, 6, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
-	h.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
-
-
-	// Left Test
-	if (h.canKang(mahjong::Tile(mahjong::TileType::Manzu, 2, false)))
-	{
-		std::cout << "[*] Test1 Passed" << std::endl;
-	}
-	else
-	{
-		std::cout << "[*] Test1 Not Passed" << std::endl;
-	}
-
-	// Right Test
-	if (h.canKang(mahjong::Tile(mahjong::TileType::Ponzu, 3, false)) == false)
-	{
-		std::cout << "[*] Test2 Passed" << std::endl;
-	}
-	else
-	{
-		std::cout << "[*] Test2 Not Passed" << std::endl;
-	}
-
-	// Special Test
-	if (h.canKang(mahjong::Tile(mahjong::TileType::Special, 5, false)))
-	{
-		std::cout << "[*] Special Test Passed" << std::endl;
-	}
-	else
-	{
-		std::cout << "[*] Special Test Not Passed" << std::endl;
-	}
+	if (player1.canClaim(mahjong::Tile(mahjong::TileType::Souzu, 2, false), mahjong::Wind::West) & mahjong::ClaimType::Kang)
+		std::cout << "[*] Test 5 Passed" << std::endl;
+	
 }

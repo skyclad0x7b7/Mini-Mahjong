@@ -7,6 +7,17 @@
 
 namespace mahjong
 {
+	enum ClaimType
+	{
+		None = 0x00000000,
+		Chi  = 0x00000001,
+		Pong = 0x00000010,
+		Kang = 0x00000100
+	};
+	ClaimType operator&(const ClaimType& type1, const ClaimType& type2);
+	ClaimType operator|(const ClaimType& type1, const ClaimType& type2);
+	ClaimType& operator|=(ClaimType& type1, const ClaimType& other);
+
 	/*
 	* TileData : 0b0000XXXX
 	*    - Suzi : (1~9) 1-base
@@ -23,6 +34,7 @@ namespace mahjong
 		Ponzu   = 0b10000000,
 		Special = 0b11000000
 	};
+
 	
 	enum class MentsuType
 	{
@@ -38,24 +50,9 @@ namespace mahjong
 		West,
 		North
 	};
-
-	Wind operator++(Wind& wind)
-	{
-		wind = static_cast<Wind>((static_cast<int>(wind) + 1) % 4);
-		return wind;
-	}
-
-	Wind operator+(const Wind& wind, const int i)
-	{
-		Wind ret = static_cast<Wind>((static_cast<int>(wind) + i) % 4);
-		return ret;
-	}
-
-	Wind operator-(const Wind& wind, const int i)
-	{
-		Wind ret = static_cast<Wind>((static_cast<int>(wind) - (i % 4) + 4) % 4);
-		return ret;
-	}
+	Wind operator++(Wind& wind);
+	Wind operator+(const Wind& wind, const int i);
+	Wind operator-(const Wind& wind, const int i);
 }
 
 #endif

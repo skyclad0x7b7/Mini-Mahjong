@@ -8,7 +8,7 @@
 
 namespace mahjong
 {
-	void Hand::initialize()
+	void Hand::reset()
 	{
 		m_inHandTiles.clear();
 		m_openedMentsu.clear();
@@ -30,11 +30,6 @@ namespace mahjong
 	{
 		assert(0 <= index && index < m_inHandTiles.size());
 		return m_inHandTiles[index];
-	}
-
-	size_t Hand::getNumOfTiles() const
-	{
-		return m_inHandTiles.size();
 	}
 
 	// Should check with Player::canClaim() after this function
@@ -62,7 +57,7 @@ namespace mahjong
 
 		// Get tile in hand if tiletype's same
 		std::vector<Tile> tileList;
-		for (int i = 0; i < m_inHandTiles.size(); i++)
+		for (size_t i = 0; i < m_inHandTiles.size(); i++)
 		{
 			if (m_inHandTiles[i].getTileType() == newTileType)
 				tileList.push_back(m_inHandTiles[i]);
@@ -95,7 +90,7 @@ namespace mahjong
 
 		// Get count of same tiles in hand 
 		int count = 0;
-		for (int i = 0; i < m_inHandTiles.size(); i++)
+		for (size_t i = 0; i < m_inHandTiles.size(); i++)
 		{
 			if (m_inHandTiles[i].getData() == newTile.getData())
 				count++;
@@ -113,7 +108,7 @@ namespace mahjong
 
 		// Get count of same tiles in hand 
 		int count = 0;
-		for (int i = 0; i < m_inHandTiles.size(); i++)
+		for (size_t i = 0; i < m_inHandTiles.size(); i++)
 		{
 			if (m_inHandTiles[i].getData() == newTile.getData())
 				count++;
@@ -123,5 +118,20 @@ namespace mahjong
 			result = true;
 
 		return result;
+	}
+
+	const std::vector<Tile>& Hand::getInHandTiles() const
+	{
+		return m_inHandTiles;
+	}
+
+	const std::vector<Mentsu>& Hand::getOpendMentsu() const
+	{
+		return m_openedMentsu;
+	}
+
+	const std::vector<Tile>& Hand::getDiscardedTiles() const
+	{
+		return m_discardedTiles;
 	}
 }

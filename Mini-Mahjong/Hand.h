@@ -14,20 +14,23 @@ namespace mahjong
 	class Hand
 	{
 	public:
-		void initialize();
+		virtual void reset();
 
 		void sort();
+		
 		void putTile(const Tile newTile);
 		Tile getTile(size_t index) const;
+		const std::vector<Tile>& getInHandTiles() const;
+		const std::vector<Mentsu>& getOpendMentsu() const;
+		const std::vector<Tile>& getDiscardedTiles() const;
 
 		const Tile discardTileBefore(const size_t index);
 		void discardTileAfter(const Tile newTile);
 
-		bool canChi(const Tile& newTile) const;
-		bool canPong(const Tile& newTile) const;
-		bool canKang(const Tile& newTile) const;
+		virtual bool canChi(const Tile& newTile) const;
+		virtual bool canPong(const Tile& newTile) const;
+		virtual bool canKang(const Tile& newTile) const;
 
-		size_t getNumOfTiles() const;
 	private:
 		std::vector<Tile> m_inHandTiles;
 		std::vector<Mentsu> m_openedMentsu;

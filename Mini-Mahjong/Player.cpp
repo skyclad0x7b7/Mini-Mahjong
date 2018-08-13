@@ -1,43 +1,40 @@
 #include "Player.h"
 
+#include <iostream>
+
 namespace mahjong
 {
 	void Player::initialize(const int score, const Wind& wind)
 	{
 		m_score = score;
 		m_wind = wind;
-		m_hand.initialize();
 	}
 
 	Tile Player::pickTile(TileMountain* pTileMountain)
 	{
 		Tile ret = pTileMountain->pickTile();
-		m_hand.putTile(ret);
+		putTile(ret);
 		return ret;
 	}
 
-	const Tile Player::discardTileBefore(const size_t index)
+	const mahjong::ClaimType Player::canClaim(const Tile& newTile, const Wind& wind) const
 	{
-		return m_hand.discardTileBefore(index);
-	}
-
-	void Player::discardTileAfter(const Tile newTile)
-	{
-		m_hand.discardTileAfter(newTile);
-	}
-
-	bool Player::canClaim(const Tile& newTile, const Wind& wind) const
-	{
+		ClaimType ret = ClaimType::None;
+		
 		bool canChi  = false;
-		bool canPong = false;
 		bool canKang = false;
+		bool canPong = false;
 
 		if ((m_wind - 1) == wind)
-			canChi = m_hand.canChi(newTile);
+			canChi = this->canChi(newTile);
 
-		if((canKang = m_hand.canKang(newTile)) == false)
-			canPong = m_hand.canPong(newTile);
+		if((canKang = this->canKang(newTile)) == false)
+			canPong = this->canPong(newTile);
 
-		return canChi || canPong || canKang;
+		ret |= canChi ? ClaimType::Chi : ClaimType::None;
+		ret |= canKang ? ClaimType::Kang : ClaimType::None;
+		ret |= canPong ? ClaimType::Pong : ClaimType::None;
+		
+		return ret;
 	}
 }

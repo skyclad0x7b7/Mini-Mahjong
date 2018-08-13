@@ -11,7 +11,7 @@
 
 namespace mahjong
 {
-	class Player
+	class Player : public Hand
 	{
 	public:
 		Player(const std::string playerName) : m_playerName(playerName) {}
@@ -21,17 +21,12 @@ namespace mahjong
 
 		Tile pickTile(TileMountain* pTileMountain);
 
-		const Tile discardTileBefore(const size_t index);
-		void discardTileAfter(const Tile newTile);
-
-		bool canClaim(const Tile& newTile, const Wind& wind) const;
-
+		const mahjong::ClaimType canClaim(const Tile& newTile, const Wind& wind) const;
 	private:
 		std::string m_playerName;
 		Wind m_wind;
 
 		int m_score;
-		Hand m_hand;
 	};
 
 }

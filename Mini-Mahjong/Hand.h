@@ -30,7 +30,7 @@ namespace mahjong
 		virtual bool canChi(const Tile& newTile) const;
 		virtual bool canPong(const Tile& newTile) const;
 		virtual bool canKang(const Tile& newTile) const;
-
+		virtual bool isTenpai() const;
 	private:
 		std::vector<Tile> m_inHandTiles;
 		std::vector<Mentsu> m_openedMentsu;

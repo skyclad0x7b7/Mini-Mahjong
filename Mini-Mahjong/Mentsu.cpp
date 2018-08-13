@@ -2,13 +2,19 @@
 
 namespace mahjong
 {
-	Mentsu::Mentsu(const Tile& tile1, const Tile& tile2, const Tile& tile3)
+	Mentsu::Mentsu(const std::vector<Tile>& newTiles, mahjong::MentsuType newMentsuType)
 	{
-		// Koutsu
-		if ((tile1.getData() == tile2.getData()) && (tile2.getData() == tile3.getData()))
-			m_memtsuType = mahjong::MentsuType::Koutsu;
-		// Shuntsu
+		m_tiles      = newTiles;
+		m_mentsuType = newMentsuType;
+	}
 
-		// Kangtsu
+	mahjong::MentsuType Mentsu::getMentsuType() const
+	{
+		return m_mentsuType;
+	}
+
+	std::vector<Tile> Mentsu::getTilesList() const
+	{
+		return m_tiles;
 	}
 }

@@ -120,6 +120,19 @@ namespace mahjong
 		return result;
 	}
 
+	bool Hand::isTenpai() const
+	{
+		// Normal Tenpai Check
+
+
+		// 7 Head Check
+
+
+		// Kokushi musou
+
+
+	}
+
 	const std::vector<Tile>& Hand::getInHandTiles() const
 	{
 		return m_inHandTiles;

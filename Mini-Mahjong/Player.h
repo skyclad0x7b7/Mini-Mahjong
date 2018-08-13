@@ -17,6 +17,9 @@ namespace mahjong
 		Player(const std::string playerName) : m_playerName(playerName) {}
 		virtual ~Player() {}
 
+		void changeWind();
+		void changeWind(const Wind& newWind);
+
 		void initialize(const int score, const Wind& wind);
 
 		Tile pickTile(TileMountain* pTileMountain);
@@ -25,7 +28,6 @@ namespace mahjong
 	private:
 		std::string m_playerName;
 		Wind m_wind;
-
 		int m_score;
 	};
 

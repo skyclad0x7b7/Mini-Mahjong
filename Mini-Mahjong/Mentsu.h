@@ -13,14 +13,14 @@ namespace mahjong
 	class Mentsu
 	{
 	public:
-		Mentsu(const Tile&, const Tile&, const Tile&); // Chi, Pong
-		Mentsu(const Tile&, const Tile&, const Tile&, const Tile&); // Kang
+		Mentsu(const std::vector<Tile>& newTiles, mahjong::MentsuType newMentsuType);
+
+		mahjong::MentsuType getMentsuType() const;
+		std::vector<Tile> getTilesList() const;
 	private:
-		mahjong::MentsuType m_memtsuType;
+		mahjong::MentsuType m_mentsuType;
 		std::vector<Tile> m_tiles;
 	};
-
-
 }
 
 #endif

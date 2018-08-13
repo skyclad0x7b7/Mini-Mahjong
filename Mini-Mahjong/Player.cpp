@@ -17,7 +17,17 @@ namespace mahjong
 		return ret;
 	}
 
-	const mahjong::ClaimType Player::canClaim(const Tile& newTile, const Wind& wind) const
+	void Player::changeWind()
+	{
+		m_wind++;
+	}
+
+	void Player::changeWind(const Wind& wind)
+	{
+		m_wind = wind;
+	}
+
+	const ClaimType Player::canClaim(const Tile& newTile, const Wind& wind) const
 	{
 		ClaimType ret = ClaimType::None;
 		

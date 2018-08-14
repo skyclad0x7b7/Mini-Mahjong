@@ -8,6 +8,7 @@ namespace mahjong
 	{
 		m_score = score;
 		m_wind = wind;
+		
 	}
 
 	Tile Player::pickTile(TileMountain* pTileMountain)

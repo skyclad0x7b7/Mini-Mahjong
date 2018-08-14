@@ -3,6 +3,11 @@
 
 namespace mahjong
 {
+	Tile::Tile() : m_data(0), m_isDora(false)
+	{
+
+	}
+
 	Tile::Tile(const TileType tileType, const int data , const bool isDora)
 	{
 		assert( 
@@ -31,6 +36,13 @@ namespace mahjong
 	bool Tile::isDora() const
 	{
 		return m_isDora;
+	}
+
+	bool Tile::isYaochuTile() const
+	{
+		if (getTileType() == TileType::Special || ((getTileNumber() == 1 || getTileNumber() == 9)))
+			return true;
+		return false;
 	}
 
 	// Operator overloading

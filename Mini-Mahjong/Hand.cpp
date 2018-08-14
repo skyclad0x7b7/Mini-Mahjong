@@ -1,6 +1,7 @@
 
 #include <algorithm>
 #include <assert.h>
+#include <set>
 
 #include "Hand.h"
 #include "Tile.h"
@@ -13,6 +14,7 @@ namespace mahjong
 		m_inHandTiles.clear();
 		m_openedMentsu.clear();
 		m_discardedTiles.clear();
+		m_agariTiles.clear();
 		m_isClaimed = false;
 	}
 
@@ -120,17 +122,56 @@ namespace mahjong
 		return result;
 	}
 
-	bool Hand::isTenpai() const
+	bool Hand::isTenpai()
 	{
+		m_agariTiles.clear();
+
 		// Normal Tenpai Check
 
+		if (!m_isClaimed)
+		{
+			Tile tempTile;
+			std::vector<Tile> uniqueTiles = m_inHandTiles;
+			std::set<Tile> s(uniqueTiles.begin(), uniqueTiles.end());
+			uniqueTiles.assign(s.begin(), s.end());
 
-		// 7 Head Check
+			// Chitoitsu
+			int headCount = 0;
+			for (auto it : uniqueTiles)
+			{
+				int tileCount = std::count(std::begin(m_inHandTiles), std::end(m_inHandTiles), it);
+				if (tileCount == 2)
+					headCount++;
+				else if (tileCount == 1)
+					tempTile = it;
+				else // count over 2, can't be Chitoitsu
+					break;
+			}
+			if (headCount == 6)
+			{
+				m_agariTiles.push_back(tempTile);
+				return true;
+			}
 
+			// Kokushi musou
+			int yaochuCount = std::count_if(std::begin(uniqueTiles), std::end(uniqueTiles), [](const Tile& tile) { return tile.isYaochuTile(); });
+			if (yaochuCount == 13) // Kokushi musou 13-way wait
+			{
+				m_agariTiles = uniqueTiles;
+				return true;
+			}
+			else if(yaochuCount == 12)
+			{
+				// Kokushi musou 1-way wait
+				for (auto it : Tiles::yaochuTiles)
+					if (std::find(std::begin(uniqueTiles), std::end(uniqueTiles), it) == std::end(uniqueTiles))
+						m_agariTiles.push_back(it);
+				assert(m_agariTiles.size() != 0);
+				return true;
+			}
+		}
 
-		// Kokushi musou
-
-
+		return false;
 	}
 
 	const std::vector<Tile>& Hand::getInHandTiles() const
@@ -146,5 +187,10 @@ namespace mahjong
 	const std::vector<Tile>& Hand::getDiscardedTiles() const
 	{
 		return m_discardedTiles;
+	}
+
+	const std::vector<Tile>& Hand::getAgariTiles() const
+	{
+		return m_agariTiles;
 	}
 }

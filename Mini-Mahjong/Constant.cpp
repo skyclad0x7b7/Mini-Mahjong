@@ -2,21 +2,28 @@
 
 namespace mahjong
 {
-	Wind operator++(Wind& wind)
+	Wind& operator++(Wind& orgWind)
 	{
-		wind = static_cast<Wind>((static_cast<int>(wind) + 1) % 4);
+		orgWind = static_cast<Wind>((static_cast<int>(orgWind) + 1) % 4);
+		return orgWind;
+	}
+
+	Wind operator++(Wind& orgWind, int i)
+	{
+		Wind wind = orgWind;
+		++orgWind;
 		return wind;
 	}
 
-	Wind operator+(const Wind& wind, const int i)
+	Wind operator+(const Wind& orgWind, const int i)
 	{
-		Wind ret = static_cast<Wind>((static_cast<int>(wind) + i) % 4);
+		Wind ret = static_cast<Wind>((static_cast<int>(orgWind) + i) % 4);
 		return ret;
 	}
 
-	Wind operator-(const Wind& wind, const int i)
+	Wind operator-(const Wind& orgWind, const int i)
 	{
-		Wind ret = static_cast<Wind>((static_cast<int>(wind) - (i % 4) + 4) % 4);
+		Wind ret = static_cast<Wind>((static_cast<int>(orgWind) - (i % 4) + 4) % 4);
 		return ret;
 	}
 

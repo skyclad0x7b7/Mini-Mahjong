@@ -6,7 +6,7 @@
 #include <type_traits>
 
 namespace mahjong
-{
+{	
 	enum ClaimType
 	{
 		None = 0x00000000,
@@ -50,9 +50,10 @@ namespace mahjong
 		West,
 		North
 	};
-	Wind operator++(Wind& wind);
-	Wind operator+(const Wind& wind, const int i);
-	Wind operator-(const Wind& wind, const int i);
+	Wind& operator++(Wind& orgWind);
+	Wind operator++(Wind& orgWind, int);
+	Wind operator+(const Wind& orgWind, const int i);
+	Wind operator-(const Wind& orgWind, const int i);
 }
 
 #endif

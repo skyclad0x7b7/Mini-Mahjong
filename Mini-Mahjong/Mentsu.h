@@ -13,8 +13,11 @@ namespace mahjong
 	class Mentsu
 	{
 	public:
+		Mentsu();
 		Mentsu(const std::vector<Tile>& newTiles, mahjong::MentsuType newMentsuType);
 
+		void putTile(const Tile& newTile);
+		void setMentsuType(const mahjong::MentsuType& newMentsuType);
 		mahjong::MentsuType getMentsuType() const;
 		std::vector<Tile> getTilesList() const;
 	private:

@@ -127,6 +127,11 @@ namespace mahjong
 		m_agariTiles.clear();
 
 		// Normal Tenpai Check
+		// 1. Check 3-body 1-head
+
+
+		// 2. Check 4-body no-head
+
 
 		if (!m_isClaimed)
 		{

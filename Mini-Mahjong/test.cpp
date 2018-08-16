@@ -2,6 +2,7 @@
 #include <vector>
 #include <bitset>
 #include <iomanip>
+#include <assert.h>
 
 #include "Player.h"
 #include "TileMountain.h"
@@ -12,6 +13,7 @@ std::string tileToString(const mahjong::Tile& t);
 void testPrint(const mahjong::Player& p);
 void testCanClaim();
 void testIsTenpai();
+void checkTenpai(const mahjong::Player& p);
 
 int main()
 {
@@ -29,7 +31,29 @@ int main()
 		testPrint(hand[i]);
 	}
 	*/
+
+	mahjong::Player player1("P1");
+
+	player1.initialize(25000, mahjong::Wind::East);
+	player1.reset();
+	// Kokushi musou 13-way wait
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 6, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 7, false));
+	player1.sort();
 	testIsTenpai();
+
+	checkTenpai(player1);
 	system("pause");
 	return 0;
 }
@@ -212,4 +236,9 @@ void testIsTenpai()
 			std::cout << std::setw(4) << tileToString(it);
 		std::cout << std::endl << std::endl;
 	}
+}
+
+void checkTenpai(const mahjong::Player& p)
+{
+	
 }

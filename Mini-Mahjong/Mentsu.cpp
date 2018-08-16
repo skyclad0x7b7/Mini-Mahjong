@@ -2,13 +2,28 @@
 
 namespace mahjong
 {
-	Mentsu::Mentsu(const std::vector<Tile>& newTiles, mahjong::MentsuType newMentsuType)
+	Mentsu::Mentsu()
+	{
+
+	}
+
+	Mentsu::Mentsu(const std::vector<Tile>& newTiles, MentsuType newMentsuType)
 	{
 		m_tiles      = newTiles;
 		m_mentsuType = newMentsuType;
 	}
 
-	mahjong::MentsuType Mentsu::getMentsuType() const
+	void Mentsu::putTile(const Tile& newTile)
+	{
+		m_tiles.push_back(newTile);
+	}
+
+	void Mentsu::setMentsuType(const MentsuType& newMentsuType)
+	{
+		m_mentsuType = newMentsuType;
+	}
+
+	MentsuType Mentsu::getMentsuType() const
 	{
 		return m_mentsuType;
 	}

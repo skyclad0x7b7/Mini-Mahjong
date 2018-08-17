@@ -17,6 +17,7 @@ namespace mahjong
 		m_discardedTiles.clear();
 		m_agariTiles.clear();
 		m_isClaimed = false;
+		m_shanten = 0;
 	}
 
 	void Hand::sort()
@@ -126,16 +127,22 @@ namespace mahjong
 	bool Hand::isTenpai()
 	{
 		m_agariTiles.clear();
+		m_shanten = 0;
 
-		int shanten = Shanten::GetInstance()->calcShanten(m_inHandTiles, m_isClaimed, m_openedMentsu.size());
+		m_shanten = Shanten::GetInstance()->calcShanten(m_inHandTiles, m_isClaimed, m_openedMentsu.size());
 
-		if (shanten == 0)
+		if (m_shanten == 0)
 		{
 			m_agariTiles = Shanten::GetInstance()->getAgariTiles();
 			return true;
 		}
 
 		return false;
+	}
+
+	const int Hand::getShanten() const
+	{
+		return m_shanten;
 	}
 
 	const std::vector<Tile>& Hand::getInHandTiles() const

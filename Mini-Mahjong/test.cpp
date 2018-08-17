@@ -215,4 +215,29 @@ void testIsTenpai()
 			std::cout << std::setw(4) << tileToString(it);
 		std::cout << std::endl << std::endl;
 	}
+
+	player1.initialize(25000, mahjong::Wind::East);
+	player1.reset();
+	// Chitoitsu
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 1, false));
+	player1.sort();
+	std::cout << " < Tiles >" << std::endl;
+	testPrint(player1);
+	if (player1.isTenpai() == false)
+	{
+		std::cout << "[*] No-Tenpai, Shanten : " << player1.getShanten();
+		std::cout << std::endl << std::endl;
+	}
 }

@@ -42,7 +42,7 @@ namespace mahjong
 
 	int Shanten::getChitoitsuShanten(const std::vector<Tile>& tiles)
 	{
-		int retShanten = -1;
+		int retShanten = 0;
 		Tile tempTile;
 
 		std::vector<Tile> uniqueTiles = tiles;
@@ -58,22 +58,22 @@ namespace mahjong
 			if (tileCount == 2)
 				headCount++;
 			else if (tileCount == 1)
+			{
+				retShanten += 1;
 				tempTile = it;
+			}
 			else // count over 2, can't be Chitoitsu
-				break;
+				retShanten += tileCount - 2;
 		}
+
 		if (headCount == 6)
 		{
 			// Chitoitsu Tenpai
 			m_agariTiles.push_back(tempTile);
 			retShanten = 0;
 		}
-		else
-		{
-			retShanten = 6 - headCount;
-		}
 
-		return retShanten;
+		return retShanten / 2;
 	}
 
 	int Shanten::getKokushiMusouShanten(const std::vector<Tile>& tiles)

@@ -24,6 +24,7 @@ namespace mahjong
 		const std::vector<Mentsu>& getOpendMentsu() const;
 		const std::vector<Tile>& getDiscardedTiles() const;
 		const std::vector<Tile>& getAgariTiles() const;
+		const int getShanten() const;
 
 		const Tile discardTileBefore(const size_t index);
 		void discardTileAfter(const Tile newTile);
@@ -38,6 +39,8 @@ namespace mahjong
 		std::vector<Tile> m_discardedTiles;
 		std::vector<Tile> m_agariTiles;
 		bool m_isClaimed;
+
+		int m_shanten;
 	};
 }
 

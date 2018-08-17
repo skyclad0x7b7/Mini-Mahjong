@@ -17,13 +17,7 @@ namespace mahjong
 	ClaimType operator&(const ClaimType& type1, const ClaimType& type2);
 	ClaimType operator|(const ClaimType& type1, const ClaimType& type2);
 	ClaimType& operator|=(ClaimType& type1, const ClaimType& other);
-
-	/*
-	* TileData : 0b0000XXXX
-	*    - Suzi : (1~9) 1-base
-	*    - Special : {East, South, West, North, Hyaku, Patsu, Chun} 1-base
-	*/
-
+	
 	/*
 	* TileType : 0bXX000000
 	*/
@@ -34,6 +28,11 @@ namespace mahjong
 		Ponzu   = 0b10000000,
 		Special = 0b11000000
 	};
+	/*
+	* TileData : 0b0000XXXX
+	*    - Suzi : (1~9) 1-base
+	*    - Special : {East, South, West, North, Hyaku, Patsu, Chun} 1-base
+	*/
 
 	
 	enum class MentsuType

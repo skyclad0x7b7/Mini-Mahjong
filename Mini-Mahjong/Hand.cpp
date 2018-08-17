@@ -1,4 +1,3 @@
-
 #include <algorithm>
 #include <assert.h>
 #include <set>
@@ -58,31 +57,22 @@ namespace mahjong
 		if (newTileType == TileType::Special)
 			return false;
 
-
-		// Get tile in hand if tiletype's same
-		std::vector<Tile> tileList;
-		for (size_t i = 0; i < m_inHandTiles.size(); i++)
-		{
-			if (m_inHandTiles[i].getTileType() == newTileType)
-				tileList.push_back(m_inHandTiles[i]);
-		}
-
 		// 1. Left
 		if (newTile.getTileNumber() <= 7 &&
-			std::find_if(std::begin(tileList), std::end(tileList), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() + 1); }) != std::end(tileList) &&
-			std::find_if(std::begin(tileList), std::end(tileList), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() + 2); }) != std::end(tileList))
+			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() + 1); }) != std::end(m_inHandTiles) &&
+			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() + 2); }) != std::end(m_inHandTiles))
 			result = true;
 
 		// 2. Center
 		if (2 <= newTile.getTileNumber() && newTile.getTileNumber() <= 8 &&
-			std::find_if(std::begin(tileList), std::end(tileList), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() - 1); }) != std::end(tileList) &&
-			std::find_if(std::begin(tileList), std::end(tileList), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() + 1); }) != std::end(tileList))
+			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() - 1); }) != std::end(m_inHandTiles) &&
+			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() + 1); }) != std::end(m_inHandTiles))
 			result = true;
 
 		// 3. Right
 		if (3 <= newTile.getTileNumber() &&
-			std::find_if(std::begin(tileList), std::end(tileList), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() - 1); }) != std::end(tileList) &&
-			std::find_if(std::begin(tileList), std::end(tileList), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() - 2); }) != std::end(tileList))
+			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() - 1); }) != std::end(m_inHandTiles) &&
+			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() - 2); }) != std::end(m_inHandTiles))
 			result = true;
 
 		return result;
@@ -93,12 +83,7 @@ namespace mahjong
 		bool result = false;
 
 		// Get count of same tiles in hand 
-		int count = 0;
-		for (size_t i = 0; i < m_inHandTiles.size(); i++)
-		{
-			if (m_inHandTiles[i].getData() == newTile.getData())
-				count++;
-		}
+		int count = std::count(std::begin(m_inHandTiles), std::end(m_inHandTiles), newTile.getData());
 
 		if (count == 2) // if count == 3, it can Kang instead of Pong
 			result = true;
@@ -111,14 +96,9 @@ namespace mahjong
 		bool result = false;
 
 		// Get count of same tiles in hand 
-		int count = 0;
-		for (size_t i = 0; i < m_inHandTiles.size(); i++)
-		{
-			if (m_inHandTiles[i].getData() == newTile.getData())
-				count++;
-		}
+		int count = std::count(std::begin(m_inHandTiles), std::end(m_inHandTiles), newTile.getData());
 
-		if (count == 3) // if count == 3, it can Kang instead of Pong
+		if (count == 4)
 			result = true;
 
 		return result;

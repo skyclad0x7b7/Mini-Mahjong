@@ -9,7 +9,7 @@
 
 namespace mahjong
 {
-	/* [Singlton Class] Use Shanten::GetInstance() */
+	/* [Singleton Class] Use Shanten::GetInstance() */
 	class Shanten
 	{
 	public:

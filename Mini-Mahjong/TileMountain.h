@@ -9,7 +9,7 @@
 
 namespace mahjong
 {
-	/* [Singlton Class] Use TileMountain::GetInstance() */
+	/* [Singleton Class] Use TileMountain::GetInstance() */
 	class TileMountain
 	{
 	public:

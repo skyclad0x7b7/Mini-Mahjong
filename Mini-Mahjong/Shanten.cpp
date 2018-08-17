@@ -207,12 +207,14 @@ namespace mahjong
 				Tile curTile = curTiles[index];
 				// Check Shuntsu - one tile right
 				if (curTile.getTileType() != TileType::Special &&
-					curTile.getTileNumber() <= 7 &&
+					curTile.getTileNumber() <= 8 &&
 					std::find_if(std::begin(curTiles), std::end(curTiles), [&](const Tile& t) { return t.getTileType() == curTile.getTileType() && t.getTileNumber() == (curTile.getTileNumber() + 1); }) != std::end(curTiles)
 				)
 				{
 					if(curTile.getTileNumber() == 1)
 						tmpTiles.push_back(Tile(curTile.getTileType(), curTile.getTileNumber() + 2, false));
+					else if (curTile.getTileNumber() == 8)
+						tmpTiles.push_back(Tile(curTile.getTileType(), curTile.getTileNumber() - 1, false));
 					else
 					{
 						tmpTiles.push_back(Tile(curTile.getTileType(), curTile.getTileNumber() + 2, false));

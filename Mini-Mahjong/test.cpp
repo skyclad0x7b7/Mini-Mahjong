@@ -13,7 +13,6 @@ std::string tileToString(const mahjong::Tile& t);
 void testPrint(const mahjong::Player& p);
 void testCanClaim();
 void testIsTenpai();
-void checkTenpai(const mahjong::Player& p);
 
 int main()
 {
@@ -134,10 +133,11 @@ void testCanClaim()
 void testIsTenpai()
 {
 	mahjong::Player player1("P1");
-
 	player1.initialize(25000, mahjong::Wind::East);
-	player1.reset();
+
+	
 	// Kokushi musou 13-way wait
+	player1.reset();
 	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 1, false));
 	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 9, false));
 	player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 1, false));
@@ -161,10 +161,13 @@ void testIsTenpai()
 			std::cout << std::setw(4) << tileToString(it);
 		std::cout << std::endl << std::endl;
 	}
+	else
+	{
+		std::clog << "[*] Shanten : " << player1.getShanten() << std::endl << std::endl;
+	}
 
-	player1.initialize(25000, mahjong::Wind::East);
-	player1.reset();
 	// Kokushi musou 1-way wait
+	player1.reset();
 	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 1, false));
 	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 9, false));
 	player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 1, false));
@@ -188,10 +191,13 @@ void testIsTenpai()
 			std::cout << std::setw(4) << tileToString(it);
 		std::cout << std::endl << std::endl;
 	}
+	else
+	{
+		std::clog << "[*] Shanten : " << player1.getShanten() << std::endl << std::endl;
+	}
 
-	player1.initialize(25000, mahjong::Wind::East);
+	// Chitoitsu - Tenpai
 	player1.reset();
-	// Chitoitsu
 	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
 	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
 	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
@@ -215,10 +221,13 @@ void testIsTenpai()
 			std::cout << std::setw(4) << tileToString(it);
 		std::cout << std::endl << std::endl;
 	}
+	else
+	{
+		std::clog << "[*] Shanten : " << player1.getShanten() << std::endl << std::endl;
+	}
 
-	player1.initialize(25000, mahjong::Wind::East);
+	// Chitoitsu - No Tenpai
 	player1.reset();
-	// Chitoitsu
 	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
 	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
 	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
@@ -235,9 +244,225 @@ void testIsTenpai()
 	player1.sort();
 	std::cout << " < Tiles >" << std::endl;
 	testPrint(player1);
-	if (player1.isTenpai() == false)
+	if (player1.isTenpai())
 	{
-		std::cout << "[*] No-Tenpai, Shanten : " << player1.getShanten();
+		std::cout << "[*] Tenpai, Agari Tile : ";
+		for (auto it : player1.getAgariTiles())
+			std::cout << std::setw(4) << tileToString(it);
 		std::cout << std::endl << std::endl;
+	}
+	else
+	{
+		std::clog << "[*] Shanten : " << player1.getShanten() << std::endl << std::endl;
+	}
+
+	// Tenpai (Head)
+	player1.reset();
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 1, false));
+	player1.sort();
+	std::cout << " < Tiles >" << std::endl;
+	testPrint(player1);
+	if (player1.isTenpai())
+	{
+		std::cout << "[*] Tenpai, Agari Tile : ";
+		for (auto it : player1.getAgariTiles())
+			std::cout << std::setw(4) << tileToString(it);
+		std::cout << std::endl << std::endl;
+	}
+	else
+	{
+		std::clog << "[*] Shanten : " << player1.getShanten() << std::endl << std::endl;
+	}
+
+	// Tenpai (Body - Koutsu)
+	player1.reset();
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 1, false));
+	player1.sort();
+	std::cout << " < Tiles >" << std::endl;
+	testPrint(player1);
+	if (player1.isTenpai())
+	{
+		std::cout << "[*] Tenpai, Agari Tile : ";
+		for (auto it : player1.getAgariTiles())
+			std::cout << std::setw(4) << tileToString(it);
+		std::cout << std::endl << std::endl;
+	}
+	else
+	{
+		std::clog << "[*] Shanten : " << player1.getShanten() << std::endl << std::endl;
+	}
+
+	// Tenpai (Body - Shuntsu - Right)
+	player1.reset();
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 1, false));
+	player1.sort();
+	std::cout << " < Tiles >" << std::endl;
+	testPrint(player1);
+	if (player1.isTenpai())
+	{
+		std::cout << "[*] Tenpai, Agari Tile : ";
+		for (auto it : player1.getAgariTiles())
+			std::cout << std::setw(4) << tileToString(it);
+		std::cout << std::endl << std::endl;
+	}
+	else
+	{
+		std::clog << "[*] Shanten : " << player1.getShanten() << std::endl << std::endl;
+	}
+	
+	// Tenpai (Body - Shuntsu - Left)
+	player1.reset();
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 8, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 9, false));
+	player1.sort();
+	std::cout << " < Tiles >" << std::endl;
+	testPrint(player1);
+	if (player1.isTenpai())
+	{
+		std::cout << "[*] Tenpai, Agari Tile : ";
+		for (auto it : player1.getAgariTiles())
+			std::cout << std::setw(4) << tileToString(it);
+		std::cout << std::endl << std::endl;
+	}
+	else
+	{
+		std::clog << "[*] Shanten : " << player1.getShanten() << std::endl << std::endl;
+	}
+
+	// Tenpai (Body - Shuntsu - Middle)
+	player1.reset();
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 7, false));
+	player1.sort();
+	std::cout << " < Tiles >" << std::endl;
+	testPrint(player1);
+	if (player1.isTenpai())
+	{
+		std::cout << "[*] Tenpai, Agari Tile : ";
+		for (auto it : player1.getAgariTiles())
+			std::cout << std::setw(4) << tileToString(it);
+		std::cout << std::endl << std::endl;
+	}
+	else
+	{
+		std::clog << "[*] Shanten : " << player1.getShanten() << std::endl << std::endl;
+	}
+
+	// No Tenpai
+	player1.reset();
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Souzu, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Souzu, 6, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Souzu, 7, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false)); 
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	player1.sort();
+	std::cout << " < Tiles >" << std::endl;
+	testPrint(player1);
+	if (player1.isTenpai())
+	{
+		std::cout << "[*] Tenpai, Agari Tile : ";
+		for (auto it : player1.getAgariTiles())
+			std::cout << std::setw(4) << tileToString(it);
+		std::cout << std::endl << std::endl;
+	}
+	else
+	{
+		std::clog << "[*] Shanten : " << player1.getShanten() << std::endl << std::endl;
+	}
+
+	// No Tenpai
+	player1.reset();
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 8, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Souzu, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Souzu, 6, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Souzu, 7, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	player1.sort();
+	std::cout << " < Tiles >" << std::endl;
+	testPrint(player1);
+	if (player1.isTenpai())
+	{
+		std::cout << "[*] Tenpai, Agari Tile : ";
+		for (auto it : player1.getAgariTiles())
+			std::cout << std::setw(4) << tileToString(it);
+		std::cout << std::endl << std::endl;
+	}
+	else
+	{
+		std::clog << "[*] Shanten : " << player1.getShanten() << std::endl << std::endl;
 	}
 }

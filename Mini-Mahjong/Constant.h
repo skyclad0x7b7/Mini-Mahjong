@@ -35,8 +35,9 @@ namespace mahjong
 	*/
 
 	
-	enum class MentsuType
+	enum class TileGroupType
 	{
+		Toitsu,
 		Shuntsu,
 		Koutsu,
 		Kangtsu

@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "Tile.h"
-#include "Mentsu.h"
+#include "TileGroup.h"
 #include "TileMountain.h"
 
 namespace mahjong
@@ -21,7 +21,7 @@ namespace mahjong
 		void putTile(const Tile newTile);
 		Tile getTile(size_t index) const;
 		const std::vector<Tile>& getInHandTiles() const;
-		const std::vector<Mentsu>& getOpendMentsu() const;
+		const std::vector<TileGroup>& getOpendMentsu() const;
 		const std::vector<Tile>& getDiscardedTiles() const;
 		const std::vector<Tile>& getAgariTiles() const;
 		const int getShanten() const;
@@ -39,7 +39,7 @@ namespace mahjong
 		virtual bool isTenpai();
 	private:
 		std::vector<Tile> m_inHandTiles;
-		std::vector<Mentsu> m_openedMentsu;
+		std::vector<TileGroup> m_openedMentsu;
 		std::vector<Tile> m_discardedTiles;
 		std::vector<Tile> m_agariTiles;
 		bool m_isClaimed;

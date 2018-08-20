@@ -4,7 +4,7 @@
 
 #include "Hand.h"
 #include "Tile.h"
-#include "Mentsu.h"
+#include "TileGroup.h"
 #include "Shanten.h"
 
 namespace mahjong
@@ -60,20 +60,20 @@ namespace mahjong
 
 		// 1. Left
 		if (newTile.getTileNumber() <= 7 &&
-			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() + 1); }) != std::end(m_inHandTiles) &&
-			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() + 2); }) != std::end(m_inHandTiles))
+			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileType() == newTile.getTileType() && tile.getTileNumber() == (newTile.getTileNumber() + 1); }) != std::end(m_inHandTiles) &&
+			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileType() == newTile.getTileType() && tile.getTileNumber() == (newTile.getTileNumber() + 2); }) != std::end(m_inHandTiles))
 			result = true;
 
 		// 2. Center
 		if (2 <= newTile.getTileNumber() && newTile.getTileNumber() <= 8 &&
-			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() - 1); }) != std::end(m_inHandTiles) &&
-			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() + 1); }) != std::end(m_inHandTiles))
+			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileType() == newTile.getTileType() && tile.getTileNumber() == (newTile.getTileNumber() - 1); }) != std::end(m_inHandTiles) &&
+			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileType() == newTile.getTileType() && tile.getTileNumber() == (newTile.getTileNumber() + 1); }) != std::end(m_inHandTiles))
 			result = true;
 
 		// 3. Right
 		if (3 <= newTile.getTileNumber() &&
-			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() - 1); }) != std::end(m_inHandTiles) &&
-			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileNumber() == (newTile.getTileNumber() - 2); }) != std::end(m_inHandTiles))
+			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileType() == newTile.getTileType() && tile.getTileNumber() == (newTile.getTileNumber() - 1); }) != std::end(m_inHandTiles) &&
+			std::find_if(std::begin(m_inHandTiles), std::end(m_inHandTiles), [&](const Tile& tile) { return tile.getTileType() == newTile.getTileType() && tile.getTileNumber() == (newTile.getTileNumber() - 2); }) != std::end(m_inHandTiles))
 			result = true;
 
 		return result;
@@ -131,7 +131,7 @@ namespace mahjong
 		return m_inHandTiles;
 	}
 
-	const std::vector<Mentsu>& Hand::getOpendMentsu() const
+	const std::vector<TileGroup>& Hand::getOpendMentsu() const
 	{
 		return m_openedMentsu;
 	}

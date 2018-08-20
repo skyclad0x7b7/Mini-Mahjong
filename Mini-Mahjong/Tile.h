@@ -52,6 +52,11 @@ namespace mahjong
 			Tile(TileType::Souzu, 9, false),
 		};
 	}
+
+	typedef struct
+	{
+		
+	} CompletedTiles;
 }
 
 #endif

@@ -4,13 +4,18 @@ namespace mahjong
 {
 	TileGroup::TileGroup()
 	{
-
+		m_tiles.clear();
 	}
 
 	TileGroup::TileGroup(const std::vector<Tile>& newTiles, TileGroupType newTileGroupType)
 	{
 		m_tiles      = newTiles;
 		m_tileGroupType = newTileGroupType;
+	}
+
+	void TileGroup::reset()
+	{
+		m_tiles.clear();
 	}
 
 	void TileGroup::putTile(const Tile& newTile)

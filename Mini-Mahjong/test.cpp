@@ -8,11 +8,13 @@
 #include "TileMountain.h"
 #include "Tile.h"
 #include "Hand.h"
+#include "Yaku.h"
 
 std::string tileToString(const mahjong::Tile& t);
 void testPrint(const mahjong::Player& p);
 void testCanClaim();
 void testIsTenpai();
+void testYaku();
 
 int main()
 {
@@ -30,7 +32,7 @@ int main()
 		testPrint(hand[i]);
 	}
 	*/
-	testIsTenpai();
+	testYaku();
 
 	system("pause");
 	return 0;
@@ -464,5 +466,47 @@ void testIsTenpai()
 	else
 	{
 		std::clog << "[*] Shanten : " << player1.getShanten() << std::endl << std::endl;
+	}
+}
+
+void testYaku()
+{
+	mahjong::Player player1("P1");
+	player1.initialize(25000, mahjong::Wind::East);
+
+	// Tenpai (Head)
+	player1.reset();
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 4, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 5, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 1, false));
+	player1.sort();
+	std::cout << " < Tiles >" << std::endl;
+	testPrint(player1);
+	std::vector<mahjong::CompletedTiles> ret = mahjong::Yaku::GetInstance()->testGetYaku(player1.getInHandTiles(), player1.getOpendMentsu(), mahjong::Tile(mahjong::TileType::Special, 5, false), player1.isClaimed(), true);
+	if (ret.size() > 0)
+	{
+		std::cout << "[*] Tsumo Success";
+		for (auto it : ret) {
+			std::cout << "    [*] Head : " << std::setw(4) << tileToString(it.head.getTilesList()[0]) << " " <<  std::setw(4) << tileToString(it.head.getTilesList()[1]) << std::endl;
+			std::cout << "    [*] Body : ";
+			for(auto bIt : it.body)
+				for(auto tId : bIt.getTilesList())
+					std::cout << std::setw(4) << tileToString(tId) << std::endl;
+			std::cout << std::endl << std::endl;
+		}
+	}
+	else
+	{
+		std::clog << "[*] Tsumo Failed" << std::endl;
 	}
 }

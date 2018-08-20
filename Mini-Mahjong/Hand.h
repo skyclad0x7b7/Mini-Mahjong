@@ -25,6 +25,7 @@ namespace mahjong
 		const std::vector<Tile>& getDiscardedTiles() const;
 		const std::vector<Tile>& getAgariTiles() const;
 		const int getShanten() const;
+		const bool isClaimed() const;
 
 		const Tile discardTileBefore(const size_t index);
 		void discardTileAfter(const Tile newTile);

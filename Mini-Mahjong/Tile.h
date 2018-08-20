@@ -3,10 +3,11 @@
 
 #pragma once
 
+#include "TileGroup.h"
+#include "Constant.h"
+
 #include <stdint.h>
 #include <vector>
-
-#include "Constant.h"
 
 namespace mahjong
 {
@@ -53,9 +54,10 @@ namespace mahjong
 		};
 	}
 
-	typedef struct
+	typedef struct _CompletedTiles
 	{
-		
+		TileGroup head;
+		std::vector<TileGroup> body;
 	} CompletedTiles;
 }
 

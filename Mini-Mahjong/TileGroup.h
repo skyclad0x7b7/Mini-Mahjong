@@ -1,5 +1,5 @@
-#ifndef Mini_Mahjong_TileGroupType_H__
-#define Mini_Mahjong_TileGroupType_H__
+#ifndef Mini_Mahjong_TileGroup_H__
+#define Mini_Mahjong_TileGroup_H__
 
 #pragma once
 
@@ -14,14 +14,16 @@ namespace mahjong
 	{
 	public:
 		TileGroup();
-		TileGroup(const std::vector<Tile>& newTiles, mahjong::TileGroupType newTileGroupType);
+		TileGroup(const std::vector<Tile>& newTiles, TileGroupType newTileGroupType);
+
+		void reset();
 
 		void putTile(const Tile& newTile);
-		void setTileGroupType(const mahjong::TileGroupType& newTileGroupType);
-		mahjong::TileGroupType getTileGroupType() const;
+		void setTileGroupType(const TileGroupType& newTileGroupType);
+		TileGroupType getTileGroupType() const;
 		std::vector<Tile> getTilesList() const;
 	private:
-		mahjong::TileGroupType m_tileGroupType;
+		TileGroupType m_tileGroupType;
 		std::vector<Tile> m_tiles;
 	};
 }

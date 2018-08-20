@@ -39,8 +39,11 @@ namespace mahjong
 	{
 		Toitsu,
 		Shuntsu,
-		Koutsu,
-		Kangtsu
+		Ankou,
+		Minkou,
+		Ankang,
+		Daiminkang,
+		Shominkang,
 	};
 
 	enum class Wind 

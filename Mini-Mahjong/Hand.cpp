@@ -121,6 +121,11 @@ namespace mahjong
 		return false;
 	}
 
+	const bool Hand::isClaimed() const
+	{
+		return m_isClaimed;
+	}
+
 	const int Hand::getShanten() const
 	{
 		return m_shanten;

@@ -52,6 +52,7 @@ namespace mahjong
 
 	bool Hand::canChi(const Tile & newTile) const
 	{
+		// ** Need Tile Type Check **
 		bool result = false;
 		TileType newTileType = newTile.getTileType();
 		if (newTileType == TileType::Special)
@@ -83,7 +84,7 @@ namespace mahjong
 		bool result = false;
 
 		// Get count of same tiles in hand 
-		int count = std::count(std::begin(m_inHandTiles), std::end(m_inHandTiles), newTile.getData());
+		int count = std::count(std::begin(m_inHandTiles), std::end(m_inHandTiles), newTile);
 
 		if (count == 2) // if count == 3, it can Kang instead of Pong
 			result = true;
@@ -96,7 +97,7 @@ namespace mahjong
 		bool result = false;
 
 		// Get count of same tiles in hand 
-		int count = std::count(std::begin(m_inHandTiles), std::end(m_inHandTiles), newTile.getData());
+		int count = std::count(std::begin(m_inHandTiles), std::end(m_inHandTiles), newTile);
 
 		if (count == 4)
 			result = true;

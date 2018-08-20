@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{05E1B08D-BA74-4736-A416-398DB40862E3}</ProjectGuid>
     <RootNamespace>MiniMahjong</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -114,6 +114,7 @@
     <ClInclude Include="Constant.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Shanten.h" />
     <ClInclude Include="TileMountain.h" />
     <ClInclude Include="Hand.h" />
@@ -124,9 +125,11 @@
     <ClInclude Include="Tile.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="Yaku.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Constant.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Shanten.cpp" />
     <ClCompile Include="TileMountain.cpp" />
     <ClCompile Include="Hand.cpp" />
@@ -134,6 +137,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="Yaku.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

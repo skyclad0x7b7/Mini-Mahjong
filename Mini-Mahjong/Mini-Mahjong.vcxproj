@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{05E1B08D-BA74-4736-A416-398DB40862E3}</ProjectGuid>
+    <ProjectGuid>{65403DA1-D6C2-44A0-945F-A0DA8543217B}</ProjectGuid>
     <RootNamespace>MiniMahjong</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -36,13 +36,13 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -111,33 +111,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Constant.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Shanten.h" />
-    <ClInclude Include="TileMountain.h" />
-    <ClInclude Include="Hand.h" />
-    <ClInclude Include="TileGroup.h" />
-    <ClInclude Include="Player.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Tile.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Yaku.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Constant.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Shanten.cpp" />
-    <ClCompile Include="TileMountain.cpp" />
     <ClCompile Include="Hand.cpp" />
-    <ClCompile Include="TileGroup.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Shanten.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="TileGroup.cpp" />
+    <ClCompile Include="TileMountain.cpp" />
     <ClCompile Include="Yaku.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Constant.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Hand.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Shanten.h" />
+    <ClInclude Include="Tile.h" />
+    <ClInclude Include="TileGroup.h" />
+    <ClInclude Include="TileMountain.h" />
+    <ClInclude Include="Yaku.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

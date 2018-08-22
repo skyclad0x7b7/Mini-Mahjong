@@ -4,6 +4,7 @@
 #pragma once
 
 #include "TileMountain.h"
+#include "TileGroup.h"
 #include "Tile.h"
 
 #include <vector>

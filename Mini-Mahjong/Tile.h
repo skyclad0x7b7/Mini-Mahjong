@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "TileGroup.h"
 #include "Constant.h"
 
 #include <stdint.h>
@@ -53,12 +52,6 @@ namespace mahjong
 			Tile(TileType::Souzu, 9, false),
 		};
 	}
-
-	typedef struct _CompletedTiles
-	{
-		TileGroup head;
-		std::vector<TileGroup> body;
-	} CompletedTiles;
 }
 
 #endif

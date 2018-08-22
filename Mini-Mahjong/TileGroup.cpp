@@ -37,4 +37,16 @@ namespace mahjong
 	{
 		return m_tiles;
 	}
+
+	bool TileGroup::operator==(const TileGroup& other) const
+	{
+		if (m_tileGroupType != other.getTileGroupType() || m_tiles.size() != other.getTilesList().size())
+			return false;
+		
+		for (size_t i = 0; i < m_tiles.size(); i++)
+			if (m_tiles[i] != other.getTilesList()[i])
+				return false;
+
+		return true;
+	}
 }

@@ -22,10 +22,18 @@ namespace mahjong
 		void setTileGroupType(const TileGroupType& newTileGroupType);
 		TileGroupType getTileGroupType() const;
 		std::vector<Tile> getTilesList() const;
+
+		bool operator==(const TileGroup&) const;
 	private:
 		TileGroupType m_tileGroupType;
 		std::vector<Tile> m_tiles;
 	};
+
+	typedef struct
+	{
+		TileGroup head;
+		std::vector<TileGroup> body;
+	} CompletedTiles;
 }
 
 #endif

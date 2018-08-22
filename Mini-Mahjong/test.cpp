@@ -501,7 +501,43 @@ void testYaku()
 			std::cout << "    [*] Body : ";
 			for(auto bIt : it.body)
 				for(auto tId : bIt.getTilesList())
-					std::cout << std::setw(4) << tileToString(tId) << std::endl;
+					std::cout << std::setw(4) << tileToString(tId);
+			std::cout << std::endl << std::endl;
+		}
+	}
+	else
+	{
+		std::clog << "[*] Tsumo Failed" << std::endl;
+	}
+
+	// Tenpai (Body)
+	player1.reset();
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Special, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 1, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 3, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 2, false));
+	player1.putTile(mahjong::Tile(mahjong::TileType::Manzu, 1, false));
+	player1.sort();
+	std::cout << " < Tiles >" << std::endl;
+	testPrint(player1);
+	ret = mahjong::Yaku::GetInstance()->testGetYaku(player1.getInHandTiles(), player1.getOpendMentsu(), mahjong::Tile(mahjong::TileType::Special, 2, false), player1.isClaimed(), true);
+	if (ret.size() > 0)
+	{
+		std::cout << "[*] Tsumo Success";
+		for (auto it : ret) {
+			std::cout << "    [*] Head : " << std::setw(4) << tileToString(it.head.getTilesList()[0]) << " " << std::setw(4) << tileToString(it.head.getTilesList()[1]) << std::endl;
+			std::cout << "    [*] Body : ";
+			for (auto bIt : it.body)
+				for (auto tId : bIt.getTilesList())
+					std::cout << std::setw(4) << tileToString(tId);
 			std::cout << std::endl << std::endl;
 		}
 	}

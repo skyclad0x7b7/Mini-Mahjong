@@ -43,7 +43,6 @@ namespace mahjong
 		unsigned int index = 0;
 
 		std::vector<Tile> tmpTiles;
-		std::vector<TileGroup> tmpOpendedMentsu;
 		while (index < curTiles.size())
 		{
 			if (index > 0 && curTiles[index] == curTiles[index - 1])

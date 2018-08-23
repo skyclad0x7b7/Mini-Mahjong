@@ -27,6 +27,13 @@ namespace mahjong
 		reset();
 		m_completedTiles.body = openedMentsu;
 		std::vector<CompletedTiles> ret = getAllCompletedTiles(curTiles, agariTile, isTsumo);
+		
+		// sort bodies
+		for (int i = 0; i < ret.size(); i++)
+			std::sort(std::begin(ret[i].body), std::end(ret[i].body));
+
+		// @TODO : Remove Duplicate CompletedTiles
+
 		return ret;
 	}
 

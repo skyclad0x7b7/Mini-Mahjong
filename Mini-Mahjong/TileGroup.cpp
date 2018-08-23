@@ -9,7 +9,7 @@ namespace mahjong
 
 	TileGroup::TileGroup(const std::vector<Tile>& newTiles, TileGroupType newTileGroupType)
 	{
-		m_tiles      = newTiles;
+		m_tiles = newTiles;
 		m_tileGroupType = newTileGroupType;
 	}
 
@@ -42,11 +42,41 @@ namespace mahjong
 	{
 		if (m_tileGroupType != other.getTileGroupType() || m_tiles.size() != other.getTilesList().size())
 			return false;
-		
+
 		for (size_t i = 0; i < m_tiles.size(); i++)
 			if (m_tiles[i] != other.getTilesList()[i])
 				return false;
 
 		return true;
+	}
+
+	bool TileGroup::operator!=(const TileGroup& other) const
+	{
+		if (*this == other)
+			return false;
+		else
+			return true;
+	}
+
+	bool TileGroup::operator>(const TileGroup& other) const
+	{
+		if (m_tileGroupType == TileGroupType::Toitsu && other.getTileGroupType() != TileGroupType::Toitsu)
+			return true;
+		else if (m_tileGroupType != TileGroupType::Toitsu && other.getTileGroupType() == TileGroupType::Toitsu)
+			return false;
+		if (m_tiles[0] > other.getTilesList()[0])
+			return true;
+	}
+
+	bool operator==(const CompletedTiles& t1, const CompletedTiles& t2)
+	{
+		if (t1.head == t2.head)
+		{
+			for (int i = 0; i < t1.body.size(); i++)
+				if (t1.body[i] != t2.body[i])
+					return false;
+			return true;
+		}
+		return false;
 	}
 }

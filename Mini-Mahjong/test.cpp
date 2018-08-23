@@ -535,9 +535,12 @@ void testYaku()
 		for (auto it : ret) {
 			std::cout << "    [*] Head : " << std::setw(4) << tileToString(it.head.getTilesList()[0]) << " " << std::setw(4) << tileToString(it.head.getTilesList()[1]) << std::endl;
 			std::cout << "    [*] Body : ";
-			for (auto bIt : it.body)
+			for (auto bIt : it.body) {
+				std::cout << " | ";
 				for (auto tId : bIt.getTilesList())
 					std::cout << std::setw(4) << tileToString(tId);
+				
+			}
 			std::cout << std::endl << std::endl;
 		}
 	}

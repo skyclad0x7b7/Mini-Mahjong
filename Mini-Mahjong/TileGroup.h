@@ -24,6 +24,8 @@ namespace mahjong
 		std::vector<Tile> getTilesList() const;
 
 		bool operator==(const TileGroup&) const;
+		bool operator!=(const TileGroup&) const;
+		bool operator>(const TileGroup&) const;
 	private:
 		TileGroupType m_tileGroupType;
 		std::vector<Tile> m_tiles;

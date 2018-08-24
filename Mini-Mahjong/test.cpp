@@ -57,12 +57,32 @@ namespace mahjong
 
 		void testPrintPlayer(const mahjong::Player& p)
 		{
-			std::cout << "    << " << p.getPlayerName() << " >> " << std::endl;
+			std::cout << " - Hand : ";
 			size_t len = p.getInHandTiles().size();
-			for (unsigned int i = 0; i < len; i++)
+			for (size_t i = 0; i < len; i++)
 			{
 				std::string out = tileToString(p.getTile(i));
 				std::cout << std::setw(4) << out;
+			}
+			std::cout << std::endl << "          ";
+			for (size_t i = 0; i < len; i++)
+				std::cout << std::setw(4) << i;
+			std::cout << std::endl;
+
+			if (p.isClaimed())
+			{
+				std::cout << " - Opened : ";
+				len = p.getOpendMentsu().size();
+				for (unsigned int i = 0; i < len; i++)
+				{
+					for (auto it : p.getOpendMentsu()[i].getTilesList())
+					{
+						std::string out = tileToString(it);
+						std::cout << std::setw(4) << out;
+					}
+					std::cout << " | ";
+				}
+				std::cout << std::endl;
 			}
 			std::cout << std::endl;
 		}

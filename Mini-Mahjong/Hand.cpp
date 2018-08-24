@@ -99,7 +99,7 @@ namespace mahjong
 		// Get count of same tiles in hand 
 		int count = std::count(std::begin(m_inHandTiles), std::end(m_inHandTiles), newTile);
 
-		if (count == 4)
+		if (count == 3)
 			result = true;
 
 		return result;
@@ -110,7 +110,7 @@ namespace mahjong
 		m_agariTiles.clear();
 		m_shanten = 0;
 
-		m_shanten = Shanten::GetInstance()->calcShanten(m_inHandTiles, m_isClaimed, m_openedMentsu.size());
+		m_shanten = Shanten::GetInstance()->calcShanten(*this);
 
 		if (m_shanten == 0)
 		{

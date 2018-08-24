@@ -114,9 +114,10 @@
     <ClCompile Include="Constant.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Hand.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Shanten.cpp" />
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="Test.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileGroup.cpp" />
     <ClCompile Include="TileMountain.cpp" />

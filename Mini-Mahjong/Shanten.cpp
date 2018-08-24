@@ -25,14 +25,21 @@ namespace mahjong
 		return &ins;
 	}
 
-	int Shanten::calcShanten(const std::vector<Tile>& tiles, bool isClaimed, int numOfClaim)
+	int Shanten::calcShanten(const Hand& hand)
 	{
 		int retShanten = -1;
 		reset();
+		for (auto it : hand.getOpendMentsu())
+		{
+			if (it.getTileGroupType() == TileGroupType::Shuntsu)
+				m_shuntsuNum++;
+			else
+				m_koutsuNum++;
+		}
 		
-		m_tiles = tiles;
+		m_tiles = hand.getInHandTiles();
 
-		if (!isClaimed)
+		if (!hand.isClaimed())
 		{
 			int chitoitsuShanten = getChitoitsuShanten(m_tiles);
 			int kokushiShanten = getKokushiMusouShanten(m_tiles);
@@ -41,7 +48,7 @@ namespace mahjong
 				return retShanten;
 		}
 
-		int normalShanten = getNormalShanten(tiles);
+		int normalShanten = getNormalShanten(m_tiles);
 
 		retShanten = (normalShanten < retShanten) ? normalShanten : retShanten;
 

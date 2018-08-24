@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Tile.h"
+#include "Player.h"
 
 #include <vector>
 
@@ -16,7 +17,7 @@ namespace mahjong
 		static Shanten* GetInstance();
 		void reset();
 
-		int calcShanten(const std::vector<Tile>& tiles, bool isClaimed = false, int numOfClaim = 0);
+		int calcShanten(const Hand& hand);
 		int getChitoitsuShanten(const std::vector<Tile>& tiles);
 		int getKokushiMusouShanten(const std::vector<Tile>& tiles);
 		int getNormalShanten(std::vector<Tile> curTiles);

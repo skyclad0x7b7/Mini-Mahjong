@@ -11,10 +11,13 @@ namespace mahjong
 	class Game
 	{
 	public:
-		//Game(Player *p1, Player *p2, Player *p3, Player *p4);
+		Game(Player *p1);
+		~Game();
 		virtual void startGame();
 	private:
-		Player m_player1;
+		Game::Game();
+
+		Player *m_player1;
 
 		Wind m_roundWind;
 	};

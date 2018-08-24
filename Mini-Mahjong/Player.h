@@ -17,12 +17,13 @@ namespace mahjong
 		Player(const std::string playerName) : m_playerName(playerName) {}
 		virtual ~Player() {}
 
+		std::string getPlayerName() const;
+		void setPlayerName(std::string);
+
 		void changeWind();
 		void changeWind(const Wind& newWind);
 
 		void initialize(const int score, const Wind& wind);
-
-		Tile pickTile(TileMountain* pTileMountain);
 
 		const mahjong::ClaimType canClaim(const Tile& newTile, const Wind& wind) const;
 	private:

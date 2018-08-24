@@ -128,6 +128,7 @@
     <ClInclude Include="Hand.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Shanten.h" />
+    <ClInclude Include="Test.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileGroup.h" />
     <ClInclude Include="TileMountain.h" />

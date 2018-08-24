@@ -11,11 +11,14 @@ namespace mahjong
 		
 	}
 
-	Tile Player::pickTile(TileMountain* pTileMountain)
+	std::string Player::getPlayerName() const
 	{
-		Tile ret = pTileMountain->pickTile();
-		putTile(ret);
-		return ret;
+		return m_playerName;
+	}
+
+	void Player::setPlayerName(std::string newName)
+	{
+		m_playerName = newName;
 	}
 
 	void Player::changeWind()
@@ -28,7 +31,7 @@ namespace mahjong
 		m_wind = wind;
 	}
 
-	const ClaimType Player::canClaim(const Tile& newTile, const Wind& wind) const
+	const ClaimType Player::canClaim(const Tile& newTile, const Wind& roundWind) const
 	{
 		ClaimType ret = ClaimType::None;
 		
@@ -36,7 +39,7 @@ namespace mahjong
 		bool canKang = false;
 		bool canPong = false;
 
-		if ((m_wind - 1) == wind)
+		if ((m_wind - 1) == roundWind)
 			canChi = this->canChi(newTile);
 
 		if((canKang = this->canKang(newTile)) == false)

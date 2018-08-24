@@ -14,6 +14,8 @@ namespace mahjong
 	{
 	public:
 		static TileMountain* GetInstance();
+		
+		size_t getRestTilesCount() const;
 
 		virtual void reset();
 		virtual Tile pickTile();

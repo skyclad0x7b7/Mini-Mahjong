@@ -42,6 +42,11 @@ namespace mahjong
 		std::shuffle(std::begin(m_entireTile), std::end(m_entireTile), gen);
 	}
 
+	size_t TileMountain::getRestTilesCount() const
+	{
+		return m_entireTile.size();
+	}
+
 	Tile TileMountain::pickTile()
 	{
 		assert(!m_entireTile.empty());

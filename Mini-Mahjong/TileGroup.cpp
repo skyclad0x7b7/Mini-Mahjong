@@ -64,19 +64,48 @@ namespace mahjong
 			return true;
 		else if (m_tileGroupType != TileGroupType::Toitsu && other.getTileGroupType() == TileGroupType::Toitsu)
 			return false;
+
 		if (m_tiles[0] > other.getTilesList()[0])
 			return true;
+		else
+			return false;
+	}
+
+	bool TileGroup::operator>=(const TileGroup& other) const
+	{
+		if (*this == other || *this > other)
+			return true;
+		else
+			return false;
+	}
+
+	bool TileGroup::operator<(const TileGroup& other) const
+	{
+		if (*this != other && !(*this > other))
+			return true;
+		else
+			return false;
+	}
+
+	bool TileGroup::operator<=(const TileGroup& other) const
+	{
+		if (*this < other || *this == other)
+			return true;
+		else
+			return false;
 	}
 
 	bool operator==(const CompletedTiles& t1, const CompletedTiles& t2)
 	{
 		if (t1.head == t2.head)
 		{
-			for (int i = 0; i < t1.body.size(); i++)
+			for (size_t i = 0; i < t1.body.size(); i++)
 				if (t1.body[i] != t2.body[i])
 					return false;
 			return true;
 		}
 		return false;
 	}
+
+
 }

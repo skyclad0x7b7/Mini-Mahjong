@@ -495,7 +495,7 @@ void testYaku()
 	std::vector<mahjong::CompletedTiles> ret = mahjong::Yaku::GetInstance()->testGetYaku(player1.getInHandTiles(), player1.getOpendMentsu(), mahjong::Tile(mahjong::TileType::Special, 5, false), player1.isClaimed(), true);
 	if (ret.size() > 0)
 	{
-		std::cout << "[*] Tsumo Success";
+		std::cout << "[*] Tsumo Success" << std::endl;
 		for (auto it : ret) {
 			std::cout << "    [*] Head : " << std::setw(4) << tileToString(it.head.getTilesList()[0]) << " " <<  std::setw(4) << tileToString(it.head.getTilesList()[1]) << std::endl;
 			std::cout << "    [*] Body : ";
@@ -531,7 +531,7 @@ void testYaku()
 	ret = mahjong::Yaku::GetInstance()->testGetYaku(player1.getInHandTiles(), player1.getOpendMentsu(), mahjong::Tile(mahjong::TileType::Special, 2, false), player1.isClaimed(), true);
 	if (ret.size() > 0)
 	{
-		std::cout << "[*] Tsumo Success";
+		std::cout << "[*] Tsumo Success" << std::endl;
 		for (auto it : ret) {
 			std::cout << "    [*] Head : " << std::setw(4) << tileToString(it.head.getTilesList()[0]) << " " << std::setw(4) << tileToString(it.head.getTilesList()[1]) << std::endl;
 			std::cout << "    [*] Body : ";

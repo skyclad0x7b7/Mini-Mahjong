@@ -1,6 +1,7 @@
 #include "Yaku.h"
 
 #include <algorithm>
+#include <set>
 
 namespace mahjong
 {
@@ -24,15 +25,14 @@ namespace mahjong
 
 	std::vector<CompletedTiles> Yaku::testGetYaku(const std::vector<Tile>& curTiles, const std::vector<TileGroup>& openedMentsu, const Tile& agariTile, bool isClaimed, bool isTsumo)
 	{
+		std::vector<CompletedTiles> ret;
+
 		reset();
 		m_completedTiles.body = openedMentsu;
-		std::vector<CompletedTiles> ret = getAllCompletedTiles(curTiles, agariTile, isTsumo);
-		
-		// sort bodies
-		for (int i = 0; i < ret.size(); i++)
-			std::sort(std::begin(ret[i].body), std::end(ret[i].body));
-
-		// @TODO : Remove Duplicate CompletedTiles
+		std::vector<CompletedTiles> duplicated = getAllCompletedTiles(curTiles, agariTile, isTsumo);
+		for (auto it : duplicated)
+			if (std::find(std::begin(ret), std::end(ret), it) == std::end(ret))
+				ret.push_back(it);
 
 		return ret;
 	}
@@ -129,6 +129,7 @@ namespace mahjong
 				head.putTile(agariTile);
 				head.putTile(curTiles[0]);
 				m_completedTiles.head = head;
+				std::sort(std::begin(m_completedTiles.body), std::end(m_completedTiles.body));
 				ret.push_back(m_completedTiles);
 			}
 			else if (curTiles.size() == 2) // body-wait
@@ -143,6 +144,7 @@ namespace mahjong
 					body.putTile(agariTile);
 					body.putTile(curTiles[0]);
 					body.putTile(curTiles[1]);
+					std::sort(std::begin(m_completedTiles.body), std::end(m_completedTiles.body));
 					ret.push_back(m_completedTiles);
 				}
 				// Check Shuntsu - Center Tile
@@ -154,6 +156,7 @@ namespace mahjong
 					body.putTile(curTiles[0]);
 					body.putTile(agariTile);
 					body.putTile(curTiles[1]);
+					std::sort(std::begin(m_completedTiles.body), std::end(m_completedTiles.body));
 					ret.push_back(m_completedTiles);
 				}
 				// Check Shuntsu - Right Tile
@@ -165,6 +168,7 @@ namespace mahjong
 					body.putTile(curTiles[0]);
 					body.putTile(curTiles[1]);
 					body.putTile(agariTile);
+					std::sort(std::begin(m_completedTiles.body), std::end(m_completedTiles.body));
 					ret.push_back(m_completedTiles);
 				}
 				// Check Toitsu
@@ -174,6 +178,7 @@ namespace mahjong
 					body.putTile(agariTile);
 					body.putTile(curTiles[0]);
 					body.putTile(curTiles[1]);
+					std::sort(std::begin(m_completedTiles.body), std::end(m_completedTiles.body));
 					ret.push_back(m_completedTiles);
 				}
 				else

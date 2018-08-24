@@ -26,6 +26,9 @@ namespace mahjong
 		bool operator==(const TileGroup&) const;
 		bool operator!=(const TileGroup&) const;
 		bool operator>(const TileGroup&) const;
+		bool operator>=(const TileGroup&) const;
+		bool operator<(const TileGroup&) const;
+		bool operator<=(const TileGroup&) const;
 	private:
 		TileGroupType m_tileGroupType;
 		std::vector<Tile> m_tiles;
@@ -36,6 +39,7 @@ namespace mahjong
 		TileGroup head;
 		std::vector<TileGroup> body;
 	} CompletedTiles;
+	bool operator==(const CompletedTiles& t1, const CompletedTiles& t2);
 }
 
 #endif

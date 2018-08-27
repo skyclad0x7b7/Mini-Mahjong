@@ -31,11 +31,9 @@ namespace mahjong
 		reset();
 		m_completedTiles.body = p.getOpendMentsu();
 		std::vector<CompletedTiles> duplicated = getAllCompletedTiles(p.getInHandTiles(), agariTile, isTsumo);
-		std::cout << "Dup : " << duplicated.size() << std::endl;
 		for (auto it : duplicated)
 			if (std::find(std::begin(ret), std::end(ret), it) == std::end(ret))
 				ret.push_back(it);
-		std::cout << "Ret : " << ret.size() << std::endl;
 
 		return ret;
 	}
@@ -49,21 +47,16 @@ namespace mahjong
 		std::vector<CompletedTiles> shuntsuCompletedTiles;
 		std::vector<CompletedTiles> koutsuCompletedTiles;
 
-		// DEBUG
-		/*for (size_t i = 0; i < curTiles.size(); i++)
-		{
-			std::string out = curTiles[i].toString();
-			std::cout << std::setw(4) << out;
-		}
-		std::cout << std::endl;
-		getchar();*/
-
 		bool flag = false;
 		unsigned int index = 0;
 
 		std::vector<Tile> tmpTiles;
 		while (index < curTiles.size())
 		{
+			toitsuCompletedTiles.clear();
+			shuntsuCompletedTiles.clear();
+			koutsuCompletedTiles.clear();
+
 			if (index > 0 && curTiles[index] == curTiles[index - 1])
 			{ // Skip same tiles
 				index++;
@@ -127,6 +120,14 @@ namespace mahjong
 				shuntsuCompletedTiles = getAllCompletedTiles(tmpTiles, agariTile, isTsumo);
 				m_completedTiles.body.erase(std::find(std::begin(m_completedTiles.body), std::end(m_completedTiles.body), tmpShuntsu));
 			}
+
+			if (toitsuCompletedTiles.size() > 0)
+				ret.insert(std::end(ret), std::begin(toitsuCompletedTiles), std::end(toitsuCompletedTiles));
+			if (shuntsuCompletedTiles.size() > 0)
+				ret.insert(std::end(ret), std::begin(shuntsuCompletedTiles), std::end(shuntsuCompletedTiles));
+			if (koutsuCompletedTiles.size() > 0)
+				ret.insert(std::end(ret), std::begin(koutsuCompletedTiles), std::end(koutsuCompletedTiles));
+
 			index++;
 		}
 
@@ -192,7 +193,6 @@ namespace mahjong
 				// Check Toitsu
 				if (agariTile == curTiles[0] && agariTile == curTiles[1])
 				{
-					std::cout << "Agari Checked" << std::endl;
 					body.setTileGroupType(isTsumo ? TileGroupType::Ankou : TileGroupType::Minkou);
 					body.putTile(agariTile);
 					body.putTile(curTiles[0]);
@@ -205,11 +205,6 @@ namespace mahjong
 			}
 		}
 
-		ret.insert(std::end(ret), std::begin(toitsuCompletedTiles), std::end(toitsuCompletedTiles));
-		ret.insert(std::end(ret), std::begin(shuntsuCompletedTiles), std::end(shuntsuCompletedTiles));
-		ret.insert(std::end(ret), std::begin(koutsuCompletedTiles), std::end(koutsuCompletedTiles));
-
-		std::cout << (m_completedTiles.body.size() + m_toitsuNum) << " " <<  ret.size() << std::endl;
 		return ret;
 	}
 }

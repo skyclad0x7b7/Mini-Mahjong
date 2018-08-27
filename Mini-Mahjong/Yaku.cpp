@@ -156,8 +156,10 @@ namespace mahjong
 					body.putTile(agariTile);
 					body.putTile(curTiles[0]);
 					body.putTile(curTiles[1]);
+					m_completedTiles.body.push_back(body);
 					std::sort(std::begin(m_completedTiles.body), std::end(m_completedTiles.body));
 					ret.push_back(m_completedTiles);
+					m_completedTiles.body.erase(std::find(std::begin(m_completedTiles.body), std::end(m_completedTiles.body), body));
 				}
 				// Check Shuntsu - Center Tile
 				else if (agariTile.getTileType() == curTiles[0].getTileType() && agariTile.getTileType() == curTiles[1].getTileType() &&
@@ -168,8 +170,10 @@ namespace mahjong
 					body.putTile(curTiles[0]);
 					body.putTile(agariTile);
 					body.putTile(curTiles[1]);
+					m_completedTiles.body.push_back(body);
 					std::sort(std::begin(m_completedTiles.body), std::end(m_completedTiles.body));
 					ret.push_back(m_completedTiles);
+					m_completedTiles.body.erase(std::find(std::begin(m_completedTiles.body), std::end(m_completedTiles.body), body));
 				}
 				// Check Shuntsu - Right Tile
 				else if (agariTile.getTileType() == curTiles[0].getTileType() && agariTile.getTileType() == curTiles[1].getTileType() &&
@@ -180,8 +184,10 @@ namespace mahjong
 					body.putTile(curTiles[0]);
 					body.putTile(curTiles[1]);
 					body.putTile(agariTile);
+					m_completedTiles.body.push_back(body);
 					std::sort(std::begin(m_completedTiles.body), std::end(m_completedTiles.body));
 					ret.push_back(m_completedTiles);
+					m_completedTiles.body.erase(std::find(std::begin(m_completedTiles.body), std::end(m_completedTiles.body), body));
 				}
 				// Check Toitsu
 				if (agariTile == curTiles[0] && agariTile == curTiles[1])
@@ -191,17 +197,11 @@ namespace mahjong
 					body.putTile(agariTile);
 					body.putTile(curTiles[0]);
 					body.putTile(curTiles[1]);
+					m_completedTiles.body.push_back(body);
 					std::sort(std::begin(m_completedTiles.body), std::end(m_completedTiles.body));
 					ret.push_back(m_completedTiles);
+					m_completedTiles.body.erase(std::find(std::begin(m_completedTiles.body), std::end(m_completedTiles.body), body));
 				}
-				else
-				{
-					return std::vector<CompletedTiles>();
-				}
-			}
-			else // Wrong tiles
-			{
-				return std::vector<CompletedTiles>();
 			}
 		}
 
@@ -209,6 +209,7 @@ namespace mahjong
 		ret.insert(std::end(ret), std::begin(shuntsuCompletedTiles), std::end(shuntsuCompletedTiles));
 		ret.insert(std::end(ret), std::begin(koutsuCompletedTiles), std::end(koutsuCompletedTiles));
 
+		std::cout << (m_completedTiles.body.size() + m_toitsuNum) << " " <<  ret.size() << std::endl;
 		return ret;
 	}
 }

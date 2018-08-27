@@ -45,7 +45,7 @@ namespace mahjong
 				// Agari
 				Yaku::GetInstance()->reset();
 				std::cout << "[*] Tsumo" << std::endl;
-				std::vector<CompletedTiles> ret = Yaku::GetInstance()->testGetYaku(m_player1->getInHandTiles(), m_player1->getOpendMentsu(), t, m_player1->isClaimed(), true);
+				std::vector<CompletedTiles> ret = Yaku::GetInstance()->testGetYaku(*m_player1, t, true);
 				
 				if (ret.size() > 0)
 				{

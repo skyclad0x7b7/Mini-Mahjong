@@ -461,7 +461,9 @@ namespace mahjong
 		{
 			mahjong::Player player1("P1");
 			player1.initialize(25000, mahjong::Wind::East);
+			std::vector<mahjong::CompletedTiles> ret;
 
+			/*
 			// Tenpai (Head)
 			player1.reset();
 			player1.putTile(mahjong::Tile(mahjong::TileType::Special, 1, false));
@@ -480,7 +482,7 @@ namespace mahjong
 			player1.sort();
 			std::cout << " < Tiles >" << std::endl;
 			testPrintPlayer(player1);
-			std::vector<mahjong::CompletedTiles> ret = mahjong::Yaku::GetInstance()->testGetYaku(player1.getInHandTiles(), player1.getOpendMentsu(), mahjong::Tile(mahjong::TileType::Special, 5, false), player1.isClaimed(), true);
+			ret = mahjong::Yaku::GetInstance()->testGetYaku(player1, mahjong::Tile(mahjong::TileType::Special, 5, false), true);
 			if (ret.size() > 0)
 			{
 				std::cout << "[*] Tsumo Success" << std::endl;
@@ -516,7 +518,46 @@ namespace mahjong
 			player1.sort();
 			std::cout << " < Tiles >" << std::endl;
 			testPrintPlayer(player1);
-			ret = mahjong::Yaku::GetInstance()->testGetYaku(player1.getInHandTiles(), player1.getOpendMentsu(), mahjong::Tile(mahjong::TileType::Special, 2, false), player1.isClaimed(), true);
+			ret = mahjong::Yaku::GetInstance()->testGetYaku(player1, mahjong::Tile(mahjong::TileType::Special, 5, false), true);
+			if (ret.size() > 0)
+			{
+				std::cout << "[*] Tsumo Success" << std::endl;
+				for (auto it : ret) {
+					std::cout << "    [*] Head : " << std::setw(4) << tileToString(it.head.getTilesList()[0]) << " " << std::setw(4) << tileToString(it.head.getTilesList()[1]) << std::endl;
+					std::cout << "    [*] Body : ";
+					for (auto bIt : it.body) {
+						std::cout << " | ";
+						for (auto tId : bIt.getTilesList())
+							std::cout << std::setw(4) << tileToString(tId);
+
+					}
+					std::cout << std::endl << std::endl;
+				}
+			}
+			else
+			{
+				std::clog << "[*] Tsumo Failed" << std::endl;
+			}*/
+
+			// Tenpai (Body)
+			player1.reset();
+			player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 2, false));
+			player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 3, false));
+			player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 4, false));
+			player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 7, false));
+			player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 8, false));
+			player1.putTile(mahjong::Tile(mahjong::TileType::Ponzu, 9, false));
+			player1.putTile(mahjong::Tile(mahjong::TileType::Souzu, 2, false));
+			player1.putTile(mahjong::Tile(mahjong::TileType::Souzu, 2, false));
+			player1.putTile(mahjong::Tile(mahjong::TileType::Souzu, 5, false));
+			player1.putTile(mahjong::Tile(mahjong::TileType::Souzu, 5, false));
+			player1.putTile(mahjong::Tile(mahjong::TileType::Souzu, 5, false));
+			player1.putTile(mahjong::Tile(mahjong::TileType::Special, 3, false));
+			player1.putTile(mahjong::Tile(mahjong::TileType::Special, 3, false));
+			player1.sort();
+			std::cout << " < Tiles >" << std::endl;
+			testPrintPlayer(player1);
+			ret = mahjong::Yaku::GetInstance()->testGetYaku(player1, mahjong::Tile(mahjong::TileType::Special, 3, false), true);
 			if (ret.size() > 0)
 			{
 				std::cout << "[*] Tsumo Success" << std::endl;

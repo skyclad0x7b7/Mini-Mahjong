@@ -1,5 +1,6 @@
 #include "Yaku.h"
 
+#include <iostream>
 #include <algorithm>
 #include <set>
 
@@ -23,16 +24,18 @@ namespace mahjong
 		m_toitsuNum = 0;
 	}
 
-	std::vector<CompletedTiles> Yaku::testGetYaku(const std::vector<Tile>& curTiles, const std::vector<TileGroup>& openedMentsu, const Tile& agariTile, bool isClaimed, bool isTsumo)
+	std::vector<CompletedTiles> Yaku::testGetYaku(const Player& p, const Tile& agariTile, bool isTsumo)
 	{
 		std::vector<CompletedTiles> ret;
 
 		reset();
-		m_completedTiles.body = openedMentsu;
-		std::vector<CompletedTiles> duplicated = getAllCompletedTiles(curTiles, agariTile, isTsumo);
+		m_completedTiles.body = p.getOpendMentsu();
+		std::vector<CompletedTiles> duplicated = getAllCompletedTiles(p.getInHandTiles(), agariTile, isTsumo);
+		std::cout << "Dup : " << duplicated.size() << std::endl;
 		for (auto it : duplicated)
 			if (std::find(std::begin(ret), std::end(ret), it) == std::end(ret))
 				ret.push_back(it);
+		std::cout << "Ret : " << ret.size() << std::endl;
 
 		return ret;
 	}
@@ -45,6 +48,15 @@ namespace mahjong
 		std::vector<CompletedTiles> toitsuCompletedTiles;
 		std::vector<CompletedTiles> shuntsuCompletedTiles;
 		std::vector<CompletedTiles> koutsuCompletedTiles;
+
+		// DEBUG
+		/*for (size_t i = 0; i < curTiles.size(); i++)
+		{
+			std::string out = curTiles[i].toString();
+			std::cout << std::setw(4) << out;
+		}
+		std::cout << std::endl;
+		getchar();*/
 
 		bool flag = false;
 		unsigned int index = 0;
@@ -172,8 +184,9 @@ namespace mahjong
 					ret.push_back(m_completedTiles);
 				}
 				// Check Toitsu
-				else if (agariTile == curTiles[0] && agariTile == curTiles[1])
+				if (agariTile == curTiles[0] && agariTile == curTiles[1])
 				{
+					std::cout << "Agari Checked" << std::endl;
 					body.setTileGroupType(isTsumo ? TileGroupType::Ankou : TileGroupType::Minkou);
 					body.putTile(agariTile);
 					body.putTile(curTiles[0]);
@@ -195,6 +208,7 @@ namespace mahjong
 		ret.insert(std::end(ret), std::begin(toitsuCompletedTiles), std::end(toitsuCompletedTiles));
 		ret.insert(std::end(ret), std::begin(shuntsuCompletedTiles), std::end(shuntsuCompletedTiles));
 		ret.insert(std::end(ret), std::begin(koutsuCompletedTiles), std::end(koutsuCompletedTiles));
+
 		return ret;
 	}
 }

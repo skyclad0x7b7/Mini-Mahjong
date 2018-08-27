@@ -4,9 +4,12 @@
 #pragma once
 
 #include "TileMountain.h"
+#include "Player.h"
 #include "TileGroup.h"
 #include "Tile.h"
 
+#include <iomanip>
+#include <stdint.h>
 #include <vector>
 
 namespace mahjong
@@ -18,7 +21,7 @@ namespace mahjong
 		static Yaku* GetInstance();
 		void reset();
 
-		std::vector<CompletedTiles> testGetYaku(const std::vector<Tile>& curTiles, const std::vector<TileGroup>& openedMentsu, const Tile& agariTile, bool isClaimed, bool isTsumo);
+		std::vector<CompletedTiles> testGetYaku(const Player& p, const Tile& agariTile, bool isTsumo);
 		
 	private:
 		std::vector<CompletedTiles> getAllCompletedTiles(const std::vector<Tile>& curTiles, const Tile& agariTile, bool isTsumo);

@@ -5,6 +5,8 @@
 
 #include "Constant.h"
 
+#include <string>
+#include <assert.h>
 #include <stdint.h>
 #include <vector>
 
@@ -16,6 +18,8 @@ namespace mahjong
 		Tile();
 		Tile(const TileType tileType, const int data, const bool isDora);
 		
+		std::string toString() const;
+
 		TileType getTileType() const;
 		int getTileNumber() const;
 		uint8_t getData() const;

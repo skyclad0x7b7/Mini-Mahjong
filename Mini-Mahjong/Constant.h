@@ -43,7 +43,7 @@ namespace mahjong
 		Minkou,
 		Ankang,
 		Daiminkang,
-		Shominkang,
+		Shouminkang,
 	};
 
 	enum class Wind 

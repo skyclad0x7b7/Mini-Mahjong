@@ -25,7 +25,7 @@ namespace mahjong
 
 		void initialize(const int score, const Wind& wind);
 
-		const mahjong::ClaimType canClaim(const Tile& newTile, const Wind& wind) const;
+		const mahjong::ClaimType canClaim(const Tile& newTile, const Wind& wind, bool isTsumo) const;
 	private:
 		std::string m_playerName;
 		Wind m_wind;

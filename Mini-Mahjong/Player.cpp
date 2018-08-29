@@ -31,7 +31,7 @@ namespace mahjong
 		m_wind = wind;
 	}
 
-	const ClaimType Player::canClaim(const Tile& newTile, const Wind& roundWind) const
+	const ClaimType Player::canClaim(const Tile& newTile, const Wind& roundWind, bool isTsumo) const
 	{
 		ClaimType ret = ClaimType::None;
 		
@@ -40,10 +40,10 @@ namespace mahjong
 		bool canPong = false;
 
 		if ((m_wind - 1) == roundWind)
-			canChi = this->canChi(newTile);
+			canChi = this->canChi(newTile, isTsumo);
 
-		if((canKang = this->canKang(newTile)) == false)
-			canPong = this->canPong(newTile);
+		if((canKang = this->canKang(newTile, isTsumo)) == false)
+			canPong = this->canPong(newTile, isTsumo);
 
 		ret |= canChi ? ClaimType::Chi : ClaimType::None;
 		ret |= canKang ? ClaimType::Kang : ClaimType::None;

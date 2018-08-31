@@ -37,6 +37,7 @@ namespace mahjong
 	
 	enum class TileGroupType
 	{
+		None,
 		Toitsu,
 		Shuntsu,
 		Ankou,

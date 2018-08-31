@@ -16,10 +16,11 @@ namespace mahjong
 		virtual void startGame();
 	private:
 		Game::Game();
-
 		Player *m_player1;
-
 		Wind m_roundWind;
+		
+		unsigned int m_kangCount;
+	
 	};
 }
 

@@ -4,6 +4,7 @@ namespace mahjong
 {
 	TileGroup::TileGroup()
 	{
+		m_tileGroupType = TileGroupType::None;
 		m_tiles.clear();
 	}
 

@@ -52,14 +52,31 @@ namespace mahjong
 
 	void Hand::doChi(const TileGroup& tileGroup)
 	{
+		assert(tileGroup.getTileGroupType() != TileGroupType::None);
+		for (auto it : tileGroup.getTilesList())
+			m_inHandTiles.erase(std::find(std::begin(m_inHandTiles), std::end(m_inHandTiles), it));
 
+		m_isClaimed = true;
+		m_openedMentsu.push_back(tileGroup);
 	}
 
 	void Hand::doPong(const Tile& tile)
 	{
+		TileGroup newTileGroup;
+		newTileGroup.setTileGroupType(TileGroupType::Minkou);
+		for (int i = 0; i < 2; i++)
+		{
+			auto it = std::find(std::begin(m_inHandTiles), std::end(m_inHandTiles), tile);
+			newTileGroup.putTile(*it);
+			m_inHandTiles.erase(it);
+		}
+		newTileGroup.putTile(tile);
 
+		m_isClaimed = true;
+		m_openedMentsu.push_back(newTileGroup);
+		
 	}
-
+	
 	TileGroupType Hand::doKangBefore(const Tile& newTile, bool isTsumo)
 	{
 		TileGroupType ret;
@@ -75,11 +92,11 @@ namespace mahjong
 			if (it.getTileGroupType() == TileGroupType::Minkou && it.getTilesList()[0] == newTile)
 				ret = TileGroupType::Shouminkang;
 		
-		assert(ret != TileGroupType::Ankang && ret != TileGroupType::Daiminkang && ret != TileGroupType::Shouminkang);
+		assert(ret != TileGroupType::None);
 		return ret;
 	}
 
-	void Hand::doKangAfter(const Tile& tile, TileGroupType type)
+	TileGroup Hand::doKangAfter(const Tile& tile, TileGroupType type)
 	{
 		if (type == TileGroupType::Ankang || type == TileGroupType::Daiminkang)
 		{
@@ -95,6 +112,7 @@ namespace mahjong
 			}
 			t.putTile(tile);
 			m_openedMentsu.push_back(t);
+			return t;
 		}
 		else
 		{
@@ -106,8 +124,10 @@ namespace mahjong
 					it.putTile(tile);
 					it.setTileGroupType(TileGroupType::Shouminkang);
 				}
+				return it;
 			}
 		}
+		assert(false);
 	}
 
 	// Should check with Hand::canChi() before this function

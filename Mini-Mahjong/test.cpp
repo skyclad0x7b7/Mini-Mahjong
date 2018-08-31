@@ -69,7 +69,7 @@ namespace mahjong
 				std::cout << std::setw(4) << i;
 			std::cout << std::endl;
 
-			if (p.isClaimed())
+			if (p.getOpendMentsu().size() > 0)
 			{
 				std::cout << " - Opened : ";
 				len = p.getOpendMentsu().size();
@@ -103,19 +103,19 @@ namespace mahjong
 
 			player1.sort();
 
-			if (player1.canClaim(mahjong::Tile(mahjong::TileType::Manzu, 1, false), mahjong::Wind::North) & mahjong::ClaimType::Chi)
+			if (player1.canClaim(mahjong::Tile(mahjong::TileType::Manzu, 1, false), mahjong::Wind::North, true) & mahjong::ClaimType::Chi)
 				std::cout << "[*] Test 1 Passed" << std::endl;
 
-			if (player1.canClaim(mahjong::Tile(mahjong::TileType::Manzu, 4, false), mahjong::Wind::North) & mahjong::ClaimType::Chi)
+			if (player1.canClaim(mahjong::Tile(mahjong::TileType::Manzu, 4, false), mahjong::Wind::North, true) & mahjong::ClaimType::Chi)
 				std::cout << "[*] Test 2 Passed" << std::endl;
 
-			if (player1.canClaim(mahjong::Tile(mahjong::TileType::Manzu, 1, false), mahjong::Wind::West) == mahjong::ClaimType::None)
+			if (player1.canClaim(mahjong::Tile(mahjong::TileType::Manzu, 1, false), mahjong::Wind::West, true) == mahjong::ClaimType::None)
 				std::cout << "[*] Test 3 Passed" << std::endl;
 
-			if (player1.canClaim(mahjong::Tile(mahjong::TileType::Ponzu, 3, false), mahjong::Wind::West) & mahjong::ClaimType::Pong)
+			if (player1.canClaim(mahjong::Tile(mahjong::TileType::Ponzu, 3, false), mahjong::Wind::West, true) & mahjong::ClaimType::Pong)
 				std::cout << "[*] Test 4 Passed" << std::endl;
 
-			if (player1.canClaim(mahjong::Tile(mahjong::TileType::Souzu, 2, false), mahjong::Wind::West) & mahjong::ClaimType::Kang)
+			if (player1.canClaim(mahjong::Tile(mahjong::TileType::Souzu, 2, false), mahjong::Wind::West, true) & mahjong::ClaimType::Kang)
 				std::cout << "[*] Test 5 Passed" << std::endl;
 
 		}

@@ -33,7 +33,7 @@ namespace mahjong
 		void doChi(const TileGroup&);
 		void doPong(const Tile& tile);
 		TileGroupType doKangBefore(const Tile& tile, bool isTsumo);
-		void doKangAfter(const Tile& tile, TileGroupType);
+		TileGroup doKangAfter(const Tile& tile, TileGroupType);
 
 		std::vector<TileGroup> getTileGroupCanChi(const Tile& newTile) const;
 

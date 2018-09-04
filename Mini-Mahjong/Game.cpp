@@ -9,12 +9,18 @@ namespace mahjong
 {
 	Game::Game() {}
 
-	Game::~Game() { delete m_player1; }
+	Game::~Game() { 
+		for (int i = 0; i < 4; i++)
+			delete m_players[i];
+	}
 
-	Game::Game(Player *p1)
+	Game::Game(Player *p1, Player *p2, Player *p3, Player *p4)
 	{
 		m_kangCount = 0;
-		m_player1 = p1;
+		m_players[0] = p1;
+		m_players[1] = p2;
+		m_players[2] = p3;
+		m_players[3] = p4;
 	}
 
 	void Game::startGame()
@@ -23,16 +29,24 @@ namespace mahjong
 		mahjong::TileMountain::GetInstance()->reset();
 		m_roundWind = Wind::East;
 
-		m_player1->reset();
-		m_player1->initialize(25000, mahjong::Wind::East);
+		for(int i = 0; i < 4; i++)
+			m_players[i]->reset();
+		m_players[0]->initialize(25000, mahjong::Wind::East);
+		m_players[1]->initialize(25000, mahjong::Wind::North);
+		m_players[2]->initialize(25000, mahjong::Wind::West);
+		m_players[3]->initialize(25000, mahjong::Wind::South);
 
 		// Distribute Tiles
-		for (int i = 0; i < 13; i++)
-			m_player1->putTile(mahjong::TileMountain::GetInstance()->pickTile());
+		for(int i = 0; i < 4; i++)
+			for (int j = 0; j < 13; j++)
+				m_players[i]->putTile(mahjong::TileMountain::GetInstance()->pickTile());
 		
+		int curPlayer = 0;
 		while (mahjong::TileMountain::GetInstance()->getRestTilesCount() != 0)
 		{
-			m_player1->sort();
+			curPlayer = curPlayer % 4;
+			m_players[curPlayer]->sort();
+			std::cout << " ========== [ P" << curPlayer + 1 << " : " << m_players[curPlayer]->getPlayerName() << "(" << Test::windToString(m_players[curPlayer]->getWind()) << ") " << m_players[curPlayer]->getScore() << "p ] ==========" << std::endl;
 
 			// Pick tile
 			Tile t = mahjong::TileMountain::GetInstance()->pickTile();
@@ -40,12 +54,12 @@ namespace mahjong
 			
 
 			// Agari Check
-			if (std::find(std::begin(m_player1->getAgariTiles()), std::end(m_player1->getAgariTiles()), t) != std::end(m_player1->getAgariTiles()))
+			if (std::find(std::begin(m_players[curPlayer]->getAgariTiles()), std::end(m_players[curPlayer]->getAgariTiles()), t) != std::end(m_players[curPlayer]->getAgariTiles()))
 			{
 				// Agari
 				Yaku::GetInstance()->reset();
 				std::cout << "[*] Tsumo" << std::endl;
-				std::vector<CompletedTiles> ret = Yaku::GetInstance()->testGetYaku(*m_player1, t, true);
+				std::vector<CompletedTiles> ret = Yaku::GetInstance()->testGetYaku(*m_players[curPlayer], t, true);
 				
 				if (ret.size() > 0)
 				{
@@ -65,18 +79,18 @@ namespace mahjong
 			Tile tmpKangTile = t;
 			while (true)
 			{
-				if (m_player1->canKang(tmpKangTile, true)) {
+				if (m_players[curPlayer]->canKang(tmpKangTile, true)) {
 					std::string select;
 					std::cout << "[*] Do Kang? (y/n) : ";
 					std::cin >> select;
 					if (select == "y")
 					{
-						TileGroupType kangType = m_player1->doKangBefore(tmpKangTile, true);
+						TileGroupType kangType = m_players[curPlayer]->doKangBefore(tmpKangTile, true);
 						if (kangType == TileGroupType::Shouminkang)
 						{
 							// ChanKang Check
 						}
-						TileGroup kangGroup = m_player1->doKangAfter(tmpKangTile, kangType);
+						TileGroup kangGroup = m_players[curPlayer]->doKangAfter(tmpKangTile, kangType);
 
 						std::cout << "[*] Kang : ";
 						for (auto it : kangGroup.getTilesList())
@@ -84,18 +98,18 @@ namespace mahjong
 						std::cout << std::endl;
 
 						// Get Rinshan-Tile
-						m_player1->sort();
+						m_players[curPlayer]->sort();
 
 						// Pick tile
 						tmpKangTile = mahjong::TileMountain::GetInstance()->pickTile();
 						std::cout << "    Picked Rinshan-Tile : " << std::setw(4) << Test::tileToString(tmpKangTile) << std::endl;
 						// Agari Check
-						if (std::find(std::begin(m_player1->getAgariTiles()), std::end(m_player1->getAgariTiles()), tmpKangTile) != std::end(m_player1->getAgariTiles()))
+						if (std::find(std::begin(m_players[curPlayer]->getAgariTiles()), std::end(m_players[curPlayer]->getAgariTiles()), tmpKangTile) != std::end(m_players[curPlayer]->getAgariTiles()))
 						{
 							// Agari
 							Yaku::GetInstance()->reset();
 							std::cout << "[*] Rinshan-Tsumo" << std::endl;
-							std::vector<CompletedTiles> ret = Yaku::GetInstance()->testGetYaku(*m_player1, tmpKangTile, true);
+							std::vector<CompletedTiles> ret = Yaku::GetInstance()->testGetYaku(*m_players[curPlayer], tmpKangTile, true);
 
 							if (ret.size() > 0)
 							{
@@ -117,40 +131,41 @@ namespace mahjong
 					}
 					else
 					{
-						m_player1->putTile(tmpKangTile);
+						m_players[curPlayer]->putTile(tmpKangTile);
 						break;
 					}
 				}
 				else
 				{
-					m_player1->putTile(tmpKangTile);
+					m_players[curPlayer]->putTile(tmpKangTile);
 					break;
 				}
 			}
 
 			// Discard Tile
-			Test::testPrintPlayer(*m_player1);
+			Test::testPrintPlayer(*m_players[curPlayer]);
 			int count = 0;
 			while (true)
 			{
 				std::cout << "[*] Pick a tile offset to discard : ";
 				std::cin >> count;
-				if (0 <= count && count < m_player1->getInHandTiles().size())
+				if (0 <= count && count < m_players[curPlayer]->getInHandTiles().size())
 					break;
 				else
 					std::cout << "[-] Please input an integer in range" << std::endl;
 			}
 			
 
-			t = m_player1->discardTileBefore(count);
+			t = m_players[curPlayer]->discardTileBefore(count);
 			// Should check other player's Claim on here
-			if(m_player1->isTenpai())
+			if(m_players[curPlayer]->isTenpai())
 				std::cout << "[*] Can Richi" << std::endl;
 			else
-				std::cout << "[*] Shanten : " << m_player1->getShanten() << std::endl;
-			m_player1->discardTileAfter(t);
+				std::cout << "[*] Shanten : " << m_players[curPlayer]->getShanten() << std::endl;
+			m_players[curPlayer]->discardTileAfter(t);
 
-			std::cout << "===============================================" << std::endl;
+			std::cout << " ======================================= " << std::endl << std::endl;
+			curPlayer++;
 		}
 
 	}

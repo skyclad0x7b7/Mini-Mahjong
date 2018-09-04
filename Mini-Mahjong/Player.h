@@ -20,8 +20,11 @@ namespace mahjong
 		std::string getPlayerName() const;
 		void setPlayerName(std::string);
 
+		Wind getWind() const;
 		void changeWind();
 		void changeWind(const Wind& newWind);
+
+		int getScore() const;
 
 		void initialize(const int score, const Wind& wind);
 

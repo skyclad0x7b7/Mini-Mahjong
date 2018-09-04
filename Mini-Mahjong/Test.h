@@ -18,6 +18,7 @@ namespace mahjong
 	namespace Test
 	{
 		std::string tileToString(const mahjong::Tile& t);
+		std::string windToString(const Wind& wind);
 		void testPrintPlayer(const mahjong::Player& p);
 		void testCanClaim();
 		void testIsTenpai();

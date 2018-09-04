@@ -21,6 +21,11 @@ namespace mahjong
 		m_playerName = newName;
 	}
 
+	Wind Player::getWind() const
+	{
+		return m_wind;
+	}
+
 	void Player::changeWind()
 	{
 		m_wind++;
@@ -29,6 +34,11 @@ namespace mahjong
 	void Player::changeWind(const Wind& wind)
 	{
 		m_wind = wind;
+	}
+
+	int Player::getScore() const
+	{
+		return m_score;
 	}
 
 	const ClaimType Player::canClaim(const Tile& newTile, const Wind& roundWind, bool isTsumo) const

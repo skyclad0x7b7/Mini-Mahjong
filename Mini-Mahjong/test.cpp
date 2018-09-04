@@ -55,6 +55,18 @@ namespace mahjong
 			return out;
 		}
 
+		std::string windToString(const Wind& wind)
+		{
+			if(wind == Wind::East)
+				return "‘‘";
+			else if (wind == Wind::South)
+				return "—ı";
+			else if (wind == Wind::West)
+				return "‡§";
+			else
+				return "›¡";
+		}
+
 		void testPrintPlayer(const mahjong::Player& p)
 		{
 			std::cout << " - Hand : ";

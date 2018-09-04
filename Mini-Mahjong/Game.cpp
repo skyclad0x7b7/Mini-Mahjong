@@ -26,6 +26,7 @@ namespace mahjong
 	void Game::startGame()
 	{
 		// Initialize
+		std::string select;
 		mahjong::TileMountain::GetInstance()->reset();
 		m_roundWind = Wind::East;
 
@@ -56,23 +57,30 @@ namespace mahjong
 			// Agari Check
 			if (std::find(std::begin(m_players[curPlayer]->getAgariTiles()), std::end(m_players[curPlayer]->getAgariTiles()), t) != std::end(m_players[curPlayer]->getAgariTiles()))
 			{
-				// Agari
-				Yaku::GetInstance()->reset();
-				std::cout << "[*] Tsumo" << std::endl;
-				std::vector<CompletedTiles> ret = Yaku::GetInstance()->testGetYaku(*m_players[curPlayer], t, true);
-				
-				if (ret.size() > 0)
+				std::cout << "[+] P" << curPlayer + 1 << " : " << m_players[curPlayer]->getPlayerName() << " Tsumo? (y/n) : ";
+				std::cin >> select;
+				if (select == "y")
 				{
-					for (auto it : ret) {
-						std::cout << "    [*] Head : " << std::setw(4) << Test::tileToString(it.head.getTilesList()[0]) << " " << std::setw(4) << Test::tileToString(it.head.getTilesList()[1]) << std::endl;
-						std::cout << "    [*] Body : ";
-						for (auto bIt : it.body)
-							for (auto tId : bIt.getTilesList())
-								std::cout << std::setw(4) << Test::tileToString(tId);
-						std::cout << std::endl << std::endl;
+					// Agari
+					Yaku::GetInstance()->reset();
+					std::cout << "[*] Tsumo" << std::endl;
+					std::vector<CompletedTiles> ret = Yaku::GetInstance()->testGetYaku(*m_players[curPlayer], t, true);
+
+					if (ret.size() > 0)
+					{
+						for (auto it : ret) {
+							std::cout << "    [*] Head : " << std::setw(4) << Test::tileToString(it.head.getTilesList()[0]) << " " << std::setw(4) << Test::tileToString(it.head.getTilesList()[1]) << std::endl;
+							std::cout << "    [*] Body : ";
+							for (auto bIt : it.body)
+								for (auto tId : bIt.getTilesList())
+									std::cout << std::setw(4) << Test::tileToString(tId);
+							std::cout << std::endl << std::endl;
+						}
+						return;
 					}
+					else
+						assert(false);
 				}
-				break;
 			}
 
 			// Kang Check
@@ -80,7 +88,6 @@ namespace mahjong
 			while (true)
 			{
 				if (m_players[curPlayer]->canKang(tmpKangTile, true)) {
-					std::string select;
 					std::cout << "[*] Do Kang? (y/n) : ";
 					std::cin >> select;
 					if (select == "y")
@@ -122,10 +129,10 @@ namespace mahjong
 											std::cout << std::setw(4) << Test::tileToString(tId);
 									std::cout << std::endl << std::endl;
 								}
-								break;
+								return;
 							}
 						}
-
+						curPlayer++;
 						continue;
 
 					}
@@ -157,11 +164,48 @@ namespace mahjong
 			
 
 			t = m_players[curPlayer]->discardTileBefore(count);
-			// Should check other player's Claim on here
 			if(m_players[curPlayer]->isTenpai())
 				std::cout << "[*] Can Richi" << std::endl;
 			else
 				std::cout << "[*] Shanten : " << m_players[curPlayer]->getShanten() << std::endl;
+			
+			// Ron Check
+			for (int i = (curPlayer + 1) % 4; i != curPlayer; i = (i+1) % 4)
+			{
+				if (i == curPlayer)
+					continue;
+				if (std::find(std::begin(m_players[i]->getAgariTiles()), std::end(m_players[i]->getAgariTiles()), t) != std::end(m_players[i]->getAgariTiles()))
+				{
+					// Can Ron
+					Test::testPrintPlayer(*m_players[i]);
+					std::cout << "[+] P" << i + 1 << " : " << m_players[i]->getPlayerName() << " Ron? (y/n) : ";
+					std::cin >> select;
+					if (select == "y")
+					{
+						// Agari
+						Yaku::GetInstance()->reset();
+						std::cout << "[*] Ron" << std::endl;
+						std::vector<CompletedTiles> ret = Yaku::GetInstance()->testGetYaku(*m_players[i], t, true);
+
+						if (ret.size() > 0)
+						{
+							for (auto it : ret) {
+								std::cout << "    [*] Head : " << std::setw(4) << Test::tileToString(it.head.getTilesList()[0]) << " " << std::setw(4) << Test::tileToString(it.head.getTilesList()[1]) << std::endl;
+								std::cout << "    [*] Body : ";
+								for (auto bIt : it.body)
+									for (auto tId : bIt.getTilesList())
+										std::cout << std::setw(4) << Test::tileToString(tId);
+								std::cout << std::endl << std::endl;
+							}
+							return;
+						}
+						else
+							assert(false);
+					}
+				}
+			}
+
+			// Claim Check
 			m_players[curPlayer]->discardTileAfter(t);
 
 			std::cout << " ======================================= " << std::endl << std::endl;

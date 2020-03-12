@@ -1,5 +1,5 @@
-#ifndef __Mini_Mahjong_Constant_H__
-#define __Mini_Mahjong_Constant_H__
+#ifndef __MINI_MAHJONG_CONSTANT_H__
+#define __MINI_MAHJONG_CONSTANT_H__
 
 #pragma once
 
@@ -8,4 +8,4 @@ namespace Mini
 	
 }
 
-#endif
+#endif // __MINI_MAHJONG_CONSTANT_H__

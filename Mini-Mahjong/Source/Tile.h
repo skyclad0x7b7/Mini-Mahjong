@@ -1,5 +1,5 @@
-#ifndef __Mini_Mahjong_Tile_H__
-#define __Mini_Mahjong_Tile_H__
+#ifndef __MINI_MAHJONG_TILE_H__
+#define __MINI_MAHJONG_TILE_H__
 
 #pragma once
 
@@ -14,4 +14,4 @@ namespace Mini
 	};
 }
 
-#endif
+#endif // __MINI_MAHJONG_TILE_H__

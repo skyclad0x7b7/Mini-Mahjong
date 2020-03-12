@@ -12,7 +12,7 @@ namespace Mini
         Red   = 2,
     }
 
-	enum class WindType
+    enum class WindType
     {
         East  = 0,
         South = 1,

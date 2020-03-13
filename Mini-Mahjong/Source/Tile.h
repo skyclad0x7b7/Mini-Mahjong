@@ -1,8 +1,6 @@
 #ifndef __MINI_MAHJONG_TILE_H__
 #define __MINI_MAHJONG_TILE_H__
 
-#pragma once
-
 #include <Constant.h>
 
 namespace Mini
@@ -14,7 +12,7 @@ namespace Mini
         bool isAkaDora = false;
     public:
         Tile();
-        virtual ~Tile() = nullptr;
+        virtual ~Tile() = 0;
 
         // Setters
         void SetIsDora(const bool value);
@@ -29,7 +27,7 @@ namespace Mini
         private:
         public:
             CharacterTile();
-            virtual ~CharacterTile() = nullptr;
+            virtual ~CharacterTile() = 0;
     }
 
     class DragonTile : public CharacterTile

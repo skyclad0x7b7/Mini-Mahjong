@@ -1,8 +1,6 @@
 #ifndef __MINI_MAHJONG_CONSTANT_H__
 #define __MINI_MAHJONG_CONSTANT_H__
 
-#pragma once
-
 namespace Mini
 {
     enum class DragonType

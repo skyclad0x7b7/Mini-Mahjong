@@ -1,7 +1,7 @@
 #ifndef __MINI_MAHJONG_TILEGROUP_H__
 #define __MINI_MAHJONG_TILEGROUP_H__
 
-#include <Tile.h>
+#include <Source/Tile.h>
 
 #include <vector>
 

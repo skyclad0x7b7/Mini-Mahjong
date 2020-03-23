@@ -1,7 +1,7 @@
 #ifndef __MINI_MAHJONG_TILE_H__
 #define __MINI_MAHJONG_TILE_H__
 
-#include <Constant.h>
+#include <Source/Constant.h>
 
 #include <string>
 

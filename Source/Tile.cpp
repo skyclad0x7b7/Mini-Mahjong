@@ -1,5 +1,5 @@
-#include <Assert.h>
-#include <Tile.h>
+#include <Source/Assert.h>
+#include <Source/Tile.h>
 
 namespace Mini
 {
@@ -9,6 +9,11 @@ namespace Mini
     Tile::Tile()
     {
         
+    }
+
+    Tile::~Tile()
+    {
+
     }
 
     void Tile::SetIsDora(const bool value)
@@ -34,6 +39,11 @@ namespace Mini
 
     }
 
+    CharacterTile::~CharacterTile()
+    {
+
+    }
+
 
     // ==================================================
     // class DragonTile implementation
@@ -41,6 +51,11 @@ namespace Mini
     DragonTile::DragonTile(DragonType type)
     {
         dragonType = type;
+    }
+
+    DragonTile::~DragonTile()
+    {
+
     }
 
     std::string DragonTile::ToString() const
@@ -79,6 +94,11 @@ namespace Mini
         windType = type;
     }
 
+    WindTile::~WindTile()
+    {
+
+    }
+
     std::string WindTile::ToString() const
     {
         switch(windType)
@@ -114,8 +134,13 @@ namespace Mini
         numberType = type;
 
         debug_assert(value != 0, "number value can't be 0");
-        debug_assert(value  < 9, "number value can't exceed 9");
+        debug_assert(value <= 9, "number value can't exceed 9");
         numberValue = value;
+    }
+    
+    NumberTile::~NumberTile()
+    {
+
     }
 
     std::string NumberTile::ToString() const

@@ -4,6 +4,7 @@
 #include <Source/Constant.h>
 
 #include <string>
+#include <vector>
 
 namespace Mini
 {
@@ -75,6 +76,10 @@ namespace Mini
         NumberType GetType() const;
         uint8_t GetNumber() const;
     };
+
+    // Some functions related with Tile class
+    std::vector<Tile *> GetCompleteTileLists();
+
 } // namespace Mini
 
 #endif // __MINI_MAHJONG_TILE_H__

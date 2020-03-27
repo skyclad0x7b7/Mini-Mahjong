@@ -1,6 +1,8 @@
 #include <Source/Hand.h>
 #include <Source/Assert.h>
 
+#include <algorithm>
+
 namespace Mini
 {
     // ==================================================
@@ -27,6 +29,11 @@ namespace Mini
         auto iter = std::find(handTiles.begin(), handTiles.end(), tile);
         debug_assert(iter != handTiles.end(), "Can't find tile to remove");
         handTiles.erase(iter);
+    }
+
+    void Hand::Sort()
+    {
+        std::sort(handTiles.begin(), handTiles.end(), [](Tile* first, Tile* second){ return first->GetIdentifier() < second->GetIdentifier(); });
     }
 
 } // namespace Mini

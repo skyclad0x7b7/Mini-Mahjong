@@ -62,7 +62,7 @@ namespace Mini
     {
         std::string ret;
 
-        switch(dragonType)
+        switch (dragonType)
         {
         case DragonType::White:
             ret = "白";
@@ -78,6 +78,28 @@ namespace Mini
         }
 
         return ret;
+    }
+
+    uint8_t DragonTile::GetIdentifier() const
+    {
+        uint8_t identifier = 0x30;
+        
+        switch (dragonType)
+        {
+        case DragonType::White:
+            identifier += 0x01;
+            break;
+        case DragonType::Green:
+            identifier += 0x02;
+            break;
+        case DragonType::Red:
+            identifier += 0x003;
+            break;
+        default:
+            assert_unreachable();
+        }
+
+        return identifier;
     }
 
     DragonType DragonTile::GetType() const
@@ -118,6 +140,31 @@ namespace Mini
         default:
             assert_unreachable();
         }
+    }
+
+    uint8_t WindTile::GetIdentifier() const
+    {
+        uint8_t identifier = 0x40;
+        
+        switch (windType)
+        {
+        case WindType::East:
+            identifier += 0x01;
+            break;
+        case WindType::South:
+            identifier += 0x02;
+            break;
+        case WindType::West:
+            identifier += 0x03;
+            break;
+        case WindType::North:
+            identifier += 0x04;
+            break;
+        default:
+            assert_unreachable();
+        }
+
+        return identifier;
     }
 
     WindType WindTile::GetType() const
@@ -163,6 +210,29 @@ namespace Mini
         }
 
         return ret;
+    }
+
+    uint8_t NumberTile::GetIdentifier() const
+    {
+        uint8_t identifier = 0;
+        
+        switch (numberType)
+        {
+        case NumberType::Cracks:
+            identifier = 0x00;
+            break;
+        case NumberType::Dots:
+            identifier = 0x10;
+            break;
+        case NumberType::Bamboo:
+            identifier = 0x20;
+            break;
+        default:
+            assert_unreachable();
+        }
+
+        identifier += numberValue;
+        return identifier;
     }
 
     NumberType NumberTile::GetType() const

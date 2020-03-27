@@ -17,6 +17,7 @@ namespace Mini
         Tile();
         virtual ~Tile() = 0;
         virtual std::string ToString() const = 0;
+        virtual uint8_t GetIdentifier() const = 0;
 
         // Setters
         void SetIsDora(const bool value);
@@ -34,6 +35,7 @@ namespace Mini
         CharacterTile();
         virtual ~CharacterTile() = 0;
         virtual std::string ToString() const = 0;
+        virtual uint8_t GetIdentifier() const = 0;
     };
 
     class DragonTile : public CharacterTile
@@ -44,6 +46,7 @@ namespace Mini
         DragonTile(DragonType type);
         virtual ~DragonTile();
         virtual std::string ToString() const;
+        virtual uint8_t GetIdentifier() const;
 
         // Getters
         DragonType GetType() const;
@@ -57,6 +60,7 @@ namespace Mini
         WindTile(WindType type);
         virtual ~WindTile();
         virtual std::string ToString() const;
+        virtual uint8_t GetIdentifier() const;
 
         // Getters
         WindType GetType() const;
@@ -71,6 +75,7 @@ namespace Mini
         NumberTile(NumberType type, const uint8_t value);
         virtual ~NumberTile();
         virtual std::string ToString() const;
+        virtual uint8_t GetIdentifier() const;
 
         // Getters
         NumberType GetType() const;

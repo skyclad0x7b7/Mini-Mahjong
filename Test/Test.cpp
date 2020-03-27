@@ -1,8 +1,11 @@
 #include <Test/Test.h>
 
 #include <Source/Tile.h>
+#include <Source/Hand.h>
 
 #include <cstdio>
+#include <algorithm>
+#include <random>
 
 namespace Mini
 {
@@ -29,9 +32,20 @@ namespace Mini
     {
         puts(" ========== < Test 02 > ========== ");
         std::vector<Tile *> tileList = GetCompleteTileLists();
+        std::random_device rd; 
+        std::mt19937 g(rd());
+        std::shuffle(tileList.begin(), tileList.end(), g);
+
+        Hand hand(std::vector<Tile *>(tileList.begin(), tileList.begin() + 13));
+        hand.Sort();
+        for (int i = 0; i < 13; ++i)
+        {
+            printf(" %s", hand.GetTiles()[i]->ToString().c_str());
+        }
+        printf("\n\n");
+
         for (auto& tile : tileList)
         {
-            printf(" %s", tile->ToString().c_str());
             delete tile;
         }
         puts(" ================================= ");

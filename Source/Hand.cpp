@@ -14,7 +14,7 @@ namespace Mini
         handTiles = initTiles;
     }
 
-    const std::vector<Tile*>& Hand::GetTiles() const
+    const std::vector<Tile*>& Hand::GetReadOnlyTiles() const
     {
         return handTiles;
     }
@@ -24,7 +24,7 @@ namespace Mini
         handTiles.emplace_back(tile);
     }
 
-    void Hand::RemoveTile(Tile *tile)
+    void Hand::RemoveTile(const Tile *tile)
     {
         auto iter = std::find(handTiles.begin(), handTiles.end(), tile);
         debug_assert(iter != handTiles.end(), "Can't find tile to remove");

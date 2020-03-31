@@ -2,13 +2,19 @@
 
 #include <Source/Tile.h>
 #include <Source/Hand.h>
+#include <Source/Player.h>
 
+#include <iostream>
 #include <cstdio>
 #include <algorithm>
 #include <random>
 
 namespace Mini
 {
+
+    /*
+    *  All tiles should be printed
+    */
     void Test01()
     {
         puts(" ========== < Test 01 > ========== ");
@@ -28,6 +34,9 @@ namespace Mini
         puts(" ================================= ");
     }
 
+    /*
+    *  Make tile list used to play game, and take 13 pieces randomly.
+    */
     void Test02()
     {
         puts(" ========== < Test 02 > ========== ");
@@ -36,11 +45,11 @@ namespace Mini
         std::mt19937 g(rd());
         std::shuffle(tileList.begin(), tileList.end(), g);
 
-        Hand hand(std::vector<Tile *>(tileList.begin(), tileList.begin() + 13));
+        Hand hand(std::vector<Tile*>(tileList.begin(), tileList.begin() + 13));
         hand.Sort();
         for (int i = 0; i < 13; ++i)
         {
-            printf(" %s", hand.GetTiles()[i]->ToString().c_str());
+            printf(" %s", hand.GetReadOnlyTiles()[i]->ToString().c_str());
         }
         printf("\n\n");
 
@@ -48,6 +57,65 @@ namespace Mini
         {
             delete tile;
         }
+        puts(" ================================= ");
+    }
+
+    /*
+    *  One player game. Player just drops a tile and takes new one.
+    */
+    void Test03()
+    {
+        std::vector<Tile*> orgTileList = GetCompleteTileLists();
+        std::vector<Tile*> tileList = orgTileList;
+        std::random_device rd; 
+        std::mt19937 g(rd());
+        std::shuffle(tileList.begin(), tileList.end(), g);
+
+        Player player(std::vector<Tile*>(tileList.begin(), tileList.begin() + 13));
+        tileList = std::vector<Tile*>(tileList.begin() + 13, tileList.end());
+
+        while (tileList.size() != 0)
+        {
+            Tile *newTile = tileList[tileList.size() - 1];
+            tileList.pop_back();
+
+            player.SortHand();
+            const auto& handTiles = player.GetReadOnlyTiles();
+            for (int i = 0; i < handTiles.size(); ++i)
+            {
+                printf("%s ", handTiles[i]->ToString().c_str());
+            }
+            printf("   %s\n", newTile->ToString().c_str());
+            
+            int index = -1;
+            while (index < 0 || index > handTiles.size())
+            {
+                printf(" Index of tile to drop: ");
+                scanf("%d", &index);
+            }
+
+            Tile *droppedTile = nullptr;
+            if (index == handTiles.size())
+            {
+                // Tsumogiri
+                droppedTile = newTile;
+            }
+            else
+            {
+                droppedTile = handTiles[index];
+                player.DropTile(droppedTile);
+                player.AddTile(newTile);
+            }
+            
+            player.AddToDroppedTile(droppedTile);
+            puts(" ----------------------------- ");
+        }
+
+        for (auto& tile : orgTileList)
+        {
+            delete tile;
+        }
+
         puts(" ================================= ");
     }
 

@@ -15,10 +15,10 @@ namespace Mini
         Hand(const std::vector<Tile*>& initTiles);
 
         // Getters
-        const std::vector<Tile*>& GetTiles() const;
+        const std::vector<Tile*>& GetReadOnlyTiles() const;
         
         void AddTile(Tile *tile);
-        void RemoveTile(Tile *tile);
+        void RemoveTile(const Tile *tile);
 
         void Sort();
     };

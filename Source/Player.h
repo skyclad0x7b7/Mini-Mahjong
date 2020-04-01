@@ -15,6 +15,7 @@ namespace Mini
         std::vector<TileGroup> pCalledTileGroup;
         std::vector<Tile*> droppedTiles;
 
+        int pScore;
     public:
         Player(const std::vector<Tile*>& initTiles);
 
@@ -27,7 +28,9 @@ namespace Mini
         void SortHand();
 
         // Event Handler
-        void OnOtherPlayerDroppedTile();
+        void OnOtherPlayerDroppedTile(Tile* tile);
+        void OnOtherPlayerCalledKang(Tile* tile);
+
     };
 
 } // namespace

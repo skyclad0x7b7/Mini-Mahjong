@@ -65,13 +65,13 @@ namespace Mini
         switch (dragonType)
         {
         case DragonType::White:
-            ret = "白";
+            ret = "🀆";
             break;
         case DragonType::Green:
-            ret = "発";
+            ret = "🀅";
             break;
         case DragonType::Red:
-            ret = "中";
+            ret = "🀄";
             break;
         default:
             assert_unreachable();
@@ -126,16 +126,16 @@ namespace Mini
         switch(windType)
         {
         case WindType::East:
-            return "東";
+            return "🀀";
             break;
         case WindType::South:
-            return "南";
+            return "🀁";
             break;
         case WindType::West:
-            return "西";
+            return "🀂";
             break;
         case WindType::North:
-            return "北";
+            return "🀃";
             break;
         default:
             assert_unreachable();
@@ -192,23 +192,24 @@ namespace Mini
 
     std::string NumberTile::ToString() const
     {
-        std::string ret = std::to_string(numberValue);
+        std::string ret;
 
         switch(numberType)
         {
         case NumberType::Cracks:
-            ret += "萬";
-            break;
-        case NumberType::Dots:
-            ret += "筒";
+            ret = "🀇";
             break;
         case NumberType::Bamboo:
-            ret += "索";
+            ret = "🀐";
+            break;
+        case NumberType::Dots:
+            ret = "🀙";
             break;
         default:
             assert_unreachable();
         }
-
+        
+        ret[3] += numberValue - 1;
         return ret;
     }
 
@@ -221,10 +222,10 @@ namespace Mini
         case NumberType::Cracks:
             identifier = 0x00;
             break;
-        case NumberType::Dots:
+        case NumberType::Bamboo:
             identifier = 0x10;
             break;
-        case NumberType::Bamboo:
+        case NumberType::Dots:
             identifier = 0x20;
             break;
         default:
@@ -269,8 +270,8 @@ namespace Mini
             for (int num = 1; num <= 9; ++num)
             {
                 ret.emplace_back(new NumberTile(NumberType::Cracks, num));
-                ret.emplace_back(new NumberTile(NumberType::Dots, num));
                 ret.emplace_back(new NumberTile(NumberType::Bamboo, num));
+                ret.emplace_back(new NumberTile(NumberType::Dots, num));
             }
         }
 

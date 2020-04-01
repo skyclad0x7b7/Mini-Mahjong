@@ -35,5 +35,14 @@ namespace Mini
         pHand.Sort();
     }
 
+    void Player::OnOtherPlayerDroppedTile(Tile* tile)
+    {
+        // Check Ron
+        
+        // Check Calling (Chi, Pong, Kang)
+
+
+    }
+
 
 } // namespace Mini

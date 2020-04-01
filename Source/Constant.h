@@ -21,8 +21,8 @@ namespace Mini
     enum class NumberType
     {
         Cracks = 0,
-        Dots   = 1,
-        Bamboo = 2
+        Bamboo = 1,
+        Dots   = 2,
     };
 } // namespace Mini
 

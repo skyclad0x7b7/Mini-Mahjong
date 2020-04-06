@@ -19,10 +19,19 @@ namespace Mini
     private:
         int priority;
         YakuConditionType ycType;
-        std::vector<TileGroupType> tgType;
-    public:
+        std::vector<TileGroupType> tgTypeList;
+        bool shouldMenzen;
         
+    public:
+        // Setters
+        void SetPriority(int value);
+        void SetConditionType(YakuConditionType type);
+        void SetTileGroupTypeList(std::vector<TileGroupType> typeList);
 
+        // Getters
+        int GetPriority() const;
+        YakuConditionType GetYakuConditionType() const;
+        std::vector<TileGroupType> GetTileGroupTypeList() const;
     };
 }
 

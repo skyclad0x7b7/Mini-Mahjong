@@ -12,20 +12,26 @@ namespace Mini
     {
     private:
         Hand pHand;
-        std::vector<TileGroup> pCalledTileGroup;
+        std::vector<TileGroup> calledTileGroup;
         std::vector<Tile*> droppedTiles;
+        bool isMenzen;
 
         int pScore;
     public:
         Player(const std::vector<Tile*>& initTiles);
 
         const std::vector<Tile*>& GetReadOnlyTiles() const;
-
+        const std::vector<Tile*>& GetReadOnlyDroppedTiles() const;
+        const std::vector<TileGroup>& GetReadOnlyCalledTileGroup() const;
+        
         void AddTile(Tile* tile);
         void DropTile(const Tile* tile);
         void AddToDroppedTile(Tile* tile);
 
         void SortHand();
+
+        void SetIsMenzen(bool value);
+        bool GetIsMenzen() const;
 
         // Event Handler
         void OnOtherPlayerDroppedTile(Tile* tile);

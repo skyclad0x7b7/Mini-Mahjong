@@ -3,6 +3,7 @@
 #include <Source/Tile.h>
 #include <Source/Hand.h>
 #include <Source/Player.h>
+#include <Source/YakuCondition.h>
 
 #include <iostream>
 #include <cstdio>
@@ -117,6 +118,32 @@ namespace Mini
         }
 
         puts(" ================================= ");
+    }
+
+    /*
+    *  Yaku Test
+    */
+    void test04()
+    {
+        // PingHu
+        Yaku yaku;
+        yaku.SetIdentifier("PingHu");
+        yaku.SetScore(1);
+        yaku.SetShouldMenzen(true);
+
+        {
+            std::vector<YakuCondition> condList;
+            
+            // Head
+            YakuCondition yakuCondition;
+            yakuCondition.SetPriority(1);
+            yakuCondition.SetConditionType(YakuConditionType::TileGroup);
+
+
+            yaku.SetYakuConditionList(condList);
+        }
+        
+
     }
 
 } // namespace Mini

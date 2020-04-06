@@ -15,6 +15,16 @@ namespace Mini
         return pHand.GetReadOnlyTiles();
     }
 
+    const std::vector<Tile*>& Player::GetReadOnlyDroppedTiles() const
+    {
+        return droppedTiles;
+    }
+
+    const std::vector<TileGroup>& Player::GetReadOnlyCalledTileGroup() const
+    {
+        return calledTileGroup;
+    }
+    
     void Player::AddTile(Tile* tile)
     {
         pHand.AddTile(tile);
@@ -33,6 +43,16 @@ namespace Mini
     void Player::SortHand()
     {
         pHand.Sort();
+    }
+
+    void Player::SetIsMenzen(bool value)
+    {
+        isMenzen = value;
+    }
+
+    bool Player::GetIsMenzen() const
+    {
+        return isMenzen;
     }
 
     void Player::OnOtherPlayerDroppedTile(Tile* tile)

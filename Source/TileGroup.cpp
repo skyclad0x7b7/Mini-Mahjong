@@ -5,21 +5,17 @@ namespace Mini
     // ==================================================
     // class TileGroup implementation
     // ==================================================
-    TileGroup::TileGroup(const TileGroupType type, const std::vector<Tile*>& tiles, Tile *called)
+    TileGroup::TileGroup(const TileGroupType type, const std::vector<Tile*>& tiles, Tile *calledTile, bool isCalled)
     {
         tgType = type;
         tgTiles = tiles;
 
-        if (called)
+        if (calledTile)
         {
-            tgTiles.emplace_back(called);
-            isOpened = true;
+            tgTiles.emplace_back(calledTile);
         }
-        else
-        {
-            // Assume it's Ankan
-            isOpened = false;
-        }
+
+        isOpened = isCalled;
     }
 
     // Setters

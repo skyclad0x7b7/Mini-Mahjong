@@ -9,6 +9,7 @@ namespace Mini
 {
     enum class TileGroupType
     {
+        Head,       // Head Type
         Shuntsu,
         Koutsu,
         Kangtsu
@@ -21,7 +22,7 @@ namespace Mini
         TileGroupType tgType;
         bool isOpened = false;
     public:
-        TileGroup(const TileGroupType type, const std::vector<Tile*>& tiles, Tile *called = nullptr);
+        TileGroup(const TileGroupType type, const std::vector<Tile*>& tiles, Tile *calledTile = nullptr, bool isCalled = false);
 
         // Setters
         void SetType(const TileGroupType type);

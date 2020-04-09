@@ -281,7 +281,7 @@ namespace Mini
             return 0;
         }
 
-        std::vector<uint8_t> checkList = { DragonTile(DragonType::White).GetIdentifier(), DragonTile(DragonType::Green).GetIdentifier(), DragonTile(DragonType::Red).GetIdentifier()
+        std::vector<uint8_t> checkList = { DragonTile(DragonType::White).GetIdentifier(), DragonTile(DragonType::Green).GetIdentifier(), DragonTile(DragonType::Red).GetIdentifier(),
                                         WindTile(roundWind).GetIdentifier(), WindTile(selfWind).GetIdentifier() };
 
         if (!isMenzen || reassembledTileGroup.restTiles.size() == 1)

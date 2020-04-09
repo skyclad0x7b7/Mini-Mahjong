@@ -1,16 +1,25 @@
 #ifndef __MINI_MAHJONG_YAKU_H__
 #define __MINI_MAHJONG_YAKU_H__
 
-#include <Source/YakuCondition.h>
+#include <Source/TileGroup.h>
 
 #include <string>
 
 namespace Mini
 {
+    struct ReassembledTileGroup
+    {
+        std::vector<TileGroup> tileGroupList;
+        std::vector<Tile*> restTiles;
+    };
+
+    bool CheckChitoitsuPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<Tile*>& handTiles, const Tile* pickedTile, ReassembledTileGroup& result);
+    bool CheckKokushimusouPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<Tile*>& handTiles, const Tile* pickedTile, ReassembledTileGroup& result);
+
     class Yaku
     {
     private:
-        Yaku::Yaku(std::string argIdentifier, int argMenzenScore, int argScore, bool argShouldMenzen);
+        Yaku(std::string argIdentifier, int argMenzenScore, int argScore, bool argShouldMenzen);
         
         std::string identifier;
         int menzenScore;
@@ -24,15 +33,15 @@ namespace Mini
         int GetScore() const;
         bool GetShouldMenzen() const;
 
-        virtual bool CanWin(const std::vector<TileGroup*>& calledTileGroup, const std::vector<Tile*>& leftTiles, const Tile* pickedTile, bool isMenzen, bool isRon) = 0;
+        virtual bool CanWin(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind) = 0;
     };
 
     class Tangyao : Yaku
     {
     public:
-        Tangyao::Tangyao(std::string argIdentifier, int argMenzenScore, int argScore, bool argShouldMenzen);
-        virtual bool CanWin(const std::vector<Tile*>& handTiles, const std::vector<Tile*>& droppedTiles, const std::vector<TileGroup*>& calledTileGroup, bool isMenzen, bool isRon);
-    }
+        Tangyao(std::string argIdentifier, int argMenzenScore, int argScore, bool argShouldMenzen);
+        virtual bool CanWin(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+    };
 
 
 

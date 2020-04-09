@@ -3,7 +3,7 @@
 #include <Source/Tile.h>
 #include <Source/Hand.h>
 #include <Source/Player.h>
-#include <Source/YakuCondition.h>
+#include <Source/Yaku.h>
 
 #include <iostream>
 #include <cstdio>
@@ -121,29 +121,131 @@ namespace Mini
     }
 
     /*
-    *  Yaku Test
+    *  Yaku Test : Chitoitsu & Kokushimusou (It's just test, so I don't free allocated memory)
     */
-    void test04()
+    void Test04()
     {
-        // PingHu
-        Yaku yaku;
-        yaku.SetIdentifier("PingHu");
-        yaku.SetScore(1);
-        yaku.SetShouldMenzen(true);
+        /* Chitoitsu Test */
+        {
+            puts("[  Chitoitsu Test 01  ]");
+            std::vector<Tile*> chitoitsuTest01List = { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1),
+                                                        new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Bamboo, 4),
+                                                        new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Dots, 8), new NumberTile(NumberType::Dots, 8),
+                                                        new WindTile(WindType::West), new WindTile(WindType::West), new DragonTile(DragonType::Red),
+                                                        new DragonTile(DragonType::Red), };
+            Tile* pickedTile = new NumberTile(NumberType::Cracks, 1);
+            printf("[*] Tiles: ");
+            for (auto& tile : chitoitsuTest01List)
+            {
+                printf("%s ", tile->ToString().c_str());
+            }
+            printf("    %s\n", pickedTile->ToString().c_str());
+
+            ReassembledTileGroup result;
+            bool isPassed = CheckChitoitsuPossible({}, chitoitsuTest01List, pickedTile, result);
+            printf("[*] Result: %s\n\n", isPassed ? "TRUE" : "FALSE");
+        }
 
         {
-            std::vector<YakuCondition> condList;
-            
-            // Head
-            YakuCondition yakuCondition;
-            yakuCondition.SetPriority(1);
-            yakuCondition.SetConditionType(YakuConditionType::TileGroup);
+            puts("[  Chitoitsu Test 02  ]");
+            std::vector<Tile*> chitoitsuTest02List = { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1),
+                                                        new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Bamboo, 4),
+                                                        new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Dots, 8), new NumberTile(NumberType::Dots, 8),
+                                                        new WindTile(WindType::West), new WindTile(WindType::West), new DragonTile(DragonType::Red),
+                                                        new DragonTile(DragonType::Red), };
+            Tile* pickedTile = new NumberTile(NumberType::Cracks, 3);
+            printf("[*] Tiles: ");
+            for (auto& tile : chitoitsuTest02List)
+            {
+                printf("%s ", tile->ToString().c_str());
+            }
+            printf("    %s\n", pickedTile->ToString().c_str());
 
-
-            yaku.SetYakuConditionList(condList);
+            ReassembledTileGroup result;
+            bool isPassed = CheckChitoitsuPossible({}, chitoitsuTest02List, pickedTile, result);
+            printf("[*] Result: %s\n\n", isPassed ? "TRUE" : "FALSE");
         }
-        
 
+        {
+            puts("[  Chitoitsu Test 03  ]");
+            std::vector<Tile*> chitoitsuTest03List = { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 3),
+                                                        new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Bamboo, 4),
+                                                        new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Dots, 8), new NumberTile(NumberType::Dots, 8),
+                                                        new WindTile(WindType::West), new WindTile(WindType::West), new DragonTile(DragonType::Red),
+                                                        new DragonTile(DragonType::Red), };
+            Tile* pickedTile = new NumberTile(NumberType::Cracks, 1);
+            printf("[*] Tiles: ");
+            for (auto& tile : chitoitsuTest03List)
+            {
+                printf("%s ", tile->ToString().c_str());
+            }
+            printf("    %s\n", pickedTile->ToString().c_str());
+
+            ReassembledTileGroup result;
+            bool isPassed = CheckChitoitsuPossible({}, chitoitsuTest03List, pickedTile, result);
+            printf("[*] Result: %s\n\n", isPassed ? "TRUE" : "FALSE");
+        }
+
+        /* Kokushimusou Test */
+        {
+            puts("[  Kokushimusou Test 01  ]");
+            std::vector<Tile*> chitoitsuTest01List = { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 9), new NumberTile(NumberType::Bamboo, 1),
+                                                        new NumberTile(NumberType::Bamboo, 9), new NumberTile(NumberType::Dots, 1), new NumberTile(NumberType::Dots, 9),
+                                                        new WindTile(WindType::East), new WindTile(WindType::South), new WindTile(WindType::West),
+                                                        new WindTile(WindType::North), new DragonTile(DragonType::White), new DragonTile(DragonType::Green),
+                                                        new DragonTile(DragonType::Red), };
+            Tile* pickedTile = new NumberTile(NumberType::Cracks, 1);
+            printf("[*] Tiles: ");
+            for (auto& tile : chitoitsuTest01List)
+            {
+                printf("%s ", tile->ToString().c_str());
+            }
+            printf("    %s\n", pickedTile->ToString().c_str());
+
+            ReassembledTileGroup result;
+            bool isPassed = CheckKokushimusouPossible({}, chitoitsuTest01List, pickedTile, result);
+            printf("[*] Result: %s\n\n", isPassed ? "TRUE" : "FALSE");
+        }
+
+        {
+            puts("[  Kokushimusou Test 02  ]");
+            std::vector<Tile*> chitoitsuTest02List = { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 9), new NumberTile(NumberType::Bamboo, 1),
+                                                        new NumberTile(NumberType::Bamboo, 9), new NumberTile(NumberType::Dots, 1), new NumberTile(NumberType::Dots, 9),
+                                                        new WindTile(WindType::East), new WindTile(WindType::South), new WindTile(WindType::West),
+                                                        new WindTile(WindType::North), new DragonTile(DragonType::White), new DragonTile(DragonType::Green),
+                                                        new DragonTile(DragonType::Red), };
+            Tile* pickedTile = new NumberTile(NumberType::Cracks, 1);
+            printf("[*] Tiles: ");
+            for (auto& tile : chitoitsuTest02List)
+            {
+                printf("%s ", tile->ToString().c_str());
+            }
+            printf("    %s\n", pickedTile->ToString().c_str());
+
+            ReassembledTileGroup result;
+            bool isPassed = CheckKokushimusouPossible({}, chitoitsuTest02List, pickedTile, result);
+            printf("[*] Result: %s\n\n", isPassed ? "TRUE" : "FALSE");
+        }
+
+        {
+            puts("[  Kokushimusou Test 03  ]");
+            std::vector<Tile*> chitoitsuTest03List = { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Bamboo, 1),
+                                                        new NumberTile(NumberType::Bamboo, 9), new NumberTile(NumberType::Dots, 1), new NumberTile(NumberType::Dots, 9),
+                                                        new WindTile(WindType::East), new WindTile(WindType::South), new WindTile(WindType::West),
+                                                        new WindTile(WindType::North), new DragonTile(DragonType::White), new DragonTile(DragonType::Green),
+                                                        new DragonTile(DragonType::Red), };
+            Tile* pickedTile = new NumberTile(NumberType::Cracks, 9);
+            printf("[*] Tiles: ");
+            for (auto& tile : chitoitsuTest03List)
+            {
+                printf("%s ", tile->ToString().c_str());
+            }
+            printf("    %s\n", pickedTile->ToString().c_str());
+
+            ReassembledTileGroup result;
+            bool isPassed = CheckKokushimusouPossible({}, chitoitsuTest03List, pickedTile, result);
+            printf("[*] Result: %s\n\n", isPassed ? "TRUE" : "FALSE");
+        }
     }
 
 } // namespace Mini

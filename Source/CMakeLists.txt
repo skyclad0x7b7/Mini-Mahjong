@@ -11,4 +11,6 @@ add_library(Mini-Mahjong STATIC
     TileGroup.cpp
     TileGroup.h
     Utils.h
+    Yaku.cpp
+    Yaku.h
 )

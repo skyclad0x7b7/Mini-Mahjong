@@ -19,31 +19,49 @@ namespace Mini
     class Yaku
     {
     private:
-        Yaku(std::string argIdentifier, int argMenzenScore, int argScore, bool argShouldMenzen);
-        
         std::string identifier;
         int menzenScore;
         int score;
-        bool shouldMenzen;
+
+    protected:
+        Yaku(std::string argIdentifier, int argMenzenScore, int argScore);
 
     public:
         // Getters
         std::string GetIdentifier() const;
         int GetMenzenScore() const;
         int GetScore() const;
-        bool GetShouldMenzen() const;
 
-        virtual bool CanWin(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind) = 0;
+        virtual int CanCount(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind) = 0;
     };
 
-    class Tangyao : Yaku
+    class Menzen : public Yaku
     {
     public:
-        Tangyao(std::string argIdentifier, int argMenzenScore, int argScore, bool argShouldMenzen);
-        virtual bool CanWin(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        Menzen(std::string argIdentifier, int argMenzenScore, int argScore) : Yaku(argIdentifier, argMenzenScore, argScore) { };
+        virtual int CanCount(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
+    class Yakuhai : public Yaku
+    {
+    public:
+        Yakuhai(std::string argIdentifier, int argMenzenScore, int argScore) : Yaku(argIdentifier, argMenzenScore, argScore) { };
+        virtual int CanCount(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+    };
 
+    class Tanyao : public Yaku
+    {
+    public:
+        Tanyao(std::string argIdentifier, int argMenzenScore, int argScore) : Yaku(argIdentifier, argMenzenScore, argScore) { };
+        virtual int CanCount(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+    };
+
+    class Pinfu : public Yaku
+    {
+    public:
+        Pinfu(std::string argIdentifier, int argMenzenScore, int argScore) : Yaku(argIdentifier, argMenzenScore, argScore) { };
+        virtual int CanCount(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+    };
 
 }
 

@@ -39,5 +39,11 @@ namespace Mini
     {
         return isOpened;
     }
+
+    const std::vector<Tile*>& TileGroup::GetReadOnlyTiles() const
+    {
+        return tgTiles;
+    }
+
     
 } // namespace Mini

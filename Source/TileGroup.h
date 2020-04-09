@@ -31,6 +31,8 @@ namespace Mini
         // Getters
         TileGroupType GetType() const;
         bool GetIsOpened() const;
+
+        const std::vector<Tile*>& GetReadOnlyTiles() const;
     };
 
 } // namespace Mini

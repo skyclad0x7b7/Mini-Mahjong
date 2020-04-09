@@ -18,6 +18,8 @@ namespace Mini
         North = 3
     };
 
+    static const std::vector<WindType> WindTypeList = {WindType::East, WindType::South, WindType::West, WindType::North};
+
     enum class NumberType
     {
         Cracks = 0,

@@ -248,4 +248,22 @@ namespace Mini
         }
     }
 
+    /*
+    *  Yaku Test : Menzen, Yakuhai, Tanyao, Pinfu
+    */
+   void Test05()
+   {
+        std::vector<Yaku*> yakuList = {
+            new Menzen("Menzen", 1, 0),
+            new Yakuhai("Yakuhai", 1, 1),
+            new Tanyao("Tanyao", 1, 1),
+            new Pinfu("Pinfu", 1, 0)
+        };
+
+        {
+            puts("[  Yaku Test 01  ]");
+            ReassembledTileGroup reassembledTileGroup;
+        }
+   }
+
 } // namespace Mini

@@ -74,12 +74,12 @@ namespace Mini
         // Simple Check 
         for (auto& tile : handTiles)
         {
-            if (std::find_if(constCheckTileIdentifierList.begin(), constCheckTileIdentifierList.end(), [&](uint8_t identifier){ return tile->GetIdentifier() == identifier; }) == constCheckTileIdentifierList.end())
+            if (std::find(constCheckTileIdentifierList.begin(), constCheckTileIdentifierList.end(), tile->GetIdentifier()) == constCheckTileIdentifierList.end())
             {
                 return false;
             }
         }
-        if (std::find_if(constCheckTileIdentifierList.begin(), constCheckTileIdentifierList.end(), [&](uint8_t identifier){ return pickedTile->GetIdentifier() == identifier; }) == constCheckTileIdentifierList.end())
+        if (std::find(constCheckTileIdentifierList.begin(), constCheckTileIdentifierList.end(), pickedTile->GetIdentifier()) == constCheckTileIdentifierList.end())
         {
             return false;
         }
@@ -103,7 +103,7 @@ namespace Mini
         bool once = true;
         for (auto& tile : handTiles)
         {
-            auto iter = std::find_if(checkTileIdentifierList.begin(), checkTileIdentifierList.end(), [&](uint8_t identifier){ return tile->GetIdentifier() == identifier; });
+            auto iter = std::find(checkTileIdentifierList.begin(), checkTileIdentifierList.end(), tile->GetIdentifier());
             if (iter == checkTileIdentifierList.end())
             {
                 if (std::exchange(once, false))
@@ -138,8 +138,8 @@ namespace Mini
         }
     }
     
-    Yaku::Yaku(std::string argIdentifier, int argMenzenScore, int argScore, bool argShouldMenzen) : 
-        identifier(argIdentifier), menzenScore(argMenzenScore), score(argScore), shouldMenzen(argShouldMenzen)
+    Yaku::Yaku(std::string argIdentifier, int argMenzenScore, int argScore) : 
+        identifier(argIdentifier), menzenScore(argMenzenScore), score(argScore)
     {
 
     }
@@ -160,34 +160,47 @@ namespace Mini
         return score;
     }
 
-    bool Yaku::GetShouldMenzen() const
-    {
-        return shouldMenzen;
-    }
-
-    bool Yaku::CanWin(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Yaku::CanCount(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         // Common condition
         if (!isMenzen && GetScore() == 0)
         {
-            return false;
+            return 0;
         }
 
-        return true;
+        return -1;
+    }
+
+    /*
+    *  Menzen
+    */
+    int Menzen::CanCount(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::CanCount(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        if (isMenzen && !isRon)
+        {
+            return GetMenzenScore();
+        }
+
+        return 0;
     }
 
 
     /*
-    *  Tangyao
+    *  Tanyao
     */
-    bool Tangyao::CanWin(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Tanyao::CanCount(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
-        if (!Yaku::CanWin(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind))
+        if (Yaku::CanCount(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
-            return false;
+            return 0;
         }
         
-        static const std::vector<uint8_t> checkTileList = { 
+        static const std::vector<uint8_t> checkTileIdentifierList = { 
             DragonTile(DragonType::White).GetIdentifier(), 
             DragonTile(DragonType::Green).GetIdentifier(), 
             DragonTile(DragonType::Red).GetIdentifier(),
@@ -204,10 +217,124 @@ namespace Mini
         };
 
         // Check if there are 1, 9, character tiles
-        // if ()
+        for (auto& tileGroup : reassembledTileGroup.tileGroupList)
+        {
+            for (auto& tile : tileGroup.GetReadOnlyTiles())
+            {
+                if (std::find(checkTileIdentifierList.begin(), checkTileIdentifierList.end(), tile->GetIdentifier()) != checkTileIdentifierList.end())
+                {
+                    return 0;
+                }
+            }
+        }
 
-        return false;
+        for (auto& tile : reassembledTileGroup.restTiles)
+        {
+            if (std::find(checkTileIdentifierList.begin(), checkTileIdentifierList.end(), tile->GetIdentifier()) != checkTileIdentifierList.end())
+            {
+                return 0;
+            }
+        }
+
+        if (std::find(checkTileIdentifierList.begin(), checkTileIdentifierList.end(), pickedTile->GetIdentifier()) != checkTileIdentifierList.end())
+        {
+            return 0;
+        }
+
+        return GetMenzenScore();
     }
 
+    /*
+    *  Yakuhai
+    */
+    int Yakuhai::CanCount(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::CanCount(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
 
+        int ret = 0;
+
+        const std::vector<uint8_t> checkList = { DragonTile(DragonType::White).GetIdentifier(), DragonTile(DragonType::Green).GetIdentifier(), DragonTile(DragonType::Red).GetIdentifier(), 
+                                                WindTile(roundWind).GetIdentifier(), WindTile(selfWind).GetIdentifier() };
+
+        for (auto& tileGroup : reassembledTileGroup.tileGroupList)
+        {
+            if (tileGroup.GetType() == TileGroupType::Koutsu || tileGroup.GetType() == TileGroupType::Kangtsu)
+            {
+                const uint8_t identifier = tileGroup.GetReadOnlyTiles()[0]->GetIdentifier();
+                ret += std::count(checkList.begin(), checkList.end(), identifier) * GetScore();
+            }
+        }
+
+        return ret;
+    }
+
+    /*
+    *  Pinfu
+    */
+    int Pinfu::CanCount(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::CanCount(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        std::vector<uint8_t> checkList = { DragonTile(DragonType::White).GetIdentifier(), DragonTile(DragonType::Green).GetIdentifier(), DragonTile(DragonType::Red).GetIdentifier()
+                                        WindTile(roundWind).GetIdentifier(), WindTile(selfWind).GetIdentifier() };
+
+        if (!isMenzen || reassembledTileGroup.restTiles.size() == 1)
+        {
+            return false;
+        }
+
+        // Head Check
+        auto headGroupIter = std::find_if(reassembledTileGroup.tileGroupList.begin(), reassembledTileGroup.tileGroupList.end(), [](const TileGroup& tg){ return tg.GetType() == TileGroupType::Head; });
+        if (headGroupIter == reassembledTileGroup.tileGroupList.end())
+        {
+            return 0;
+        }
+        if (std::find(checkList.begin(), checkList.end(), headGroupIter->GetReadOnlyTiles()[0]->GetIdentifier()) != checkList.end())
+        {
+            return 0;
+        }
+
+        // Body Check
+        bool once = true;
+        for (auto& tileGroup : reassembledTileGroup.tileGroupList)
+        {
+            if (tileGroup.GetType() == TileGroupType::Head)
+            {
+                if (std::exchange(once, false))
+                {
+                    continue;
+                }
+                else
+                { // Head count over 2
+                    return 0;
+                }
+            }
+            
+            if (tileGroup.GetType() != TileGroupType::Shuntsu)
+            { // Pinfu can only be made by shuntsu
+                return 0;
+            }
+        }
+
+        // Rest Tile Check
+        if (reassembledTileGroup.restTiles.size() != 2)
+        {
+            return 0;
+        }
+        std::vector<uint8_t> lastBodyIdList = { reassembledTileGroup.restTiles[0]->GetIdentifier(), reassembledTileGroup.restTiles[1]->GetIdentifier(), pickedTile->GetIdentifier() };
+        std::sort(lastBodyIdList.begin(), lastBodyIdList.end());
+        if ( (lastBodyIdList[2] - lastBodyIdList[1]) != 0 || (lastBodyIdList[1] - lastBodyIdList[0]) != 0 ||
+                (lastBodyIdList[0] == lastBodyIdList[1] || lastBodyIdList[1] == lastBodyIdList[2]) )
+        {
+            return 0;
+        }
+
+        return GetMenzenScore();
+    }
 } // namespace Mini

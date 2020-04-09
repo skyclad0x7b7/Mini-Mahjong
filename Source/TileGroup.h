@@ -33,6 +33,8 @@ namespace Mini
         bool GetIsOpened() const;
 
         const std::vector<Tile*>& GetReadOnlyTiles() const;
+
+        std::string ToString() const;
     };
 
 } // namespace Mini

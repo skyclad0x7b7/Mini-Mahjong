@@ -1,6 +1,8 @@
 #ifndef __MINI_MAHJONG_CONSTANT_H__
 #define __MINI_MAHJONG_CONSTANT_H__
 
+#include <vector>
+
 namespace Mini
 {
     enum class DragonType
@@ -18,7 +20,7 @@ namespace Mini
         North = 3
     };
 
-    static const std::vector<WindType> WindTypeList = {WindType::East, WindType::South, WindType::West, WindType::North};
+    static const std::vector<WindType> WindTypeList = { WindType::East, WindType::South, WindType::West, WindType::North };
 
     enum class NumberType
     {

@@ -160,23 +160,23 @@ namespace Mini
         return score;
     }
 
-    int Yaku::CanCount(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Yaku::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         // Common condition
         if (!isMenzen && GetScore() == 0)
         {
-            return 0;
+            return -1;
         }
 
-        return -1;
+        return 0;
     }
 
     /*
     *  Menzen
     */
-    int Menzen::CanCount(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Menzen::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
-        if (Yaku::CanCount(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
         }
@@ -193,9 +193,9 @@ namespace Mini
     /*
     *  Tanyao
     */
-    int Tanyao::CanCount(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Tanyao::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
-        if (Yaku::CanCount(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
         }
@@ -247,9 +247,9 @@ namespace Mini
     /*
     *  Yakuhai
     */
-    int Yakuhai::CanCount(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Yakuhai::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
-        if (Yaku::CanCount(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
         }
@@ -274,9 +274,9 @@ namespace Mini
     /*
     *  Pinfu
     */
-    int Pinfu::CanCount(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Pinfu::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
-        if (Yaku::CanCount(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
         }
@@ -329,7 +329,7 @@ namespace Mini
         }
         std::vector<uint8_t> lastBodyIdList = { reassembledTileGroup.restTiles[0]->GetIdentifier(), reassembledTileGroup.restTiles[1]->GetIdentifier(), pickedTile->GetIdentifier() };
         std::sort(lastBodyIdList.begin(), lastBodyIdList.end());
-        if ( (lastBodyIdList[2] - lastBodyIdList[1]) != 0 || (lastBodyIdList[1] - lastBodyIdList[0]) != 0 ||
+        if ( (lastBodyIdList[2] - lastBodyIdList[1]) != 1 || (lastBodyIdList[1] - lastBodyIdList[0]) != 1 ||
                 (lastBodyIdList[0] == lastBodyIdList[1] || lastBodyIdList[1] == lastBodyIdList[2]) )
         {
             return 0;

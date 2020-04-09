@@ -1,5 +1,7 @@
 #include <Source/TileGroup.h>
 
+#include <Source/Assert.h>
+
 namespace Mini
 {
     // ==================================================
@@ -9,6 +11,14 @@ namespace Mini
     {
         tgType = type;
         tgTiles = tiles;
+
+        if (type == TileGroupType::Head)
+        {
+            debug_assert(tiles.size() == 2, "Head's tiles count must be 2");
+            debug_assert(tiles[0]->GetIdentifier() == tiles[1]->GetIdentifier(), "Head tiles must be same");
+            debug_assert(calledTile == nullptr, "Head can't be called");
+            debug_assert(isCalled == false, "Head can't be called");
+        }
 
         if (calledTile)
         {
@@ -43,6 +53,16 @@ namespace Mini
     const std::vector<Tile*>& TileGroup::GetReadOnlyTiles() const
     {
         return tgTiles;
+    }
+
+    std::string TileGroup::ToString() const
+    {
+        std::string ret;
+        for (auto& tile : tgTiles)
+        {
+            ret += tile->ToString() + " ";
+        }
+        return ret;
     }
 
     

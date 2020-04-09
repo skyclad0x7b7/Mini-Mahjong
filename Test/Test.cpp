@@ -262,8 +262,180 @@ namespace Mini
 
         {
             puts("[  Yaku Test 01  ]");
-            ReassembledTileGroup reassembledTileGroup;
+            ReassembledTileGroup reassembledTileGroup = {
+                { 
+                    TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Bamboo, 5) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Dots, 6), new NumberTile(NumberType::Bamboo, 7), new NumberTile(NumberType::Bamboo, 8) }, nullptr, false),
+                },
+                {
+                    new NumberTile(NumberType::Dots, 6),
+                    new NumberTile(NumberType::Dots, 7)
+                }
+            };
+            Tile* pickedTile = new NumberTile(NumberType::Dots, 5);
+            bool isMenzen = true;
+            bool isRon    = false;
+            WindType roundWind = WindType::East;
+            WindType selfWind  = WindType::West;
+            
+            printf("Tiles: ");
+            for (auto& tileGroup: reassembledTileGroup.tileGroupList)
+            {
+                printf("%s ", tileGroup.ToString().c_str());
+            }
+            for (auto& tile: reassembledTileGroup.restTiles)
+            {
+                printf("%s ", tile->ToString().c_str());
+            }
+            printf("    %s\n", pickedTile->ToString().c_str());
+
+            int totalScore = 0;
+            for (auto& yaku: yakuList)
+            {
+                if (int score = yaku->GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind))
+                {
+                    printf("  <%s> %d\n", yaku->GetIdentifier().c_str(), score);
+                    totalScore += score;
+                }
+            }
+            printf("  Total Score : %d\n\n", totalScore);
+
         }
+
+        {
+            puts("[  Yaku Test 02  ]");
+            ReassembledTileGroup reassembledTileGroup = {
+                { 
+                    TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Bamboo, 5) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Dots, 6), new NumberTile(NumberType::Bamboo, 7), new NumberTile(NumberType::Bamboo, 8) }, nullptr, false),
+                },
+                {
+                    new NumberTile(NumberType::Dots, 6),
+                    new NumberTile(NumberType::Dots, 7)
+                }
+            };
+            Tile* pickedTile = new NumberTile(NumberType::Dots, 5);
+            bool isMenzen = true;
+            bool isRon    = false;
+            WindType roundWind = WindType::East;
+            WindType selfWind  = WindType::West;
+            
+            printf("Tiles: ");
+            for (auto& tileGroup: reassembledTileGroup.tileGroupList)
+            {
+                printf("%s ", tileGroup.ToString().c_str());
+            }
+            for (auto& tile: reassembledTileGroup.restTiles)
+            {
+                printf("%s ", tile->ToString().c_str());
+            }
+            printf("    %s\n", pickedTile->ToString().c_str());
+
+            int totalScore = 0;
+            for (auto& yaku: yakuList)
+            {
+                if (int score = yaku->GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind))
+                {
+                    printf("  <%s> %d\n", yaku->GetIdentifier().c_str(), score);
+                    totalScore += score;
+                }
+            }
+            printf("  Total Score : %d\n\n", totalScore);
+
+        }
+
+        {
+            puts("[  Yaku Test 03  ]");
+            ReassembledTileGroup reassembledTileGroup = {
+                { 
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 3), new NumberTile(NumberType::Cracks, 4) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Bamboo, 5) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Dots, 6), new NumberTile(NumberType::Bamboo, 7), new NumberTile(NumberType::Bamboo, 8) }, nullptr, false),
+                },
+                {
+                    new NumberTile(NumberType::Dots, 6),
+                }
+            };
+            Tile* pickedTile = new NumberTile(NumberType::Dots, 6);
+            bool isMenzen = true;
+            bool isRon    = false;
+            WindType roundWind = WindType::East;
+            WindType selfWind  = WindType::West;
+            
+            printf("Tiles: ");
+            for (auto& tileGroup: reassembledTileGroup.tileGroupList)
+            {
+                printf("%s ", tileGroup.ToString().c_str());
+            }
+            for (auto& tile: reassembledTileGroup.restTiles)
+            {
+                printf("%s ", tile->ToString().c_str());
+            }
+            printf("    %s\n", pickedTile->ToString().c_str());
+
+            int totalScore = 0;
+            for (auto& yaku: yakuList)
+            {
+                if (int score = yaku->GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind))
+                {
+                    printf("  <%s> %d\n", yaku->GetIdentifier().c_str(), score);
+                    totalScore += score;
+                }
+            }
+            printf("  Total Score : %d\n\n", totalScore);
+
+        }
+
+        {
+            puts("[  Yaku Test 04  ]");
+            ReassembledTileGroup reassembledTileGroup = {
+                { 
+                    TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Bamboo, 5) }, nullptr, false),
+                    TileGroup(TileGroupType::Koutsu, { new WindTile(WindType::West), new WindTile(WindType::West), new WindTile(WindType::West) }, nullptr, false),
+                },
+                {
+                    new NumberTile(NumberType::Dots, 6),
+                    new NumberTile(NumberType::Dots, 7)
+                }
+            };
+            Tile* pickedTile = new NumberTile(NumberType::Dots, 5);
+            bool isMenzen = true;
+            bool isRon    = false;
+            WindType roundWind = WindType::East;
+            WindType selfWind  = WindType::West;
+            
+            printf("Tiles: ");
+            for (auto& tileGroup: reassembledTileGroup.tileGroupList)
+            {
+                printf("%s ", tileGroup.ToString().c_str());
+            }
+            for (auto& tile: reassembledTileGroup.restTiles)
+            {
+                printf("%s ", tile->ToString().c_str());
+            }
+            printf("    %s\n", pickedTile->ToString().c_str());
+
+            int totalScore = 0;
+            for (auto& yaku: yakuList)
+            {
+                if (int score = yaku->GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind))
+                {
+                    printf("  <%s> %d\n", yaku->GetIdentifier().c_str(), score);
+                    totalScore += score;
+                }
+            }
+            printf("  Total Score : %d\n\n", totalScore);
+
+        }
+
+        
    }
 
 } // namespace Mini

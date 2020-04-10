@@ -254,10 +254,10 @@ namespace Mini
    void Test05()
    {
         std::vector<Yaku*> yakuList = {
-            new Menzen("Menzen", 1, 0),
-            new Yakuhai("Yakuhai", 1, 1),
-            new Tanyao("Tanyao", 1, 1),
-            new Pinfu("Pinfu", 1, 0)
+            new Menzen("Menzen", 1, 0, YakuType::GENERAL),
+            new Yakuhai("Yakuhai", 1, 1, YakuType::GENERAL),
+            new Tanyao("Tanyao", 1, 1, YakuType::GENERAL),
+            new Pinfu("Pinfu", 1, 0, YakuType::GENERAL)
         };
 
         {
@@ -369,14 +369,40 @@ namespace Mini
         printf("    %s (%s)\n", pickedTile->ToString().c_str(), isRon ? "Ron" : "Tsumo");
 
         int totalScore = 0;
+        std::vector<std::pair<Yaku*, int>> countedYakuList;
         for (auto& yaku: yakuList)
         {
             if (int score = yaku->GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind))
             {
-                printf("  <%s> %d\n", yaku->GetIdentifier().c_str(), score);
-                totalScore += score;
+                YakuType yakuType = yaku->GetYakuType();
+                if (yakuType == YakuType::GENERAL)
+                {
+                    countedYakuList.emplace_back(std::pair<Yaku*, int>(yaku, score));
+                    continue;
+                }
+
+                if (auto dup = std::find_if(countedYakuList.begin(), countedYakuList.end(), [&](std::pair<Yaku*,int>& y) { return y.first->GetYakuType() == yakuType; }); dup != countedYakuList.end())
+                {
+                    if (score > dup->second)
+                    {
+                        countedYakuList.erase(dup);
+                        countedYakuList.emplace_back(std::pair<Yaku*, int>(yaku, score));
+                    }
+                }
+                else
+                {
+                    countedYakuList.emplace_back(std::pair<Yaku*, int>(yaku, score));
+                    continue;
+                }
             }
         }
+        for (auto& yakuPair : countedYakuList)
+        {
+            printf("  <%s> %d\n", yakuPair.first->GetIdentifier().c_str(), yakuPair.second);
+            totalScore += yakuPair.second;
+        }
+
+
         printf("  Total Score : %d\n\n", totalScore);
     }
 

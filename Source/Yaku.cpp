@@ -138,8 +138,8 @@ namespace Mini
         }
     }
     
-    Yaku::Yaku(std::string argIdentifier, int argMenzenScore, int argScore) : 
-        identifier(argIdentifier), menzenScore(argMenzenScore), score(argScore)
+    Yaku::Yaku(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : 
+        identifier(argIdentifier), menzenScore(argMenzenScore), score(argScore), yakuType(argYakuType)
     {
 
     }
@@ -148,6 +148,11 @@ namespace Mini
     std::string Yaku::GetIdentifier() const
     {
         return identifier;
+    }
+
+    YakuType Yaku::GetYakuType() const
+    {
+        return yakuType;
     }
 
     int Yaku::GetMenzenScore() const

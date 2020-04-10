@@ -2,6 +2,8 @@
 
 #include <Source/Assert.h>
 
+#include <map>
+
 namespace Mini
 {
     bool CheckChitoitsuPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<Tile*>& handTiles, const Tile* pickedTile, ReassembledTileGroup& result)
@@ -377,28 +379,159 @@ namespace Mini
             tileGroup.Sort();
         }
 
-        for (int i = 0; i < tileGroupList.size() - 1; ++i)
+        for (int i = 0; i < tmpTileGroupList.size() - 1; ++i)
         {
-            if (tileGroupList[i].GetType() != TileGroupType::Shuntsu)
+            if (tmpTileGroupList[i].GetType() != TileGroupType::Shuntsu)
             {
                 continue;
             }
 
-            for (int j = i + 1; j < tileGroupList.size(); ++j)
+            for (int j = i + 1; j < tmpTileGroupList.size(); ++j)
             {
-                if (tileGroupList[j].GetType() != TileGroupType::Shuntsu)
+                if (tmpTileGroupList[j].GetType() != TileGroupType::Shuntsu)
                 {
                     continue;
                 }
 
-                const std::vector<Tile*>& firstTileList  = tileGroupList[i].GetReadOnlyTiles();
-                const std::vector<Tile*>& secondTileList = tileGroupList[j].GetReadOnlyTiles();
+                const std::vector<Tile*>& firstTileList  = tmpTileGroupList[i].GetReadOnlyTiles();
+                const std::vector<Tile*>& secondTileList = tmpTileGroupList[j].GetReadOnlyTiles();
                 if (firstTileList[0]->GetIdentifier() == secondTileList[0]->GetIdentifier() &&
                     firstTileList[1]->GetIdentifier() == secondTileList[1]->GetIdentifier() &&
                     firstTileList[2]->GetIdentifier() == secondTileList[2]->GetIdentifier())
                 {
                     return GetRealScore(isMenzen);
                 }
+            }
+        }
+
+        return 0;
+    }
+
+    /*
+    *  Ryanpeko
+    */
+    int Ryanpeko::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>       restTileList = reassembledTileGroup.restTiles;
+
+        // Add pickedTile into tileGroup if needed
+        std::vector<TileGroup> tmpTileGroupList = tileGroupList;
+        if (restTileList.size() == 2) // Last one is body
+        {
+            if (pickedTile->GetIdentifier() != restTileList[0]->GetIdentifier()) // Shuntsu Check
+            {
+                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1], pickedTile }, nullptr, false));
+            }
+        }
+
+        // Sort TileGroups
+        for (auto& tileGroup : tmpTileGroupList)
+        {
+            if (tileGroup.GetType() == TileGroupType::Koutsu || tileGroup.GetType() == TileGroupType::Kangtsu)
+            {
+                return false;
+            }
+            tileGroup.Sort();
+        }
+
+        int ipekoCount = 0;
+        for (int i = 0; i < tmpTileGroupList.size() - 1; ++i)
+        {
+            if (tmpTileGroupList[i].GetType() != TileGroupType::Shuntsu)
+            {
+                continue;
+            }
+
+            for (int j = i + 1; j < tmpTileGroupList.size(); ++j)
+            {
+                if (tmpTileGroupList[j].GetType() != TileGroupType::Shuntsu)
+                {
+                    continue;
+                }
+
+                const std::vector<Tile*>& firstTileList  = tmpTileGroupList[i].GetReadOnlyTiles();
+                const std::vector<Tile*>& secondTileList = tmpTileGroupList[j].GetReadOnlyTiles();
+                if (firstTileList[0]->GetIdentifier() == secondTileList[0]->GetIdentifier() &&
+                    firstTileList[1]->GetIdentifier() == secondTileList[1]->GetIdentifier() &&
+                    firstTileList[2]->GetIdentifier() == secondTileList[2]->GetIdentifier())
+                {
+                    ++ipekoCount;
+                }
+            }
+        }
+
+        if (ipekoCount == 2)
+        {
+            return GetRealScore(isMenzen);
+        }
+
+        return 0;
+    }
+
+    /*
+    *  Ikkitsuukan
+    */
+    int Ikkitsuukan::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>       restTileList = reassembledTileGroup.restTiles;
+
+        // Add pickedTile into tileGroup if needed
+        std::vector<TileGroup> tmpTileGroupList = tileGroupList;
+        if (restTileList.size() == 2) // Last one is body
+        {
+            if (pickedTile->GetIdentifier() != restTileList[0]->GetIdentifier()) // Shuntsu Check
+            {
+                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1], pickedTile }, nullptr, false));
+            }
+        }
+        
+        std::map<NumberType, uint8_t> ikkitsuukanPair = { {NumberType::Cracks, 0}, {NumberType::Bamboo, 0}, {NumberType::Dots, 0} };
+        for (auto tileGroup : tmpTileGroupList)
+        {
+            if (tileGroup.GetType() != TileGroupType::Shuntsu)
+            {
+                continue;
+            }
+
+            tileGroup.Sort();
+            NumberTile *first  = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[0]);
+            NumberTile *second = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[1]);
+            NumberTile *third  = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[2]);
+            debug_assert(first  != nullptr, "tile must be number tile");
+            debug_assert(second != nullptr, "tile must be number tile");
+            debug_assert(third  != nullptr, "tile must be number tile");
+
+            if (first->GetNumber() == 1 && second->GetNumber() == 2 && third->GetNumber() == 3)
+            {
+                ikkitsuukanPair[first->GetType()] |= 0b001;
+            }
+            else if (first->GetNumber() == 4 && second->GetNumber() == 5 && third->GetNumber() == 6)
+            {
+                ikkitsuukanPair[first->GetType()] |= 0b010;
+            }
+            else if (first->GetNumber() == 7 && second->GetNumber() == 8 && third->GetNumber() == 9)
+            {
+                ikkitsuukanPair[first->GetType()] |= 0b100;
+            }   
+        }
+
+        for (NumberType numberType : NumberTypeList)
+        {
+            if (ikkitsuukanPair[numberType] == 0b111)
+            {
+                return GetRealScore(isMenzen);
             }
         }
 

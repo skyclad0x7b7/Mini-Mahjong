@@ -31,6 +31,10 @@ namespace Mini
         Bamboo = 1,
         Dots   = 2,
     };
+
+    static const std::vector<NumberType> NumberTypeList = { NumberType::Cracks, NumberType::Bamboo, NumberType::Dots };
+
+
 } // namespace Mini
 
 #endif // __MINI_MAHJONG_CONSTANT_H__

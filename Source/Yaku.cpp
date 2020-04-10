@@ -365,7 +365,7 @@ namespace Mini
         }
 
         const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>       restTileList = reassembledTileGroup.restTiles;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
 
         // Add pickedTile into tileGroup if needed
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
@@ -422,7 +422,7 @@ namespace Mini
         }
 
         const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>       restTileList = reassembledTileGroup.restTiles;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
 
         // Add pickedTile into tileGroup if needed
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
@@ -489,7 +489,7 @@ namespace Mini
         }
 
         const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>       restTileList = reassembledTileGroup.restTiles;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
 
         // Add pickedTile into tileGroup if needed
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
@@ -553,7 +553,7 @@ namespace Mini
         }
 
         const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>       restTileList = reassembledTileGroup.restTiles;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
 
         // Add pickedTile into tileGroup if needed
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
@@ -599,7 +599,18 @@ namespace Mini
             }
             else
             {
-                sanshokuDoujunPair[key] = 0;
+                switch(first->GetType())
+                {
+                case NumberType::Cracks:
+                    sanshokuDoujunPair[key] = 0b001;
+                    break;
+                case NumberType::Bamboo:
+                    sanshokuDoujunPair[key] = 0b010;
+                    break;
+                case NumberType::Dots:
+                    sanshokuDoujunPair[key] = 0b100;
+                    break;
+                }
             }
         }
 
@@ -611,6 +622,87 @@ namespace Mini
             }
         }
 
+        return 0;
+    }
+
+    /*
+    *  Sanshoku Doukou
+    */
+    int SanshokuDoukou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+
+        // Add pickedTile into tileGroup if needed
+        std::vector<TileGroup> tmpTileGroupList = tileGroupList;
+        if (restTileList.size() == 2) // Last one is body
+        {
+            if (pickedTile->GetIdentifier() == restTileList[0]->GetIdentifier()) // Koutsu Check
+            {
+                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1], pickedTile }, nullptr, false));
+            }
+        }
+
+        std::map<uint8_t, uint8_t> sanshokuDoukouPair;
+        for (auto tileGroup : tmpTileGroupList)
+        {
+            if (tileGroup.GetType() != TileGroupType::Koutsu && tileGroup.GetType() != TileGroupType::Kangtsu)
+            {
+                continue;
+            }
+
+            NumberTile *first  = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[0]);
+            if (first == nullptr) // It's not NumberTile
+            {
+                continue;
+            }
+
+            int key = first->GetNumber();
+            if (auto iter = sanshokuDoukouPair.find(key); iter != sanshokuDoukouPair.end())
+            {
+                switch(first->GetType())
+                {
+                case NumberType::Cracks:
+                    iter->second |= 0b001;
+                    break;
+                case NumberType::Bamboo:
+                    iter->second |= 0b010;
+                    break;
+                case NumberType::Dots:
+                    iter->second |= 0b100;
+                    break;
+                }
+            }
+            else
+            {
+                switch(first->GetType())
+                {
+                case NumberType::Cracks:
+                    sanshokuDoukouPair[key] = 0b001;
+                    break;
+                case NumberType::Bamboo:
+                    sanshokuDoukouPair[key] = 0b010;
+                    break;
+                case NumberType::Dots:
+                    sanshokuDoukouPair[key] =  0b100;
+                    break;
+                }
+            }
+        }
+
+        for (auto iter : sanshokuDoukouPair)
+        {
+            if (iter.second == 0b111)
+            {
+                return GetRealScore(isMenzen);
+            }
+        }
+        
         return 0;
     }
 

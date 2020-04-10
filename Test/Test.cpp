@@ -121,7 +121,7 @@ namespace Mini
     }
 
     /*
-    *  Yaku Test : Chitoitsu & Kokushimusou (It's just test, so I don't free allocated memory)
+    *  Possibility Check : Chitoitsu & Kokushimusou (It's just test, so I don't free allocated memory)
     */
     void Test04()
     {
@@ -527,7 +527,7 @@ namespace Mini
     }
 
     /*
-    *  Yaku Test : ( Menzen, Yakuhai, Tanyao, Pinfu, Ipeko, Ryanpeko, Ikkitsukan ), Sanshoku Doujun, 
+    *  Yaku Test : ( Menzen, Yakuhai, Tanyao, Pinfu, Ipeko, Ryanpeko, Ikkitsukan ), Sanshoku Doujun, Sanshoku Doukou
     */
     void Test07()
     {
@@ -539,7 +539,8 @@ namespace Mini
             new Ipeko("Ipeko", 1, 0, YakuType::N_PEKO),
             new Ryanpeko("Ryanpeko", 3, 1, YakuType::N_PEKO),
             new Ikkitsuukan("Ikkitsuukan", 2, 1, YakuType::GENERAL),
-            new SanshokuDoujun("SanshokuDoujun", 2, 1, YakuType::GENERAL)
+            new SanshokuDoujun("SanshokuDoujun", 2, 1, YakuType::GENERAL),
+            new SanshokuDoukou("SanshokuDoukou", 2, 2, YakuType::GENERAL)
         };
 
         {
@@ -603,6 +604,51 @@ namespace Mini
                 }
             };
             Tile* pickedTile = new NumberTile(NumberType::Cracks, 4);
+            bool isMenzen = true;
+            bool isRon    = false;
+            WindType roundWind = WindType::East;
+            WindType selfWind  = WindType::West;
+            
+            CalcAndPrintYaku(yakuList, reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind);
+        }
+
+        {
+            puts("[  Yaku Test 04 ]");
+            ReassembledTileGroup reassembledTileGroup = {
+                { 
+                    TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 5), new NumberTile(NumberType::Cracks, 5) }, nullptr, false),
+                    TileGroup(TileGroupType::Koutsu, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2) }, nullptr, false),
+                    TileGroup(TileGroupType::Koutsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 2) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Dots, 1), new NumberTile(NumberType::Dots, 2), new NumberTile(NumberType::Dots, 3) }, nullptr, false),
+                },
+                {
+                    new NumberTile(NumberType::Dots, 2),
+                    new NumberTile(NumberType::Dots, 2)
+                }
+            };
+            Tile* pickedTile = new NumberTile(NumberType::Dots, 2);
+            bool isMenzen = true;
+            bool isRon    = false;
+            WindType roundWind = WindType::East;
+            WindType selfWind  = WindType::West;
+            
+            CalcAndPrintYaku(yakuList, reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind);
+        }
+
+        {
+            puts("[  Yaku Test 05 ]");
+            ReassembledTileGroup reassembledTileGroup = {
+                { 
+                    TileGroup(TileGroupType::Koutsu, { new NumberTile(NumberType::Cracks, 4), new NumberTile(NumberType::Cracks, 4), new NumberTile(NumberType::Cracks, 4) }, nullptr, false),
+                    TileGroup(TileGroupType::Koutsu, { new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 6), new NumberTile(NumberType::Bamboo, 7), new NumberTile(NumberType::Bamboo, 8) }, nullptr, false),
+                    TileGroup(TileGroupType::Kangtsu, { new NumberTile(NumberType::Dots, 4), new NumberTile(NumberType::Dots, 4), new NumberTile(NumberType::Dots, 4), new NumberTile(NumberType::Dots, 4) }, nullptr, false),
+                },
+                {
+                    new NumberTile(NumberType::Cracks, 5)
+                }
+            };
+            Tile* pickedTile = new NumberTile(NumberType::Cracks, 5);
             bool isMenzen = true;
             bool isRon    = false;
             WindType roundWind = WindType::East;

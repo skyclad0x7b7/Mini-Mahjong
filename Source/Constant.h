@@ -2,6 +2,7 @@
 #define __MINI_MAHJONG_CONSTANT_H__
 
 #include <vector>
+#include <string>
 
 namespace Mini
 {
@@ -21,6 +22,8 @@ namespace Mini
     };
 
     static const std::vector<WindType> WindTypeList = { WindType::East, WindType::South, WindType::West, WindType::North };
+
+    std::string GetWindTypeString(WindType type);
 
     enum class NumberType
     {

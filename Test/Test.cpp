@@ -3,7 +3,7 @@
 #include <Source/Tile.h>
 #include <Source/Hand.h>
 #include <Source/Player.h>
-#include <Source/Yaku.h>
+#include <Source/Utils.h>
 
 #include <iostream>
 #include <cstdio>
@@ -280,28 +280,7 @@ namespace Mini
             WindType roundWind = WindType::East;
             WindType selfWind  = WindType::West;
             
-            printf("Tiles: ");
-            for (auto& tileGroup: reassembledTileGroup.tileGroupList)
-            {
-                printf("%s ", tileGroup.ToString().c_str());
-            }
-            for (auto& tile: reassembledTileGroup.restTiles)
-            {
-                printf("%s ", tile->ToString().c_str());
-            }
-            printf("    %s\n", pickedTile->ToString().c_str());
-
-            int totalScore = 0;
-            for (auto& yaku: yakuList)
-            {
-                if (int score = yaku->GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind))
-                {
-                    printf("  <%s> %d\n", yaku->GetIdentifier().c_str(), score);
-                    totalScore += score;
-                }
-            }
-            printf("  Total Score : %d\n\n", totalScore);
-
+            CalcAndPrintYaku(yakuList, reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind);
         }
 
         {
@@ -324,28 +303,7 @@ namespace Mini
             WindType roundWind = WindType::East;
             WindType selfWind  = WindType::West;
             
-            printf("Tiles: ");
-            for (auto& tileGroup: reassembledTileGroup.tileGroupList)
-            {
-                printf("%s ", tileGroup.ToString().c_str());
-            }
-            for (auto& tile: reassembledTileGroup.restTiles)
-            {
-                printf("%s ", tile->ToString().c_str());
-            }
-            printf("    %s\n", pickedTile->ToString().c_str());
-
-            int totalScore = 0;
-            for (auto& yaku: yakuList)
-            {
-                if (int score = yaku->GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind))
-                {
-                    printf("  <%s> %d\n", yaku->GetIdentifier().c_str(), score);
-                    totalScore += score;
-                }
-            }
-            printf("  Total Score : %d\n\n", totalScore);
-
+            CalcAndPrintYaku(yakuList, reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind);
         }
 
         {
@@ -367,28 +325,7 @@ namespace Mini
             WindType roundWind = WindType::East;
             WindType selfWind  = WindType::West;
             
-            printf("Tiles: ");
-            for (auto& tileGroup: reassembledTileGroup.tileGroupList)
-            {
-                printf("%s ", tileGroup.ToString().c_str());
-            }
-            for (auto& tile: reassembledTileGroup.restTiles)
-            {
-                printf("%s ", tile->ToString().c_str());
-            }
-            printf("    %s\n", pickedTile->ToString().c_str());
-
-            int totalScore = 0;
-            for (auto& yaku: yakuList)
-            {
-                if (int score = yaku->GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind))
-                {
-                    printf("  <%s> %d\n", yaku->GetIdentifier().c_str(), score);
-                    totalScore += score;
-                }
-            }
-            printf("  Total Score : %d\n\n", totalScore);
-
+            CalcAndPrintYaku(yakuList, reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind);
         }
 
         {
@@ -407,35 +344,41 @@ namespace Mini
             };
             Tile* pickedTile = new NumberTile(NumberType::Dots, 5);
             bool isMenzen = true;
-            bool isRon    = false;
+            bool isRon    = true;
             WindType roundWind = WindType::East;
             WindType selfWind  = WindType::West;
-            
-            printf("Tiles: ");
-            for (auto& tileGroup: reassembledTileGroup.tileGroupList)
-            {
-                printf("%s ", tileGroup.ToString().c_str());
-            }
-            for (auto& tile: reassembledTileGroup.restTiles)
-            {
-                printf("%s ", tile->ToString().c_str());
-            }
-            printf("    %s\n", pickedTile->ToString().c_str());
 
-            int totalScore = 0;
-            for (auto& yaku: yakuList)
-            {
-                if (int score = yaku->GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind))
-                {
-                    printf("  <%s> %d\n", yaku->GetIdentifier().c_str(), score);
-                    totalScore += score;
-                }
-            }
-            printf("  Total Score : %d\n\n", totalScore);
-
+            CalcAndPrintYaku(yakuList, reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind);
         }
-
-        
    }
+
+
+    /* Utility for Test */
+    void CalcAndPrintYaku(std::vector<Yaku*> yakuList, const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        printf(" ( RoundWind: %s, SelfWind: %s )\n", GetWindTypeString(roundWind).c_str(), GetWindTypeString(selfWind).c_str());
+        printf("Tiles: ");
+        for (auto& tileGroup: reassembledTileGroup.tileGroupList)
+        {
+            printf("%s ", tileGroup.ToString().c_str());
+        }
+        for (auto& tile: reassembledTileGroup.restTiles)
+        {
+            printf("%s ", tile->ToString().c_str());
+        }
+        printf("    %s (%s)\n", pickedTile->ToString().c_str(), isRon ? "Ron" : "Tsumo");
+
+        int totalScore = 0;
+        for (auto& yaku: yakuList)
+        {
+            if (int score = yaku->GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind))
+            {
+                printf("  <%s> %d\n", yaku->GetIdentifier().c_str(), score);
+                totalScore += score;
+            }
+        }
+        printf("  Total Score : %d\n\n", totalScore);
+    }
+
 
 } // namespace Mini

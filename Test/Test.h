@@ -1,6 +1,10 @@
 #ifndef __MINI_MAHJONG_TEST_H__
 #define __MINI_MAHJONG_TEST_H__
 
+#include <Source/Yaku.h>
+
+#include <vector>
+
 namespace Mini
 {
     void Test01();
@@ -8,6 +12,10 @@ namespace Mini
     void Test03();
     void Test04();
     void Test05();
+
+
+    /* Utility for Test */
+    void CalcAndPrintYaku(std::vector<Yaku*> yakuList, const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
 }
 
 #endif // __MINI_MAHJONG_TEST_H__

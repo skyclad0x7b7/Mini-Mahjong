@@ -12,10 +12,10 @@ namespace Mini
     void Test03();
     void Test04();
     void Test05();
-
+    void Test06();
 
     /* Utility for Test */
-    void CalcAndPrintYaku(std::vector<Yaku*> yakuList, const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+    void CalcAndPrintYaku(std::vector<Yaku*> yakuList, const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
 }
 
 #endif // __MINI_MAHJONG_TEST_H__

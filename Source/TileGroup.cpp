@@ -65,5 +65,9 @@ namespace Mini
         return ret;
     }
 
-    
+    void TileGroup::Sort()
+    {
+        std::sort(tgTiles.begin(), tgTiles.end(), [](Tile* first, Tile* second){ return first->GetIdentifier() < second->GetIdentifier(); });
+    }
+
 } // namespace Mini

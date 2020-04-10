@@ -13,6 +13,7 @@ namespace Mini
     void Test04();
     void Test05();
     void Test06();
+    void Test07();
 
     /* Utility for Test */
     void CalcAndPrintYaku(std::vector<Yaku*> yakuList, const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);

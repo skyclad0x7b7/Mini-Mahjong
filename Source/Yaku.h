@@ -98,6 +98,13 @@ namespace Mini
         Ikkitsuukan(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
         virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
+
+    class SanshokuDoujun : public Yaku
+    {
+    public:
+        SanshokuDoujun(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+    };
 }
 
 #endif // __MINI_MAHJONG_YAKU_H__

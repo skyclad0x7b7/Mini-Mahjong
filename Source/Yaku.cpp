@@ -341,8 +341,12 @@ namespace Mini
         }
         std::vector<uint8_t> lastBodyIdList = { reassembledTileGroup.restTiles[0]->GetIdentifier(), reassembledTileGroup.restTiles[1]->GetIdentifier(), pickedTile->GetIdentifier() };
         std::sort(lastBodyIdList.begin(), lastBodyIdList.end());
-        if ( (lastBodyIdList[2] - lastBodyIdList[1]) != 1 || (lastBodyIdList[1] - lastBodyIdList[0]) != 1 ||
-                (lastBodyIdList[0] == lastBodyIdList[1] || lastBodyIdList[1] == lastBodyIdList[2]) )
+        if ( lastBodyIdList[0] == lastBodyIdList[1] ) // Not shuntsu
+        {
+            return 0;
+        }
+
+        if ( lastBodyIdList[1] == pickedTile->GetIdentifier() ) // Middle-Tile wating
         {
             return 0;
         }
@@ -527,9 +531,81 @@ namespace Mini
             }   
         }
 
-        for (NumberType numberType : NumberTypeList)
+        for (auto iter : ikkitsuukanPair)
         {
-            if (ikkitsuukanPair[numberType] == 0b111)
+            if (iter.second == 0b111)
+            {
+                return GetRealScore(isMenzen);
+            }
+        }
+
+        return 0;
+    }
+
+    /*
+    *  Sanshoku Doujun
+    */
+    int SanshokuDoujun::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>       restTileList = reassembledTileGroup.restTiles;
+
+        // Add pickedTile into tileGroup if needed
+        std::vector<TileGroup> tmpTileGroupList = tileGroupList;
+        if (restTileList.size() == 2) // Last one is body
+        {
+            if (pickedTile->GetIdentifier() != restTileList[0]->GetIdentifier()) // Shuntsu Check
+            {
+                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1], pickedTile }, nullptr, false));
+            }
+        }
+
+        std::map<uint32_t, uint8_t> sanshokuDoujunPair;
+        for (auto tileGroup : tmpTileGroupList)
+        {
+            if (tileGroup.GetType() != TileGroupType::Shuntsu)
+            {
+                continue;
+            }
+
+            tileGroup.Sort();
+            NumberTile *first  = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[0]);
+            NumberTile *second = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[1]);
+            NumberTile *third  = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[2]);
+            debug_assert(first  != nullptr, "tile must be number tile");
+            debug_assert(second != nullptr, "tile must be number tile");
+            debug_assert(third  != nullptr, "tile must be number tile");
+
+            int key = first->GetNumber() | second->GetNumber() << 2 | third->GetNumber() << 4;
+            if (auto iter = sanshokuDoujunPair.find(key); iter !=sanshokuDoujunPair.end())
+            {
+                switch(first->GetType())
+                {
+                case NumberType::Cracks:
+                    iter->second |= 0b001;
+                    break;
+                case NumberType::Bamboo:
+                    iter->second |= 0b010;
+                    break;
+                case NumberType::Dots:
+                    iter->second |= 0b100;
+                    break;
+                }
+            }
+            else
+            {
+                sanshokuDoujunPair[key] = 0;
+            }
+        }
+
+        for (auto iter : sanshokuDoujunPair)
+        {
+            if (iter.second == 0b111)
             {
                 return GetRealScore(isMenzen);
             }

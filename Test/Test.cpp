@@ -526,6 +526,92 @@ namespace Mini
         }
     }
 
+    /*
+    *  Yaku Test : ( Menzen, Yakuhai, Tanyao, Pinfu, Ipeko, Ryanpeko, Ikkitsukan ), Sanshoku Doujun, 
+    */
+    void Test07()
+    {
+        std::vector<Yaku*> yakuList = {
+            new Menzen("Menzen", 1, 0, YakuType::GENERAL),
+            new Yakuhai("Yakuhai", 1, 1, YakuType::GENERAL),
+            new Tanyao("Tanyao", 1, 1, YakuType::GENERAL),
+            new Pinfu("Pinfu", 1, 0, YakuType::GENERAL),
+            new Ipeko("Ipeko", 1, 0, YakuType::N_PEKO),
+            new Ryanpeko("Ryanpeko", 3, 1, YakuType::N_PEKO),
+            new Ikkitsuukan("Ikkitsuukan", 2, 1, YakuType::GENERAL),
+            new SanshokuDoujun("SanshokuDoujun", 2, 1, YakuType::GENERAL)
+        };
+
+        {
+            puts("[  Yaku Test 01  ]");
+            ReassembledTileGroup reassembledTileGroup = {
+                { 
+                    TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Dots, 2), new NumberTile(NumberType::Dots, 3), new NumberTile(NumberType::Dots, 4) }, nullptr, false),
+                },
+                {
+                    new NumberTile(NumberType::Cracks, 3),
+                    new NumberTile(NumberType::Cracks, 2)
+                }
+            };
+            Tile* pickedTile = new NumberTile(NumberType::Cracks, 4);
+            bool isMenzen = true;
+            bool isRon    = false;
+            WindType roundWind = WindType::East;
+            WindType selfWind  = WindType::West;
+            
+            CalcAndPrintYaku(yakuList, reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind);
+        }
+
+        {
+            puts("[  Yaku Test 02 ]");
+            ReassembledTileGroup reassembledTileGroup = {
+                { 
+                    TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Dots, 2), new NumberTile(NumberType::Dots, 3), new NumberTile(NumberType::Dots, 4) }, nullptr, false),
+                },
+                {
+                    new NumberTile(NumberType::Cracks, 4),
+                    new NumberTile(NumberType::Cracks, 2)
+                }
+            };
+            Tile* pickedTile = new NumberTile(NumberType::Cracks, 3);
+            bool isMenzen = true;
+            bool isRon    = false;
+            WindType roundWind = WindType::East;
+            WindType selfWind  = WindType::West;
+            
+            CalcAndPrintYaku(yakuList, reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind);
+        }
+
+        {
+            puts("[  Yaku Test 03 ]");
+            ReassembledTileGroup reassembledTileGroup = {
+                { 
+                    TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Dots, 2), new NumberTile(NumberType::Dots, 3), new NumberTile(NumberType::Dots, 4) }, nullptr, false),
+                },
+                {
+                    new NumberTile(NumberType::Cracks, 5),
+                    new NumberTile(NumberType::Cracks, 6)
+                }
+            };
+            Tile* pickedTile = new NumberTile(NumberType::Cracks, 4);
+            bool isMenzen = true;
+            bool isRon    = false;
+            WindType roundWind = WindType::East;
+            WindType selfWind  = WindType::West;
+            
+            CalcAndPrintYaku(yakuList, reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind);
+        }
+    }
+
 
     /* Utility for Test */
     void CalcAndPrintYaku(std::vector<Yaku*> yakuList, const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
@@ -580,6 +666,5 @@ namespace Mini
 
         printf("  Total Score : %d\n\n", totalScore);
     }
-
 
 } // namespace Mini

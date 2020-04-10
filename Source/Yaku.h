@@ -45,6 +45,7 @@ namespace Mini
         YakuType GetYakuType() const;
         int GetMenzenScore() const;
         int GetScore() const;
+        int GetRealScore(bool isMenzen) const;
 
         virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind) = 0;
     };
@@ -74,6 +75,13 @@ namespace Mini
     {
     public:
         Pinfu(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+    };
+
+    class Ipeko : public Yaku
+    {
+    public:
+        Ipeko(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
         virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 

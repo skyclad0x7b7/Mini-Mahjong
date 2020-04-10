@@ -165,6 +165,11 @@ namespace Mini
         return score;
     }
 
+    int Yaku::GetRealScore(bool isMenzen) const
+    {
+        return isMenzen ? GetMenzenScore() : GetScore();
+    }
+
     int Yaku::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         // Common condition
@@ -188,7 +193,7 @@ namespace Mini
 
         if (isMenzen && !isRon)
         {
-            return GetMenzenScore();
+            return GetRealScore(isMenzen);
         }
 
         return 0;
@@ -246,7 +251,7 @@ namespace Mini
             return 0;
         }
 
-        return GetMenzenScore();
+        return GetRealScore(isMenzen);
     }
 
     /*
@@ -269,7 +274,7 @@ namespace Mini
             if (tileGroup.GetType() == TileGroupType::Koutsu || tileGroup.GetType() == TileGroupType::Kangtsu)
             {
                 const uint8_t identifier = tileGroup.GetReadOnlyTiles()[0]->GetIdentifier();
-                ret += std::count(checkList.begin(), checkList.end(), identifier) * GetScore();
+                ret += std::count(checkList.begin(), checkList.end(), identifier) * GetRealScore(isMenzen);
             }
         }
 
@@ -291,7 +296,7 @@ namespace Mini
 
         if (!isMenzen || reassembledTileGroup.restTiles.size() == 1)
         {
-            return false;
+            return 0;
         }
 
         // Head Check
@@ -340,6 +345,23 @@ namespace Mini
             return 0;
         }
 
-        return GetMenzenScore();
+        return GetRealScore(isMenzen);
     }
+
+    /*
+    *  Ipeko
+    */
+    int Yakuhai::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+
+
+        return GetRealScore(isMenzen);
+    }
+
+
 } // namespace Mini

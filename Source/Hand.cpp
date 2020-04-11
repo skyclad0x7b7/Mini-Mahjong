@@ -1,5 +1,6 @@
 #include <Source/Hand.h>
 #include <Source/Assert.h>
+#include <Source/Utils.h>
 
 #include <algorithm>
 
@@ -33,7 +34,7 @@ namespace Mini
 
     void Hand::Sort()
     {
-        std::sort(handTiles.begin(), handTiles.end(), [](Tile* first, Tile* second){ return first->GetIdentifier() < second->GetIdentifier(); });
+        SortTiles(handTiles);
     }
 
 } // namespace Mini

@@ -1,7 +1,10 @@
 #ifndef __MINI_MAHJONG_UTILS_H__
 #define __MINI_MAHJONG_UTILS_H__
 
+#include <Source/Tile.h>
+
 #include <stdio.h>
+#include <vector>
 
 namespace Mini
 {
@@ -11,6 +14,8 @@ namespace Mini
 #else
 #define dbgprint(fmt, args...)
 #endif
+    
+    void SortTiles(std::vector<Tile*>& tileList);
 
 }
 

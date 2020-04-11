@@ -1,6 +1,6 @@
 #include <Source/TileGroup.h>
-
 #include <Source/Assert.h>
+#include <Source/Utils.h>
 
 namespace Mini
 {
@@ -9,22 +9,43 @@ namespace Mini
     // ==================================================
     TileGroup::TileGroup(const TileGroupType type, const std::vector<Tile*>& tiles, Tile *calledTile, bool isCalled)
     {
-        tgType = type;
-        tgTiles = tiles;
+        std::vector<Tile*> tmpTiles = tiles;
+
+        if (calledTile)
+        {
+            tmpTiles.emplace_back(calledTile);
+        }
+
+        SortTiles(tmpTiles);
 
         if (type == TileGroupType::Head)
         {
-            debug_assert(tiles.size() == 2, "Head's tiles count must be 2");
-            debug_assert(tiles[0]->GetIdentifier() == tiles[1]->GetIdentifier(), "Head tiles must be same");
+            debug_assert(tmpTiles.size() == 2, "Head's tiles count must be 2");
+            debug_assert(tmpTiles[0]->GetIdentifier() == tmpTiles[1]->GetIdentifier(), "Head's tiles must be same");
             debug_assert(calledTile == nullptr, "Head can't be called");
             debug_assert(isCalled == false, "Head can't be called");
         }
 
-        if (calledTile)
+        if (type == TileGroupType::Koutsu)
         {
-            tgTiles.emplace_back(calledTile);
+            debug_assert(tmpTiles.size() == 3, "Koutsu's tiles count must be 3");
+            debug_assert(tmpTiles[0]->GetIdentifier() == tmpTiles[1]->GetIdentifier() && tmpTiles[1]->GetIdentifier() == tmpTiles[2]->GetIdentifier(), "Koutsu's tiles must be same");
         }
 
+        if (type == TileGroupType::Kangtsu)
+        {
+            debug_assert(tmpTiles.size() == 4, "Kangtsu's tiles count must be 3");
+            debug_assert(tmpTiles[0]->GetIdentifier() == tmpTiles[1]->GetIdentifier() && tmpTiles[1]->GetIdentifier() == tmpTiles[2]->GetIdentifier() && tmpTiles[2]->GetIdentifier() == tmpTiles[3]->GetIdentifier(), "Kangtsu's tiles must be same");
+        }
+
+        if (type == TileGroupType::Shuntsu)
+        {
+            debug_assert(tmpTiles.size() == 3, "Shuntsu's tiles count must be 3");
+            debug_assert((tmpTiles[2]->GetIdentifier() - tmpTiles[1]->GetIdentifier()) == 1 && (tmpTiles[1]->GetIdentifier() - tmpTiles[0]->GetIdentifier()) == 1, "Shuntsu's tiles must be consecutive");
+        }
+
+        tgType = type;
+        tgTiles = tmpTiles;
         isOpened = isCalled;
     }
 
@@ -67,7 +88,7 @@ namespace Mini
 
     void TileGroup::Sort()
     {
-        std::sort(tgTiles.begin(), tgTiles.end(), [](Tile* first, Tile* second){ return first->GetIdentifier() < second->GetIdentifier(); });
+        SortTiles(tgTiles);
     }
 
 } // namespace Mini

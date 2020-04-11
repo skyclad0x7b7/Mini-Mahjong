@@ -722,5 +722,140 @@ namespace Mini
         return GetRealScore(isMenzen);
     }
 
+    /*
+    *  JunChanta
+    */
+    int JunChanta::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        
+        // Check TileGroupList
+        for (auto& tileGroup : tileGroupList)
+        {
+            bool found = false;
+            for (auto& tile : tileGroup.GetReadOnlyTiles()) 
+            {
+                if (auto iter = std::find(RoutouTileIdList.begin(), RoutouTileIdList.end(), tile->GetIdentifier()); iter != RoutouTileIdList.end())
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                return 0;
+            }
+        }
+
+        // Check RestTileList
+        bool found = std::find(RoutouTileIdList.begin(), RoutouTileIdList.end(), pickedTile->GetIdentifier()) != RoutouTileIdList.end();
+        for (auto& tile : restTileList)
+        {
+            if (auto iter = std::find(RoutouTileIdList.begin(), RoutouTileIdList.end(), tile->GetIdentifier()); iter != RoutouTileIdList.end())
+            {
+                found = true;
+                break;
+            } 
+        } 
+        if (!found)
+        {
+            return 0;
+        }
+        
+        return GetRealScore(isMenzen);
+    }
+
+    /*
+    *  HonRoutou
+    */
+    int HonRoutou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        
+        // Check TileGroupList
+        for (auto& tileGroup : tileGroupList)
+        {
+            for (auto& tile : tileGroup.GetReadOnlyTiles()) 
+            {
+                if (auto iter = std::find(YaochuuTileIdList.begin(), YaochuuTileIdList.end(), tile->GetIdentifier()); iter == YaochuuTileIdList.end())
+                {
+                    return 0;
+                }
+            }
+        }
+
+        // Check RestTileList
+        for (auto& tile : restTileList)
+        {
+            if (auto iter = std::find(YaochuuTileIdList.begin(), YaochuuTileIdList.end(), tile->GetIdentifier()); iter == YaochuuTileIdList.end())
+            {
+                return 0;
+            } 
+        }
+
+        // Check PickedTile
+        if (std::find(YaochuuTileIdList.begin(), YaochuuTileIdList.end(), pickedTile->GetIdentifier()) == YaochuuTileIdList.end())
+        {
+            return 0;
+        }
+        
+        return GetRealScore(isMenzen);
+    }
+
+    /*
+    *  ChinRoutou
+    */
+    int ChinRoutou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        
+        // Check TileGroupList
+        for (auto& tileGroup : tileGroupList)
+        {
+            for (auto& tile : tileGroup.GetReadOnlyTiles()) 
+            {
+                if (auto iter = std::find(RoutouTileIdList.begin(), RoutouTileIdList.end(), tile->GetIdentifier()); iter == RoutouTileIdList.end())
+                {
+                    return 0;
+                }
+            }
+        }
+
+        // Check RestTileList
+        for (auto& tile : restTileList)
+        {
+            if (auto iter = std::find(RoutouTileIdList.begin(), RoutouTileIdList.end(), tile->GetIdentifier()); iter == RoutouTileIdList.end())
+            {
+                return 0;
+            } 
+        }
+
+        // Check PickedTile
+        if (std::find(RoutouTileIdList.begin(), RoutouTileIdList.end(), pickedTile->GetIdentifier()) == RoutouTileIdList.end())
+        {
+            return 0;
+        }
+        
+        return GetRealScore(isMenzen);
+    }
+
 
 } // namespace Mini

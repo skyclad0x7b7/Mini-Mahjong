@@ -659,7 +659,7 @@ namespace Mini
     }
 
     /*
-    *  Yaku Test : ( Menzen, Yakuhai, Tanyao, Pinfu, Ipeko, Ryanpeko, Ikkitsukan, Sanshoku Doujun, Sanshoku Doukou ), Chanta
+    *  Yaku Test : ( Menzen, Yakuhai, Tanyao, Pinfu, Ipeko, Ryanpeko, Ikkitsukan, Sanshoku Doujun, Sanshoku Doukou ), Chanta, JunChanta, HonRoutou, ChinRoutou
     */
     void Test08()
     {
@@ -673,7 +673,10 @@ namespace Mini
             new Ikkitsuukan("Ikkitsuukan", 2, 1, YakuType::GENERAL),
             new SanshokuDoujun("SanshokuDoujun", 2, 1, YakuType::GENERAL),
             new SanshokuDoukou("SanshokuDoukou", 2, 2, YakuType::GENERAL),
-            new Chanta("Chanta", 2, 1, YakuType::CHANTA)
+            new Chanta("Chanta", 2, 1, YakuType::CHANTA),
+            new JunChanta("JunChanta", 3, 2, YakuType::CHANTA),
+            new HonRoutou("HonRoutou", 2, 2, YakuType::CHANTA),
+            new ChinRoutou("ChinRoutou", 13, 13, YakuType::YAKUMAN)
         };
 
         {
@@ -714,6 +717,75 @@ namespace Mini
                 }
             };
             Tile* pickedTile = new WindTile(WindType::East);
+            bool isMenzen = false;
+            bool isRon    = false;
+            WindType roundWind = WindType::East;
+            WindType selfWind  = WindType::West;
+            
+            CalcAndPrintYaku(yakuList, reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind);
+        }
+
+        {
+            puts("[  Yaku Test 03  ]");
+            ReassembledTileGroup reassembledTileGroup = {
+                { 
+                    TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Dots, 1), new NumberTile(NumberType::Dots, 1) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 3) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 1), new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Dots, 1), new NumberTile(NumberType::Dots, 2), new NumberTile(NumberType::Dots, 3) }, nullptr, false),
+                },
+                {
+                    new NumberTile(NumberType::Dots, 1),
+                    new NumberTile(NumberType::Dots, 2)
+                }
+            };
+            Tile* pickedTile = new NumberTile(NumberType::Dots, 3);
+            bool isMenzen = false;
+            bool isRon    = false;
+            WindType roundWind = WindType::East;
+            WindType selfWind  = WindType::West;
+            
+            CalcAndPrintYaku(yakuList, reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind);
+        }
+
+        {
+            puts("[  Yaku Test 04  ]");
+            ReassembledTileGroup reassembledTileGroup = {
+                { 
+                    TileGroup(TileGroupType::Head, { new WindTile(WindType::South), new WindTile(WindType::South) }, nullptr, false),
+                    TileGroup(TileGroupType::Koutsu, { new NumberTile(NumberType::Bamboo, 1), new NumberTile(NumberType::Bamboo, 1), new NumberTile(NumberType::Bamboo, 1) }, nullptr, false),
+                    TileGroup(TileGroupType::Kangtsu, { new NumberTile(NumberType::Dots, 9), new NumberTile(NumberType::Dots, 9), new NumberTile(NumberType::Dots, 9), new NumberTile(NumberType::Dots, 9) }, nullptr, false),
+                    TileGroup(TileGroupType::Koutsu, { new DragonTile(DragonType::White), new DragonTile(DragonType::White), new DragonTile(DragonType::White) }, nullptr, false),
+                },
+                {
+                    new WindTile(WindType::East),
+                    new WindTile(WindType::East)
+                }
+            };
+            Tile* pickedTile = new WindTile(WindType::East);
+            bool isMenzen = false;
+            bool isRon    = false;
+            WindType roundWind = WindType::East;
+            WindType selfWind  = WindType::West;
+            
+            CalcAndPrintYaku(yakuList, reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind);
+        }
+
+        {
+            puts("[  Yaku Test 05  ]");
+            ReassembledTileGroup reassembledTileGroup = {
+                { 
+                    TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1) }, nullptr, false),
+                    TileGroup(TileGroupType::Koutsu, { new NumberTile(NumberType::Cracks, 9), new NumberTile(NumberType::Cracks, 9), new NumberTile(NumberType::Cracks, 9) }, nullptr, false),
+                    TileGroup(TileGroupType::Koutsu, { new NumberTile(NumberType::Bamboo, 9), new NumberTile(NumberType::Bamboo, 9), new NumberTile(NumberType::Bamboo, 9) }, nullptr, false),
+                    TileGroup(TileGroupType::Koutsu, { new NumberTile(NumberType::Dots, 1), new NumberTile(NumberType::Dots, 1), new NumberTile(NumberType::Dots, 1) }, nullptr, false),
+                },
+                {
+                    new NumberTile(NumberType::Dots, 9),
+                    new NumberTile(NumberType::Dots, 9)
+                }
+            };
+            Tile* pickedTile = new NumberTile(NumberType::Dots, 9);
             bool isMenzen = false;
             bool isRon    = false;
             WindType roundWind = WindType::East;
@@ -770,6 +842,18 @@ namespace Mini
                 }
             }
         }
+
+        // Yakuman post-process
+        if (std::find_if(countedYakuList.begin(), countedYakuList.end(), [](const std::pair<Yaku*, int>& y){ return y.first->GetYakuType() == YakuType::YAKUMAN; }) != countedYakuList.end())
+        {
+            auto iter = std::find_if(countedYakuList.begin(), countedYakuList.end(), [](const std::pair<Yaku*, int>& y){ return y.first->GetYakuType() != YakuType::YAKUMAN; });
+            while (iter != countedYakuList.end())
+            {
+                countedYakuList.erase(iter);
+                iter = std::find_if(countedYakuList.begin(), countedYakuList.end(), [](const std::pair<Yaku*, int>& y){ return y.first->GetYakuType() != YakuType::YAKUMAN; });
+            }
+        }
+
         for (auto& yakuPair : countedYakuList)
         {
             printf("  <%s> %d\n", yakuPair.first->GetIdentifier().c_str(), yakuPair.second);

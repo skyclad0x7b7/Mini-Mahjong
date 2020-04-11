@@ -101,6 +101,15 @@ namespace Mini
             NumberTile(NumberType::Dots, 9).GetIdentifier()
     };
 
+    const static std::vector<uint8_t> RoutouTileIdList = {
+        NumberTile(NumberType::Cracks, 1).GetIdentifier(),
+        NumberTile(NumberType::Cracks, 9).GetIdentifier(),
+        NumberTile(NumberType::Bamboo, 1).GetIdentifier(),
+        NumberTile(NumberType::Bamboo, 9).GetIdentifier(),
+        NumberTile(NumberType::Dots, 1).GetIdentifier(),
+        NumberTile(NumberType::Dots, 9).GetIdentifier()
+    };
+
 } // namespace Mini
 
 #endif // __MINI_MAHJONG_TILE_H__

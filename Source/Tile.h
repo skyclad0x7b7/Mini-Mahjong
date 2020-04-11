@@ -85,6 +85,22 @@ namespace Mini
     // Some functions related with Tile class
     std::vector<Tile *> GetCompleteTileLists();
 
+    const static std::vector<uint8_t> YaochuuTileIdList = { 
+            DragonTile(DragonType::White).GetIdentifier(),
+            DragonTile(DragonType::Green).GetIdentifier(),
+            DragonTile(DragonType::Red).GetIdentifier(),
+            WindTile(WindType::East).GetIdentifier(),
+            WindTile(WindType::South).GetIdentifier(),
+            WindTile(WindType::West).GetIdentifier(),
+            WindTile(WindType::North).GetIdentifier(),
+            NumberTile(NumberType::Cracks, 1).GetIdentifier(),
+            NumberTile(NumberType::Cracks, 9).GetIdentifier(),
+            NumberTile(NumberType::Bamboo, 1).GetIdentifier(),
+            NumberTile(NumberType::Bamboo, 9).GetIdentifier(),
+            NumberTile(NumberType::Dots, 1).GetIdentifier(),
+            NumberTile(NumberType::Dots, 9).GetIdentifier()
+    };
+
 } // namespace Mini
 
 #endif // __MINI_MAHJONG_TILE_H__

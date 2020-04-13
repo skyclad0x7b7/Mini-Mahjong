@@ -15,3 +15,5 @@ add_library(Mini-Mahjong STATIC
     Yaku.cpp
     Yaku.h
 )
+
+set_target_properties (Mini-Mahjong PROPERTIES CXX_STANDARD 17)

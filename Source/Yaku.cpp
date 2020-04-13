@@ -2,6 +2,7 @@
 
 #include <Source/Assert.h>
 
+#include <algorithm>
 #include <map>
 
 namespace Mini

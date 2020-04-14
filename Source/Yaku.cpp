@@ -563,6 +563,8 @@ namespace Mini
                 case NumberType::Dots:
                     iter->second |= 0b100;
                     break;
+                default:
+                    assert_unreachable();
                 }
             }
             else
@@ -578,6 +580,8 @@ namespace Mini
                 case NumberType::Dots:
                     sanshokuDoujunPair[key] = 0b100;
                     break;
+                default:
+                    assert_unreachable();
                 }
             }
         }
@@ -644,6 +648,8 @@ namespace Mini
                 case NumberType::Dots:
                     iter->second |= 0b100;
                     break;
+                default:
+                    assert_unreachable();
                 }
             }
             else
@@ -659,6 +665,8 @@ namespace Mini
                 case NumberType::Dots:
                     sanshokuDoukouPair[key] =  0b100;
                     break;
+                default:
+                    assert_unreachable();
                 }
             }
         }
@@ -855,6 +863,198 @@ namespace Mini
             return 0;
         }
         
+        return GetRealScore(isMenzen);
+    }
+
+    /*
+    *  Tsuuiisou
+    */
+    int Tsuuiisou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        
+        // Check TileGroupList
+        for (auto& tileGroup : tileGroupList)
+        {
+            // Don't need to check all tiles in TileGroup
+            if (std::find(JiTileIdList.begin(), JiTileIdList.end(), tileGroup.GetReadOnlyTiles()[0]->GetIdentifier()) == JiTileIdList.end())
+            {
+                return 0;
+            }
+        }
+
+        // Check RestTileList & PickedTile
+        // Don't need to check all tiles in RestTile and PickedTile
+        if (std::find(JiTileIdList.begin(), JiTileIdList.end(), pickedTile->GetIdentifier()) == JiTileIdList.end())
+        {
+            return 0;
+        }
+        
+        return GetRealScore(isMenzen);
+    }
+
+    /*
+    *  Honiisou
+    */
+    int Honiisou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+
+        NumberType numberType = NumberType::None;
+
+        // Check TileGroupList
+        for (auto& tileGroup : tileGroupList)
+        {
+            NumberTile *tile = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[0]);
+            if (!tile)
+            {
+                continue;
+            }
+
+            if (numberType == NumberType::None)
+            {
+                numberType = tile->GetType();
+            }
+            else
+            {
+                if (numberType != tile->GetType())
+                {
+                    return 0;
+                }
+            }
+        }
+
+        // Check RestTileList & PickedTile
+        // Don't need to check all tiles in RestTile and PickedTile
+        if (NumberTile *tile = dynamic_cast<NumberTile*>(pickedTile))
+        {
+            if (numberType == NumberType::None)
+            {
+                numberType = tile->GetType();
+            }
+            else if (numberType != tile->GetType())
+            {
+                return 0;
+            }
+        }
+
+        // Check if there's any number tile or not
+        if (numberType == NumberType::None)
+        {
+            return 0;
+        }
+
+        return GetRealScore(isMenzen);
+    }
+
+    /*
+    *  Chiniisou
+    */
+    int Chiniisou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+
+        NumberType numberType = NumberType::None;
+
+        // Check TileGroupList
+        for (auto& tileGroup : tileGroupList)
+        {
+            NumberTile *tile = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[0]);
+            if (!tile)
+            {
+                return 0;
+            }
+
+            if (numberType == NumberType::None)
+            {
+                numberType = tile->GetType();
+            }
+            else
+            {
+                if (numberType != tile->GetType())
+                {
+                    return 0;
+                }
+            }
+        }
+
+        // Check RestTileList & PickedTile
+        // Don't need to check all tiles in RestTile and PickedTile
+        if (NumberTile *tile = dynamic_cast<NumberTile*>(pickedTile))
+        {
+            if (numberType == NumberType::None)
+            {
+                numberType = tile->GetType();
+            }
+            else if (numberType != tile->GetType())
+            {
+                return 0;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+        
+
+        // Check if there's any number tile or not
+        if (numberType == NumberType::None)
+        {
+            return 0;
+        }
+        
+        return GetRealScore(isMenzen);
+    }
+
+    /*
+    *  Chitoitsu
+    */
+    int Chitoitsu::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+
+        if (!isMenzen) // Chitoitsu must be in Menzen state
+        {
+            return 0;
+        }
+
+        if (restTileList.size() != 1) // Chitoitsu must wait for Head
+        {
+            return 0;
+        }
+
+        for (auto& tileGroup : tileGroupList)
+        {
+            if (tileGroup.GetType() != TileGroupType::Head)
+            {
+                return 0;
+            }
+        }
+
         return GetRealScore(isMenzen);
     }
 

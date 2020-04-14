@@ -110,6 +110,16 @@ namespace Mini
         NumberTile(NumberType::Dots, 9).GetIdentifier()
     };
 
+    const static std::vector<uint8_t> JiTileIdList = {
+        DragonTile(DragonType::White).GetIdentifier(),
+        DragonTile(DragonType::Green).GetIdentifier(),
+        DragonTile(DragonType::Red).GetIdentifier(),
+        WindTile(WindType::East).GetIdentifier(),
+        WindTile(WindType::South).GetIdentifier(),
+        WindTile(WindType::West).GetIdentifier(),
+        WindTile(WindType::North).GetIdentifier()
+    };
+
 } // namespace Mini
 
 #endif // __MINI_MAHJONG_TILE_H__

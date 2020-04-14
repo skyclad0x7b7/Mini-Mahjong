@@ -27,9 +27,10 @@ namespace Mini
 
     enum class NumberType
     {
-        Cracks = 0,
-        Bamboo = 1,
-        Dots   = 2,
+        None = 0,
+        Cracks = 1,
+        Bamboo = 2,
+        Dots   = 3,
     };
 
     static const std::vector<NumberType> NumberTypeList = { NumberType::Cracks, NumberType::Bamboo, NumberType::Dots };

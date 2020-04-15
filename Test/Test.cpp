@@ -927,7 +927,7 @@ namespace Mini
             new Tanyao("Tanyao", 1, 1, YakuType::GENERAL),
             new Pinfu("Pinfu", 1, 0, YakuType::GENERAL),
             new Ipeko("Ipeko", 1, 0, YakuType::N_PEKO),
-            new Ryanpeko("Ryanpeko", 3, 1, YakuType::N_PEKO),
+            new Ryanpeko("Ryanpeko", 3, 0, YakuType::N_PEKO),
             new Ikkitsuukan("Ikkitsuukan", 2, 1, YakuType::GENERAL),
             new SanshokuDoujun("SanshokuDoujun", 2, 1, YakuType::GENERAL),
             new SanshokuDoukou("SanshokuDoukou", 2, 2, YakuType::GENERAL),

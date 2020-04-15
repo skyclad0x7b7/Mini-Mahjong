@@ -10,6 +10,7 @@ int main()
     // Mini::Test06();
     // Mini::Test07();
     // Mini::Test08();
-    Mini::Test09();
+    // Mini::Test09();
+    Mini::Test10();
     return 0;
 }

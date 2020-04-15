@@ -230,7 +230,7 @@ namespace Mini
         {
             if (pickedTile->GetIdentifier() == restTileList[0]->GetIdentifier()) // Koutsu Check
             {
-                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1], pickedTile }, nullptr, false));
+                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
         }
 
@@ -341,7 +341,7 @@ namespace Mini
         {
             if (pickedTile->GetIdentifier() != restTileList[0]->GetIdentifier()) // Shuntsu Check
             {
-                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1], pickedTile }, nullptr, false));
+                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
         }
 
@@ -398,7 +398,7 @@ namespace Mini
         {
             if (pickedTile->GetIdentifier() != restTileList[0]->GetIdentifier()) // Shuntsu Check
             {
-                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1], pickedTile }, nullptr, false));
+                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
         }
 
@@ -465,7 +465,7 @@ namespace Mini
         {
             if (pickedTile->GetIdentifier() != restTileList[0]->GetIdentifier()) // Shuntsu Check
             {
-                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1], pickedTile }, nullptr, false));
+                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
         }
         
@@ -529,7 +529,7 @@ namespace Mini
         {
             if (pickedTile->GetIdentifier() != restTileList[0]->GetIdentifier()) // Shuntsu Check
             {
-                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1], pickedTile }, nullptr, false));
+                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
         }
 
@@ -616,7 +616,7 @@ namespace Mini
         {
             if (pickedTile->GetIdentifier() == restTileList[0]->GetIdentifier()) // Koutsu Check
             {
-                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1], pickedTile }, nullptr, false));
+                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
         }
 
@@ -1058,5 +1058,123 @@ namespace Mini
         return GetRealScore(isMenzen);
     }
 
+    /*
+    *  Toitoi
+    */
+    int Toitoi::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
 
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+
+        // Add pickedTile into tileGroup if needed
+        std::vector<TileGroup> tmpTileGroupList = tileGroupList;
+        if (restTileList.size() == 2) // Last one is body
+        {
+            if (pickedTile->GetIdentifier() == restTileList[0]->GetIdentifier()) // Koutsu Check
+            {
+                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
+            }
+        }
+
+        for (auto& tileGroup : tmpTileGroupList)
+        {
+            if (tileGroup.GetType() == TileGroupType::Shuntsu)
+            {
+                return 0;
+            }
+        }
+
+        return GetRealScore(isMenzen);
+    }
+
+    /*
+    *  Sanankou
+    */
+    int Sanankou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+
+        // Add pickedTile into tileGroup if needed
+        std::vector<TileGroup> tmpTileGroupList = tileGroupList;
+        if (restTileList.size() == 2) // Last one is body
+        {
+            if (pickedTile->GetIdentifier() == restTileList[0]->GetIdentifier()) // Koutsu Check
+            {
+                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
+            }
+        }
+
+        int count = 0;
+        for (auto& tileGroup : tmpTileGroupList)
+        {
+            if (tileGroup.GetType() == TileGroupType::Koutsu || tileGroup.GetType() == TileGroupType::Kangtsu)
+            {
+                if (!tileGroup.GetIsCalled())
+                {
+                    count++;
+                }
+            }
+        }
+
+        if (count == 3)
+        {
+            return GetRealScore(isMenzen);
+        }
+
+        return 0;
+    }
+
+    /*
+    *  Suuankou
+    */
+    int Suuankou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+
+        // Add pickedTile into tileGroup if needed
+        std::vector<TileGroup> tmpTileGroupList = tileGroupList;
+        if (restTileList.size() == 2) // Last one is body
+        {
+            if (pickedTile->GetIdentifier() == restTileList[0]->GetIdentifier()) // Koutsu Check
+            {
+                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
+            }
+        }
+
+        int count = 0;
+        for (auto& tileGroup : tmpTileGroupList)
+        {
+            if (tileGroup.GetType() == TileGroupType::Koutsu || tileGroup.GetType() == TileGroupType::Kangtsu)
+            {
+                if (!tileGroup.GetIsCalled())
+                {
+                    count++;
+                }
+            }
+        }
+
+        if (count == 4)
+        {
+            return GetRealScore(isMenzen);
+        }
+
+        return 0;
+    }
 } // namespace Mini

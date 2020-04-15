@@ -7,7 +7,7 @@ namespace Mini
     // ==================================================
     // class TileGroup implementation
     // ==================================================
-    TileGroup::TileGroup(const TileGroupType type, const std::vector<Tile*>& tiles, Tile *calledTile, bool isCalled)
+    TileGroup::TileGroup(const TileGroupType type, const std::vector<Tile*>& tiles, Tile *calledTile, bool argIsCalled)
     {
         std::vector<Tile*> tmpTiles = tiles;
 
@@ -23,7 +23,7 @@ namespace Mini
             debug_assert(tmpTiles.size() == 2, "Head's tiles count must be 2");
             debug_assert(tmpTiles[0]->GetIdentifier() == tmpTiles[1]->GetIdentifier(), "Head's tiles must be same");
             debug_assert(calledTile == nullptr, "Head can't be called");
-            debug_assert(isCalled == false, "Head can't be called");
+            debug_assert(argIsCalled == false, "Head can't be called");
         }
 
         if (type == TileGroupType::Koutsu)
@@ -46,7 +46,7 @@ namespace Mini
 
         tgType = type;
         tgTiles = tmpTiles;
-        isOpened = isCalled;
+        isCalled = argIsCalled;
     }
 
     // Setters
@@ -55,9 +55,9 @@ namespace Mini
         tgType = type;
     }
 
-    void TileGroup::SetIsOpened(const bool value)
+    void TileGroup::SetIsCalled(const bool value)
     {
-        isOpened = value;
+        isCalled = value;
     }
 
     // Getters
@@ -66,9 +66,9 @@ namespace Mini
         return tgType;
     }
 
-    bool TileGroup::GetIsOpened() const
+    bool TileGroup::GetIsCalled() const
     {
-        return isOpened;
+        return isCalled;
     }
 
     const std::vector<Tile*>& TileGroup::GetReadOnlyTiles() const

@@ -5,6 +5,21 @@
 #include <algorithm>
 #include <map>
 
+namespace
+{
+    template <typename Cont>
+    auto FindIdentifier(const Cont& container, const Mini::Tile& tile)
+    {
+        return std::find(container.begin(), container.end(), tile);
+    }
+
+    template <typename Cont>
+    bool InIdentifierList(const Cont& container, const Mini::Tile& tile)
+    {
+        return FindIdentifier(container, tile) != container.end();
+    }
+}
+
 namespace Mini
 {
     bool CheckChitoitsuPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<TileCRef>& handTiles, const Tile& pickedTile, ReassembledTileGroup& result)
@@ -18,9 +33,9 @@ namespace Mini
         std::vector<uint8_t> identifierList;
         for (const Tile& tile : handTiles)
         {
-            identifierList.emplace_back(tile.GetIdentifier());
+            identifierList.emplace_back(tile);
         } 
-        identifierList.emplace_back(pickedTile.GetIdentifier());
+        identifierList.emplace_back(pickedTile);
 
         for (uint8_t identifier : identifierList)
         {
@@ -38,12 +53,13 @@ namespace Mini
             const Tile& firstTile = tmp.back();
             tmp.pop_back();
 
-            auto secondTileIter = std::find_if(tmp.begin(), tmp.end(), [&](const Tile& tile) { return tile.GetIdentifier() == firstTile.GetIdentifier(); });
+            auto secondTileIter = FindIdentifier(tmp, firstTile);
             if (secondTileIter == tmp.end())
             {
                 result.restTiles.emplace_back(*secondTileIter);
                 continue;
             }
+
 
             result.tileGroupList.emplace_back(TileGroupType::Head, std::vector { TileCRef(firstTile), *secondTileIter });
         }
@@ -61,12 +77,12 @@ namespace Mini
         // Simple Check 
         for (const Tile& tile : handTiles)
         {
-            if (std::find(YaochuuTileIdList.begin(), YaochuuTileIdList.end(), tile.GetIdentifier()) == YaochuuTileIdList.end())
+            if (!InIdentifierList(YaochuuTileIdList, tile))
             {
                 return false;
             }
         }
-        if (std::find(YaochuuTileIdList.begin(), YaochuuTileIdList.end(), pickedTile.GetIdentifier()) == YaochuuTileIdList.end())
+        if (!InIdentifierList(YaochuuTileIdList, pickedTile))
         {
             return false;
         }
@@ -76,7 +92,7 @@ namespace Mini
         bool once = true;
         for (const Tile& tile : handTiles)
         {
-            auto iter = std::find(checkTileIdentifierList.begin(), checkTileIdentifierList.end(), tile.GetIdentifier());
+            auto iter = FindIdentifier(checkTileIdentifierList, tile);
             if (iter == checkTileIdentifierList.end())
             {
                 if (std::exchange(once, false))
@@ -100,7 +116,7 @@ namespace Mini
             // 13-way wating
             return true;
         }
-        else if (checkTileIdentifierList[0] == pickedTile.GetIdentifier())
+        else if (checkTileIdentifierList[0] == pickedTile)
         {
             // common kokushimusou
             return true;
@@ -188,7 +204,7 @@ namespace Mini
         {
             for (const Tile& tile : tileGroup.GetReadOnlyTiles())
             {
-                if (std::find(YaochuuTileIdList.begin(), YaochuuTileIdList.end(), tile.GetIdentifier()) != YaochuuTileIdList.end())
+                if (InIdentifierList(YaochuuTileIdList, tile))
                 {
                     return 0;
                 }
@@ -197,13 +213,13 @@ namespace Mini
 
         for (const Tile& tile : reassembledTileGroup.restTiles)
         {
-            if (std::find(YaochuuTileIdList.begin(), YaochuuTileIdList.end(), tile.GetIdentifier()) != YaochuuTileIdList.end())
+            if (InIdentifierList(YaochuuTileIdList, tile))
             {
                 return 0;
             }
         }
 
-        if (std::find(YaochuuTileIdList.begin(), YaochuuTileIdList.end(), pickedTile.GetIdentifier()) != YaochuuTileIdList.end())
+        if (InIdentifierList(YaochuuTileIdList, pickedTile))
         {
             return 0;
         }
@@ -236,14 +252,13 @@ namespace Mini
 
         int ret = 0;
 
-        const std::vector<uint8_t> checkList = { DragonTile(DragonType::White).GetIdentifier(), DragonTile(DragonType::Green).GetIdentifier(), DragonTile(DragonType::Red).GetIdentifier(), 
-                                                WindTile(roundWind).GetIdentifier(), WindTile(selfWind).GetIdentifier() };
+        const std::vector<uint8_t> checkList = { DragonTile(DragonType::White), DragonTile(DragonType::Green), DragonTile(DragonType::Red), WindTile(roundWind), WindTile(selfWind) };
 
         for (auto& tileGroup : tmpTileGroupList)
         {
             if (tileGroup.GetType() == TileGroupType::Koutsu || tileGroup.GetType() == TileGroupType::Kangtsu)
             {
-                const uint8_t identifier = tileGroup.GetReadOnlyTiles()[0].get().GetIdentifier();
+                const uint8_t identifier = static_cast<const Tile&>(tileGroup.GetReadOnlyTiles()[0]);
                 ret += std::count(checkList.begin(), checkList.end(), identifier) * GetRealScore(isMenzen);
             }
         }
@@ -261,8 +276,7 @@ namespace Mini
             return 0;
         }
 
-        std::vector<uint8_t> checkList = { DragonTile(DragonType::White).GetIdentifier(), DragonTile(DragonType::Green).GetIdentifier(), DragonTile(DragonType::Red).GetIdentifier(),
-                                        WindTile(roundWind).GetIdentifier(), WindTile(selfWind).GetIdentifier() };
+        std::vector<uint8_t> checkList = { DragonTile(DragonType::White), DragonTile(DragonType::Green), DragonTile(DragonType::Red), WindTile(roundWind), WindTile(selfWind) };
 
         if (!isMenzen || reassembledTileGroup.restTiles.size() == 1)
         {
@@ -275,7 +289,7 @@ namespace Mini
         {
             return 0;
         }
-        if (std::find(checkList.begin(), checkList.end(), headGroupIter->GetReadOnlyTiles()[0].get().GetIdentifier()) != checkList.end())
+        if (InIdentifierList(checkList, headGroupIter->GetReadOnlyTiles()[0]))
         {
             return 0;
         }
@@ -307,14 +321,14 @@ namespace Mini
         {
             return 0;
         }
-        std::vector<uint8_t> lastBodyIdList = { reassembledTileGroup.restTiles[0].get().GetIdentifier(), reassembledTileGroup.restTiles[1].get().GetIdentifier(), pickedTile.GetIdentifier() };
+        std::vector<uint8_t> lastBodyIdList = { static_cast<const Tile&>(reassembledTileGroup.restTiles[0]), static_cast<const Tile&>(reassembledTileGroup.restTiles[1]), pickedTile };
         std::sort(lastBodyIdList.begin(), lastBodyIdList.end());
-        if ( lastBodyIdList[0] == lastBodyIdList[1] ) // Not shuntsu
+        if (lastBodyIdList[0] == lastBodyIdList[1]) // Not shuntsu
         {
             return 0;
         }
 
-        if ( lastBodyIdList[1] == pickedTile.GetIdentifier() ) // Middle-Tile wating
+        if (lastBodyIdList[1] == pickedTile) // Middle-Tile wating
         {
             return 0;
         }
@@ -706,7 +720,7 @@ namespace Mini
             bool found = false;
             for (const Tile& tile : tileGroup.GetReadOnlyTiles()) 
             {
-                if (auto const iter = std::find(YaochuuTileIdList.begin(), YaochuuTileIdList.end(), tile.GetIdentifier()); iter != YaochuuTileIdList.end())
+                if (const auto iter = FindIdentifier(YaochuuTileIdList, tile); iter != YaochuuTileIdList.end())
                 {
                     found = true;
                     break;
@@ -719,10 +733,10 @@ namespace Mini
         }
 
         // Check RestTileList
-        bool found = std::find(YaochuuTileIdList.begin(), YaochuuTileIdList.end(), pickedTile.GetIdentifier()) != YaochuuTileIdList.end();
+        bool found = InIdentifierList(YaochuuTileIdList, pickedTile);
         for (const Tile& tile : restTileList)
         {
-            if (auto iter = std::find(YaochuuTileIdList.begin(), YaochuuTileIdList.end(), tile.GetIdentifier()); iter != YaochuuTileIdList.end())
+            if (InIdentifierList(YaochuuTileIdList, tile))
             {
                 found = true;
                 break;
@@ -755,7 +769,7 @@ namespace Mini
             bool found = false;
             for (const Tile& tile : tileGroup.GetReadOnlyTiles())
             {
-                if (auto iter = std::find(RoutouTileIdList.begin(), RoutouTileIdList.end(), tile.GetIdentifier()); iter != RoutouTileIdList.end())
+                if (InIdentifierList(RoutouTileIdList, tile))
                 {
                     found = true;
                     break;
@@ -768,10 +782,10 @@ namespace Mini
         }
 
         // Check RestTileList
-        bool found = std::find(RoutouTileIdList.begin(), RoutouTileIdList.end(), pickedTile.GetIdentifier()) != RoutouTileIdList.end();
+        bool found = InIdentifierList(RoutouTileIdList, pickedTile);
         for (const Tile& tile : restTileList)
         {
-            if (auto iter = std::find(RoutouTileIdList.begin(), RoutouTileIdList.end(), tile.GetIdentifier()); iter != RoutouTileIdList.end())
+            if (InIdentifierList(RoutouTileIdList, tile))
             {
                 found = true;
                 break;
@@ -803,7 +817,7 @@ namespace Mini
         {
             for (const Tile& tile : tileGroup.GetReadOnlyTiles()) 
             {
-                if (auto iter = std::find(YaochuuTileIdList.begin(), YaochuuTileIdList.end(), tile.GetIdentifier()); iter == YaochuuTileIdList.end())
+                if (!InIdentifierList(YaochuuTileIdList, tile))
                 {
                     return 0;
                 }
@@ -813,14 +827,14 @@ namespace Mini
         // Check RestTileList
         for (const Tile& tile : restTileList)
         {
-            if (auto iter = std::find(YaochuuTileIdList.begin(), YaochuuTileIdList.end(), tile.GetIdentifier()); iter == YaochuuTileIdList.end())
+            if (!InIdentifierList(YaochuuTileIdList, tile))
             {
                 return 0;
             } 
         }
 
         // Check PickedTile
-        if (std::find(YaochuuTileIdList.begin(), YaochuuTileIdList.end(), pickedTile.GetIdentifier()) == YaochuuTileIdList.end())
+        if (!InIdentifierList(YaochuuTileIdList, pickedTile))
         {
             return 0;
         }
@@ -846,7 +860,7 @@ namespace Mini
         {
             for (const Tile& tile : tileGroup.GetReadOnlyTiles())
             {
-                if (auto iter = std::find(RoutouTileIdList.begin(), RoutouTileIdList.end(), tile.GetIdentifier()); iter == RoutouTileIdList.end())
+                if (!InIdentifierList(RoutouTileIdList, tile))
                 {
                     return 0;
                 }
@@ -856,14 +870,14 @@ namespace Mini
         // Check RestTileList
         for (const Tile& tile : restTileList)
         {
-            if (auto iter = std::find(RoutouTileIdList.begin(), RoutouTileIdList.end(), tile.GetIdentifier()); iter == RoutouTileIdList.end())
+            if (!InIdentifierList(RoutouTileIdList, tile))
             {
                 return 0;
             } 
         }
 
         // Check PickedTile
-        if (std::find(RoutouTileIdList.begin(), RoutouTileIdList.end(), pickedTile.GetIdentifier()) == RoutouTileIdList.end())
+        if (!InIdentifierList(RoutouTileIdList, pickedTile))
         {
             return 0;
         }
@@ -888,7 +902,7 @@ namespace Mini
         for (auto& tileGroup : tileGroupList)
         {
             // Don't need to check all tiles in TileGroup
-            if (std::find(JiTileIdList.begin(), JiTileIdList.end(), tileGroup.GetReadOnlyTiles()[0].get().GetIdentifier()) == JiTileIdList.end())
+            if (!InIdentifierList(JiTileIdList, tileGroup.GetReadOnlyTiles()[0]))
             {
                 return 0;
             }
@@ -896,7 +910,7 @@ namespace Mini
 
         // Check RestTileList & PickedTile
         // Don't need to check all tiles in RestTile and PickedTile
-        if (std::find(JiTileIdList.begin(), JiTileIdList.end(), pickedTile.GetIdentifier()) == JiTileIdList.end())
+        if (!InIdentifierList(JiTileIdList, pickedTile))
         {
             return 0;
         }

@@ -26,6 +26,8 @@ namespace Mini
         // Getters
         bool GetIsDora() const;
         bool GetIsAkaDora() const;
+
+        operator uint8_t () const;
     };
     
     class CharacterTile : public Tile

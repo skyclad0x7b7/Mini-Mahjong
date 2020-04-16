@@ -31,6 +31,11 @@ namespace Mini
         return isAkaDora;
     }
 
+    Tile::operator uint8_t () const
+    {
+        return this->GetIdentifier();
+    }
+
     // ==================================================
     // class CharacterTile implementation
     // ==================================================

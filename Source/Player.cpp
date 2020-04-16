@@ -25,17 +25,17 @@ namespace Mini
         return calledTileGroup;
     }
     
-    void Player::AddTile(const TileCRef& tile)
+    void Player::AddTile(const Tile& tile)
     {
         pHand.AddTile(tile);
     }
 
-    void Player::DropTile(const TileCRef& tile)
+    void Player::DropTile(const Tile& tile)
     {
         pHand.RemoveTile(tile);
     }
 
-    void Player::AddToDroppedTile(const TileCRef& tile)
+    void Player::AddToDroppedTile(const Tile& tile)
     {
         droppedTiles.emplace_back(tile);
     }
@@ -55,7 +55,7 @@ namespace Mini
         return isMenzen;
     }
 
-    void Player::OnOtherPlayerDroppedTile(const TileCRef& tile)
+    void Player::OnOtherPlayerDroppedTile(const Tile& tile)
     {
         // Check Ron
         

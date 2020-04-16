@@ -17,8 +17,8 @@ namespace Mini
         // Getters
         const std::vector<TileCRef>& GetReadOnlyTiles() const;
         
-        void AddTile(const TileCRef& tile);
-        void RemoveTile(const TileCRef& tile);
+        void AddTile(const Tile& tile);
+        void RemoveTile(const Tile& tile);
 
         void Sort();
     };

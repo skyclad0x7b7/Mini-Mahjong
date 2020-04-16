@@ -20,12 +20,12 @@ namespace Mini
         return handTiles;
     }
     
-    void Hand::AddTile(const TileCRef& tile)
+    void Hand::AddTile(const Tile& tile)
     {
         handTiles.emplace_back(tile);
     }
 
-    void Hand::RemoveTile(const TileCRef& tile)
+    void Hand::RemoveTile(const Tile& tile)
     {
         auto iter = std::find(handTiles.begin(), handTiles.end(), tile);
         debug_assert(iter != handTiles.end(), "Can't find tile to remove");

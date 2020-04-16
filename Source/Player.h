@@ -24,9 +24,9 @@ namespace Mini
         const std::vector<TileCRef>& GetReadOnlyDroppedTiles() const;
         const std::vector<TileGroup>& GetReadOnlyCalledTileGroup() const;
         
-        void AddTile(const TileCRef& tile);
-        void DropTile(const TileCRef& tile);
-        void AddToDroppedTile(const TileCRef& tile);
+        void AddTile(const Tile& tile);
+        void DropTile(const Tile& tile);
+        void AddToDroppedTile(const Tile& tile);
 
         void SortHand();
 
@@ -34,8 +34,8 @@ namespace Mini
         bool GetIsMenzen() const;
 
         // Event Handler
-        void OnOtherPlayerDroppedTile(const TileCRef& tile);
-        void OnOtherPlayerCalledKang(const TileCRef& tile);
+        void OnOtherPlayerDroppedTile(const Tile& tile);
+        void OnOtherPlayerCalledKang(const Tile& tile);
 
     };
 

@@ -228,7 +228,7 @@ namespace Mini
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
         if (restTileList.size() == 2) // Last one is body
         {
-            if (pickedTile.GetIdentifier() == restTileList[0].get().GetIdentifier()) // Koutsu Check
+            if (pickedTile == restTileList[0]) // Koutsu Check
             {
                 tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
@@ -339,7 +339,7 @@ namespace Mini
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
         if (restTileList.size() == 2) // Last one is body
         {
-            if (pickedTile.GetIdentifier() != restTileList[0].get().GetIdentifier()) // Shuntsu Check
+            if (pickedTile != restTileList[0]) // Shuntsu Check
             {
                 tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
@@ -367,9 +367,9 @@ namespace Mini
 
                 const std::vector<TileCRef>& firstTileList  = tmpTileGroupList[i].GetReadOnlyTiles();
                 const std::vector<TileCRef>& secondTileList = tmpTileGroupList[j].GetReadOnlyTiles();
-                if (firstTileList[0].get().GetIdentifier() == secondTileList[0].get().GetIdentifier() &&
-                    firstTileList[1].get().GetIdentifier() == secondTileList[1].get().GetIdentifier() &&
-                    firstTileList[2].get().GetIdentifier() == secondTileList[2].get().GetIdentifier())
+                if (firstTileList[0] == secondTileList[0] &&
+                    firstTileList[1] == secondTileList[1] &&
+                    firstTileList[2] == secondTileList[2])
                 {
                     return GetRealScore(isMenzen);
                 }
@@ -396,7 +396,7 @@ namespace Mini
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
         if (restTileList.size() == 2) // Last one is body
         {
-            if (pickedTile.GetIdentifier() != restTileList[0].get().GetIdentifier()) // Shuntsu Check
+            if (pickedTile != restTileList[0]) // Shuntsu Check
             {
                 tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
@@ -429,9 +429,9 @@ namespace Mini
 
                 const std::vector<TileCRef>& firstTileList  = tmpTileGroupList[i].GetReadOnlyTiles();
                 const std::vector<TileCRef>& secondTileList = tmpTileGroupList[j].GetReadOnlyTiles();
-                if (firstTileList[0].get().GetIdentifier() == secondTileList[0].get().GetIdentifier() &&
-                    firstTileList[1].get().GetIdentifier() == secondTileList[1].get().GetIdentifier() &&
-                    firstTileList[2].get().GetIdentifier() == secondTileList[2].get().GetIdentifier())
+                if (firstTileList[0] == secondTileList[0] &&
+                    firstTileList[1] == secondTileList[1] &&
+                    firstTileList[2] == secondTileList[2])
                 {
                     ++ipekoCount;
                 }
@@ -463,7 +463,7 @@ namespace Mini
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
         if (restTileList.size() == 2) // Last one is body
         {
-            if (pickedTile.GetIdentifier() != restTileList[0].get().GetIdentifier()) // Shuntsu Check
+            if (pickedTile != restTileList[0]) // Shuntsu Check
             {
                 tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
@@ -479,9 +479,9 @@ namespace Mini
 
             tileGroup.Sort();
             try {
-                auto const& first  = dynamic_cast<const NumberTile&>(tileGroup.GetReadOnlyTiles()[0].get());
-                auto const& second = dynamic_cast<const NumberTile&>(tileGroup.GetReadOnlyTiles()[1].get());
-                auto const& third  = dynamic_cast<const NumberTile&>(tileGroup.GetReadOnlyTiles()[2].get());
+                auto const& first  = dynamic_cast<const NumberTile&>(static_cast<const Tile&>(tileGroup.GetReadOnlyTiles()[0]));
+                auto const& second = dynamic_cast<const NumberTile&>(static_cast<const Tile&>(tileGroup.GetReadOnlyTiles()[1]));
+                auto const& third  = dynamic_cast<const NumberTile&>(static_cast<const Tile&>(tileGroup.GetReadOnlyTiles()[2]));
 
                 if (first.GetNumber() == 1 && second.GetNumber() == 2 && third.GetNumber() == 3)
                 {
@@ -528,7 +528,7 @@ namespace Mini
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
         if (restTileList.size() == 2) // Last one is body
         {
-            if (pickedTile.GetIdentifier() != restTileList[0].get().GetIdentifier()) // Shuntsu Check
+            if (pickedTile != restTileList[0]) // Shuntsu Check
             {
                 tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
@@ -544,9 +544,9 @@ namespace Mini
 
             tileGroup.Sort();
             try {
-                const auto& first  = dynamic_cast<const NumberTile&>(tileGroup.GetReadOnlyTiles()[0].get());
-                const auto& second = dynamic_cast<const NumberTile&>(tileGroup.GetReadOnlyTiles()[1].get());
-                const auto& third  = dynamic_cast<const NumberTile&>(tileGroup.GetReadOnlyTiles()[2].get());
+                const auto& first  = dynamic_cast<const NumberTile&>(static_cast<const Tile&>(tileGroup.GetReadOnlyTiles()[0]));
+                const auto& second = dynamic_cast<const NumberTile&>(static_cast<const Tile&>(tileGroup.GetReadOnlyTiles()[1]));
+                const auto& third  = dynamic_cast<const NumberTile&>(static_cast<const Tile&>(tileGroup.GetReadOnlyTiles()[2]));
 
                 const int key = first.GetNumber() | second.GetNumber() << 2 | third.GetNumber() << 4;
                 if (auto iter = sanshokuDoujunPair.find(key); iter !=sanshokuDoujunPair.end())
@@ -616,7 +616,7 @@ namespace Mini
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
         if (restTileList.size() == 2) // Last one is body
         {
-            if (pickedTile.GetIdentifier() == restTileList[0].get().GetIdentifier()) // Koutsu Check
+            if (pickedTile == restTileList[0]) // Koutsu Check
             {
                 tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
@@ -632,7 +632,7 @@ namespace Mini
 
             // used pointer to check if it's number tile
             // to avoid using try catch for branching
-            auto const* first_ptr  = dynamic_cast<const NumberTile*>(&tileGroup.GetReadOnlyTiles()[0].get());
+            auto const* first_ptr  = dynamic_cast<const NumberTile*>(&static_cast<const Tile&>(tileGroup.GetReadOnlyTiles()[0]));
             if (first_ptr == nullptr) // It's not NumberTile
             {
                 continue;
@@ -922,7 +922,7 @@ namespace Mini
         // Check TileGroupList
         for (auto& tileGroup : tileGroupList)
         {
-            const auto* tile_ptr = dynamic_cast<const NumberTile*>(&tileGroup.GetReadOnlyTiles()[0].get());
+            const auto* tile_ptr = dynamic_cast<const NumberTile*>(&static_cast<const Tile&>(tileGroup.GetReadOnlyTiles()[0]));
             if (tile_ptr == nullptr)
             {
                 continue;
@@ -984,7 +984,7 @@ namespace Mini
         // Check TileGroupList
         for (auto& tileGroup : tileGroupList)
         {
-            const auto* tile_ptr = dynamic_cast<const NumberTile*>(&tileGroup.GetReadOnlyTiles()[0].get());
+            const auto* tile_ptr = dynamic_cast<const NumberTile*>(&static_cast<const Tile&>(tileGroup.GetReadOnlyTiles()[0]));
             if (tile_ptr == nullptr)
             {
                 return 0;
@@ -1083,7 +1083,7 @@ namespace Mini
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
         if (restTileList.size() == 2) // Last one is body
         {
-            if (pickedTile.GetIdentifier() == restTileList[0].get().GetIdentifier()) // Koutsu Check
+            if (pickedTile == restTileList[0]) // Koutsu Check
             {
                 tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
@@ -1117,7 +1117,7 @@ namespace Mini
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
         if (restTileList.size() == 2) // Last one is body
         {
-            if (pickedTile.GetIdentifier() == restTileList[0].get().GetIdentifier()) // Koutsu Check
+            if (pickedTile == restTileList[0]) // Koutsu Check
             {
                 tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
@@ -1160,7 +1160,7 @@ namespace Mini
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
         if (restTileList.size() == 2) // Last one is body
         {
-            if (pickedTile.GetIdentifier() == restTileList[0].get().GetIdentifier()) // Koutsu Check
+            if (pickedTile == restTileList[0]) // Koutsu Check
             {
                 tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }

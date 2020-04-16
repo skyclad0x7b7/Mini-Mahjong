@@ -278,14 +278,19 @@ namespace Mini
         return ret;
     }
 
-    bool operator == (const TileRef& a, const TileRef& b)
+    bool operator == (const Tile& a, const Tile& b)
     {
-        return static_cast<const Tile&>(a) == b;
+        return a.GetIdentifier() == b.GetIdentifier();
     }
 
-    bool operator == (const TileCRef& a, const TileCRef& b)
+    bool operator != (const Tile& a, const Tile& b)
     {
-        return static_cast<const Tile&>(a) == b;
+        return !(a == b);
+    }
+
+    bool operator - (const Tile& a, const Tile& b)
+    {
+        return a.GetIdentifier() - b.GetIdentifier();
     }
 
 } // namespace Mini

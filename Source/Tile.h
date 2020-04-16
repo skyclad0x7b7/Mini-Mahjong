@@ -26,7 +26,6 @@ namespace Mini
         // Getters
         bool GetIsDora() const;
         bool GetIsAkaDora() const;
-
     };
     
     class CharacterTile : public Tile
@@ -124,8 +123,9 @@ namespace Mini
         WindTile(WindType::North).GetIdentifier()
     };
 
-    bool operator == (const TileRef& a, const TileRef& b);
-    bool operator == (const TileCRef& a, const TileCRef& b);
+    bool operator == (const Tile& a, const Tile& b);
+    bool operator != (const Tile& a, const Tile& b);
+    bool operator - (const Tile& a, const Tile& b);
 
 } // namespace Mini
 

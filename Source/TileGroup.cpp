@@ -21,7 +21,7 @@ namespace Mini
         if (type == TileGroupType::Head)
         {
             debug_assert(tmpTiles.size() == 2, "Head's tiles count must be 2");
-            debug_assert(tmpTiles[0].get().GetIdentifier() == tmpTiles[1].get().GetIdentifier(), "Head's tiles must be same");
+            debug_assert(tmpTiles[0] == tmpTiles[1], "Head's tiles must be same");
             debug_assert(calledTile == std::nullopt, "Head can't be called");
             debug_assert(argIsCalled == false, "Head can't be called");
         }
@@ -29,19 +29,19 @@ namespace Mini
         if (type == TileGroupType::Koutsu)
         {
             debug_assert(tmpTiles.size() == 3, "Koutsu's tiles count must be 3");
-            debug_assert(tmpTiles[0].get().GetIdentifier() == tmpTiles[1].get().GetIdentifier() && tmpTiles[1].get().GetIdentifier() == tmpTiles[2].get().GetIdentifier(), "Koutsu's tiles must be same");
+            debug_assert(tmpTiles[0] == tmpTiles[1] && tmpTiles[1] == tmpTiles[2], "Koutsu's tiles must be same");
         }
 
         if (type == TileGroupType::Kangtsu)
         {
             debug_assert(tmpTiles.size() == 4, "Kangtsu's tiles count must be 3");
-            debug_assert(tmpTiles[0].get().GetIdentifier() == tmpTiles[1].get().GetIdentifier() && tmpTiles[1].get().GetIdentifier() == tmpTiles[2].get().GetIdentifier() && tmpTiles[2].get().GetIdentifier() == tmpTiles[3].get().GetIdentifier(), "Kangtsu's tiles must be same");
+            debug_assert(tmpTiles[0] == tmpTiles[1] && tmpTiles[1] == tmpTiles[2] && tmpTiles[2] == tmpTiles[3], "Kangtsu's tiles must be same");
         }
 
         if (type == TileGroupType::Shuntsu)
         {
             debug_assert(tmpTiles.size() == 3, "Shuntsu's tiles count must be 3");
-            debug_assert((tmpTiles[2].get().GetIdentifier() - tmpTiles[1].get().GetIdentifier()) == 1 && (tmpTiles[1].get().GetIdentifier() - tmpTiles[0].get().GetIdentifier()) == 1, "Shuntsu's tiles must be consecutive");
+            debug_assert((tmpTiles[2] - tmpTiles[1]) == 1 && (tmpTiles[1] - tmpTiles[0]) == 1, "Shuntsu's tiles must be consecutive");
         }
 
         tgType = type;
@@ -79,9 +79,9 @@ namespace Mini
     std::string TileGroup::ToString() const
     {
         std::string ret;
-        for (auto& tile : tgTiles)
+        for (const Tile& tile : tgTiles)
         {
-            ret += tile.get().ToString() + " ";
+            ret += tile.ToString() + " ";
         }
         return ret;
     }

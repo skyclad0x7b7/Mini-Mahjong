@@ -249,33 +249,43 @@ namespace Mini
     // ==================================================
     // Some functions related with Tile class implementation
     // ==================================================
-    std::vector<Tile *> GetCompleteTileLists()
+    std::vector<TileCRef> GetCompleteTileLists()
     {
-        std::vector<Tile *> ret;
+        std::vector<TileCRef> ret;
 
         for (int i = 0; i < 4; ++i)
         {
             // Wind Tiles
-            ret.emplace_back(new WindTile(WindType::East));
-            ret.emplace_back(new WindTile(WindType::South));
-            ret.emplace_back(new WindTile(WindType::West));
-            ret.emplace_back(new WindTile(WindType::North));
+            ret.emplace_back(*new WindTile(WindType::East));
+            ret.emplace_back(*new WindTile(WindType::South));
+            ret.emplace_back(*new WindTile(WindType::West));
+            ret.emplace_back(*new WindTile(WindType::North));
 
             // Dragon Tiles
-            ret.emplace_back(new DragonTile(DragonType::White));
-            ret.emplace_back(new DragonTile(DragonType::Green));
-            ret.emplace_back(new DragonTile(DragonType::Red));
+            ret.emplace_back(*new DragonTile(DragonType::White));
+            ret.emplace_back(*new DragonTile(DragonType::Green));
+            ret.emplace_back(*new DragonTile(DragonType::Red));
 
             // Number Tiles
             for (int num = 1; num <= 9; ++num)
             {
-                ret.emplace_back(new NumberTile(NumberType::Cracks, num));
-                ret.emplace_back(new NumberTile(NumberType::Bamboo, num));
-                ret.emplace_back(new NumberTile(NumberType::Dots, num));
+                ret.emplace_back(*new NumberTile(NumberType::Cracks, num));
+                ret.emplace_back(*new NumberTile(NumberType::Bamboo, num));
+                ret.emplace_back(*new NumberTile(NumberType::Dots, num));
             }
         }
 
         return ret;
+    }
+
+    bool operator == (const TileRef& a, const TileRef& b)
+    {
+        return static_cast<const Tile&>(a) == b;
+    }
+
+    bool operator == (const TileCRef& a, const TileCRef& b)
+    {
+        return static_cast<const Tile&>(a) == b;
     }
 
 } // namespace Mini

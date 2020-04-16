@@ -15,7 +15,7 @@ namespace Mini
 #define dbgprint(fmt, args...)
 #endif
     
-    void SortTiles(std::vector<Tile*>& tileList);
+    void SortTiles(std::vector<TileCRef>& tileList);
 
 }
 

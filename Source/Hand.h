@@ -10,15 +10,15 @@ namespace Mini
     class Hand
     {
     private:
-        std::vector<Tile*> handTiles;
+        std::vector<TileCRef> handTiles;
     public:
-        Hand(const std::vector<Tile*>& initTiles);
+        Hand(const std::vector<TileCRef>& initTiles);
 
         // Getters
-        const std::vector<Tile*>& GetReadOnlyTiles() const;
+        const std::vector<TileCRef>& GetReadOnlyTiles() const;
         
-        void AddTile(Tile *tile);
-        void RemoveTile(const Tile *tile);
+        void AddTile(const TileCRef& tile);
+        void RemoveTile(const TileCRef& tile);
 
         void Sort();
     };

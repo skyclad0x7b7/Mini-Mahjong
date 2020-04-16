@@ -3,6 +3,7 @@
 
 #include <Source/Constant.h>
 
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -82,8 +83,11 @@ namespace Mini
         uint8_t GetNumber() const;
     };
 
+    using TileCRef = std::reference_wrapper<const Tile>;
+    using TileRef  = std::reference_wrapper<Tile>;
+
     // Some functions related with Tile class
-    std::vector<Tile *> GetCompleteTileLists();
+    std::vector<TileCRef> GetCompleteTileLists();
 
     const static std::vector<uint8_t> YaochuuTileIdList = { 
             DragonTile(DragonType::White).GetIdentifier(),
@@ -119,6 +123,9 @@ namespace Mini
         WindTile(WindType::West).GetIdentifier(),
         WindTile(WindType::North).GetIdentifier()
     };
+
+    bool operator == (const TileRef& a, const TileRef& b);
+    bool operator == (const TileCRef& a, const TileCRef& b);
 
 } // namespace Mini
 

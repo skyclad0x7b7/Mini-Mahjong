@@ -4,8 +4,8 @@
 
 namespace Mini
 {
-    void SortTiles(std::vector<Tile*>& tileList)
+    void SortTiles(std::vector<TileCRef>& tileList)
     {
-        std::sort(tileList.begin(), tileList.end(), [](const Tile* first, const Tile* second) { return first->GetIdentifier() < second->GetIdentifier(); });
+        std::sort(tileList.begin(), tileList.end(), [](const Tile& first, const Tile& second) { return first.GetIdentifier() < second.GetIdentifier(); });
     }
 } // namespace Mini

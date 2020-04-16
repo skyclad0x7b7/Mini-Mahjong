@@ -3,6 +3,7 @@
 
 #include <Source/Tile.h>
 
+#include <optional>
 #include <vector>
 
 namespace Mini
@@ -18,11 +19,11 @@ namespace Mini
     class TileGroup
     {
     private:
-        std::vector<Tile*> tgTiles;
+        std::vector<TileCRef> tgTiles;
         TileGroupType tgType;
         bool isCalled = false;
     public:
-        TileGroup(const TileGroupType type, const std::vector<Tile*>& tiles, Tile *calledTile = nullptr, bool argIsCalled = false);
+        TileGroup(const TileGroupType type, const std::vector<TileCRef>& tiles, const std::optional<TileCRef>& calledTile = std::nullopt, bool argIsCalled = false);
 
         // Setters
         void SetType(const TileGroupType type);
@@ -31,12 +32,15 @@ namespace Mini
         // Getters
         TileGroupType GetType() const;
         bool GetIsCalled() const;
-        const std::vector<Tile*>& GetReadOnlyTiles() const;
+        const std::vector<TileCRef>& GetReadOnlyTiles() const;
         
         std::string ToString() const;
 
         void Sort();
     };
+
+    using TileGroupRef = std::reference_wrapper<TileGroup>;
+    using TileGroupCRef = std::reference_wrapper<const TileGroup>;
 
 } // namespace Mini
 

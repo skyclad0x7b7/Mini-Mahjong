@@ -9,23 +9,23 @@ namespace Mini
     // ==================================================
     // class TileGroup implementation
     // ==================================================
-    Hand::Hand(const std::vector<Tile*>& initTiles)
+    Hand::Hand(const std::vector<TileCRef>& initTiles)
     {
         debug_assert(initTiles.size() == 13, "Tiles count must be 13");
         handTiles = initTiles;
     }
 
-    const std::vector<Tile*>& Hand::GetReadOnlyTiles() const
+    const std::vector<TileCRef>& Hand::GetReadOnlyTiles() const
     {
         return handTiles;
     }
     
-    void Hand::AddTile(Tile *tile)
+    void Hand::AddTile(const TileCRef& tile)
     {
         handTiles.emplace_back(tile);
     }
 
-    void Hand::RemoveTile(const Tile *tile)
+    void Hand::RemoveTile(const TileCRef& tile)
     {
         auto iter = std::find(handTiles.begin(), handTiles.end(), tile);
         debug_assert(iter != handTiles.end(), "Can't find tile to remove");

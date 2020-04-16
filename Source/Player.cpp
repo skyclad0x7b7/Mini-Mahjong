@@ -5,17 +5,17 @@ namespace Mini
     // ==================================================
     // class Player implementation
     // ==================================================
-    Player::Player(const std::vector<Tile*>& initTiles) : pHand(initTiles)
+    Player::Player(const std::vector<TileCRef>& initTiles) : pHand(initTiles)
     {
         
     }
 
-    const std::vector<Tile*>& Player::GetReadOnlyTiles() const
+    const std::vector<TileCRef>& Player::GetReadOnlyTiles() const
     {
         return pHand.GetReadOnlyTiles();
     }
 
-    const std::vector<Tile*>& Player::GetReadOnlyDroppedTiles() const
+    const std::vector<TileCRef>& Player::GetReadOnlyDroppedTiles() const
     {
         return droppedTiles;
     }
@@ -25,17 +25,17 @@ namespace Mini
         return calledTileGroup;
     }
     
-    void Player::AddTile(Tile* tile)
+    void Player::AddTile(const TileCRef& tile)
     {
         pHand.AddTile(tile);
     }
 
-    void Player::DropTile(const Tile* tile)
+    void Player::DropTile(const TileCRef& tile)
     {
         pHand.RemoveTile(tile);
     }
 
-    void Player::AddToDroppedTile(Tile* tile)
+    void Player::AddToDroppedTile(const TileCRef& tile)
     {
         droppedTiles.emplace_back(tile);
     }
@@ -55,7 +55,7 @@ namespace Mini
         return isMenzen;
     }
 
-    void Player::OnOtherPlayerDroppedTile(Tile* tile)
+    void Player::OnOtherPlayerDroppedTile(const TileCRef& tile)
     {
         // Check Ron
         

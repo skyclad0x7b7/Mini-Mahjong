@@ -1177,4 +1177,151 @@ namespace Mini
 
         return 0;
     }
+
+    /*
+    *  Shosangen
+    */
+    int Shosangen::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+
+        // Add pickedTile into tileGroup if needed
+        std::vector<TileGroup> tmpTileGroupList = tileGroupList;
+        if (restTileList.size() == 2) // Last one is body
+        {
+            if (pickedTile->GetIdentifier() == restTileList[0]->GetIdentifier()) // Koutsu Check
+            {
+                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
+            }
+        }
+        else // Last one is Head
+        {
+            tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Head, { restTileList[0], pickedTile }, nullptr, false));
+        }
+
+        uint8_t headCheck = 0;
+        uint8_t bodyCheck = 0;
+        for (auto tileGroup : tmpTileGroupList)
+        {
+            if (tileGroup.GetType() == TileGroupType::Head)
+            {
+                if (DragonTile* tile = dynamic_cast<DragonTile*>(tileGroup.GetReadOnlyTiles()[0]))
+                {
+                    switch(tile->GetType())
+                    {
+                    case DragonType::White:
+                        headCheck |= 0b001;
+                        break;
+                    case DragonType::Green:
+                        headCheck |= 0b010;
+                        break;
+                    case DragonType::Red:
+                        headCheck |= 0b100;
+                        break;
+                    }
+                }
+                else // Shosangen's head must be DragonTile
+                {
+                    return 0;
+                }
+            }
+
+
+            if (tileGroup.GetType() == TileGroupType::Koutsu || tileGroup.GetType() == TileGroupType::Kangtsu)
+            {
+                DragonTile *first  = dynamic_cast<DragonTile*>(tileGroup.GetReadOnlyTiles()[0]);
+                if (first == nullptr) // It's not DragonTile
+                {
+                    continue;
+                }
+
+                switch(first->GetType())
+                {
+                case DragonType::White:
+                    bodyCheck |= 0b001;
+                    break;
+                case DragonType::Green:
+                    bodyCheck |= 0b010;
+                    break;
+                case DragonType::Red:
+                    bodyCheck |= 0b100;
+                    break;
+                }
+            }
+        }
+
+        if ( (headCheck | bodyCheck) == 0b111 )
+        {
+            return GetRealScore(isMenzen);
+        }
+
+        return 0;
+    }
+
+    /*
+    *  Daisangen
+    */
+    int Daisangen::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+
+        // Add pickedTile into tileGroup if needed
+        std::vector<TileGroup> tmpTileGroupList = tileGroupList;
+        if (restTileList.size() == 2) // Last one is body
+        {
+            if (pickedTile->GetIdentifier() == restTileList[0]->GetIdentifier()) // Koutsu Check
+            {
+                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
+            }
+        }
+        else // Last one is Head
+        {
+            tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Head, { restTileList[0], pickedTile }, nullptr, false));
+        }
+
+        uint8_t bodyCheck = 0;
+        for (auto tileGroup : tmpTileGroupList)
+        {
+            if (tileGroup.GetType() == TileGroupType::Koutsu || tileGroup.GetType() == TileGroupType::Kangtsu)
+            {
+                DragonTile *first  = dynamic_cast<DragonTile*>(tileGroup.GetReadOnlyTiles()[0]);
+                if (first == nullptr) // It's not DragonTile
+                {
+                    continue;
+                }
+
+                switch(first->GetType())
+                {
+                case DragonType::White:
+                    bodyCheck |= 0b001;
+                    break;
+                case DragonType::Green:
+                    bodyCheck |= 0b010;
+                    break;
+                case DragonType::Red:
+                    bodyCheck |= 0b100;
+                    break;
+                }
+            }
+        }
+
+        if ( bodyCheck == 0b111 )
+        {
+            return GetRealScore(isMenzen);
+        }
+
+        return 0;
+    }
 } // namespace Mini

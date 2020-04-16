@@ -190,6 +190,20 @@ namespace Mini
         Suuankou(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
         virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
+
+    class Shosangen : public Yaku
+    {
+    public:
+        Shosangen(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+    };
+
+    class Daisangen : public Yaku
+    {
+    public:
+        Daisangen(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+    };
 }
 
 #endif // __MINI_MAHJONG_YAKU_H__

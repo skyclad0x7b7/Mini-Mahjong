@@ -1,6 +1,7 @@
 #include <Source/Yaku.h>
 
 #include <Source/Assert.h>
+#include <Source/Utils.h>
 
 #include <algorithm>
 #include <map>
@@ -178,6 +179,7 @@ namespace Mini
     */
     int Tanyao::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -216,6 +218,7 @@ namespace Mini
     */
     int Yakuhai::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -256,6 +259,7 @@ namespace Mini
     */
     int Pinfu::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -327,6 +331,7 @@ namespace Mini
     */
     int Ipeko::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -343,6 +348,11 @@ namespace Mini
             {
                 tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
+        }
+
+        if (tmpTileGroupList.size() == 0)
+        {
+            return 0;
         }
 
         // Sort TileGroups
@@ -384,6 +394,7 @@ namespace Mini
     */
     int Ryanpeko::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -400,6 +411,11 @@ namespace Mini
             {
                 tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
+        }
+
+        if (tmpTileGroupList.size() == 0)
+        {
+            return 0;
         }
 
         // Sort TileGroups
@@ -451,6 +467,7 @@ namespace Mini
     */
     int Ikkitsuukan::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -515,6 +532,7 @@ namespace Mini
     */
     int SanshokuDoujun::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -532,6 +550,7 @@ namespace Mini
                 tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Shuntsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
         }
+
 
         std::map<uint32_t, uint8_t> sanshokuDoujunPair;
         for (auto tileGroup : tmpTileGroupList)
@@ -602,6 +621,7 @@ namespace Mini
     */
     int SanshokuDoukou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -687,6 +707,7 @@ namespace Mini
     */
     int Chanta::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -736,6 +757,7 @@ namespace Mini
     */
     int JunChanta::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -785,6 +807,7 @@ namespace Mini
     */
     int HonRoutou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -828,6 +851,7 @@ namespace Mini
     */
     int ChinRoutou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -871,6 +895,7 @@ namespace Mini
     */
     int Tsuuiisou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -904,6 +929,7 @@ namespace Mini
     */
     int Honiisou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -964,6 +990,7 @@ namespace Mini
     */
     int Chiniisou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -1029,6 +1056,7 @@ namespace Mini
     */
     int Chitoitsu::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -1063,6 +1091,7 @@ namespace Mini
     */
     int Toitoi::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -1097,6 +1126,7 @@ namespace Mini
     */
     int Sanankou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -1140,6 +1170,7 @@ namespace Mini
     */
     int Suuankou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -1183,6 +1214,7 @@ namespace Mini
     */
     int Shosangen::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -1200,9 +1232,13 @@ namespace Mini
                 tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
         }
-        else // Last one is Head
+        else if (restTileList.size() == 1) // Last one is Head
         {
             tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Head, { restTileList[0], pickedTile }, nullptr, false));
+        }
+        else // Kokushimusou
+        {
+            return 0;
         }
 
         uint8_t headCheck = 0;
@@ -1269,6 +1305,7 @@ namespace Mini
     */
     int Daisangen::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
             return 0;
@@ -1286,9 +1323,13 @@ namespace Mini
                 tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
         }
-        else // Last one is Head
+        else if (restTileList.size() == 1) // Last one is Head
         {
             tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Head, { restTileList[0], pickedTile }, nullptr, false));
+        }
+        else // Kokushimusou
+        {
+            return 0;
         }
 
         uint8_t bodyCheck = 0;
@@ -1323,5 +1364,63 @@ namespace Mini
         }
 
         return 0;
+    }
+
+    /*
+    *  Kokushimusou
+    */
+    int Kokushimusou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+
+        if (tileGroupList.size() > 0)
+        {
+            return 0;
+        }
+
+        uint8_t checkList[YaochuuTileIdList.size()];
+        memset(checkList, 0, YaochuuTileIdList.size());
+
+        // RestTile Check
+        for (auto& tile : restTileList)
+        {
+            uint8_t identifier = tile->GetIdentifier();
+            
+            if (auto iter = std::find_if(YaochuuTileIdList.begin(), YaochuuTileIdList.end(), [identifier](uint8_t id){ return identifier == id; }); iter != YaochuuTileIdList.end())
+            {
+                ++checkList[iter - YaochuuTileIdList.begin()];
+                
+            } else
+            {
+                return 0;
+            }
+        }
+
+        // PickedTile Check
+        uint8_t identifier = pickedTile->GetIdentifier();
+        if (auto iter = std::find_if(YaochuuTileIdList.begin(), YaochuuTileIdList.end(), [identifier](uint8_t id){ return identifier == id; }); iter != YaochuuTileIdList.end())
+        {
+            ++checkList[iter - YaochuuTileIdList.begin()];
+        } else
+        {
+            return 0;
+        }
+        
+        for (uint8_t value : checkList)
+        {
+            if (value == 0)
+            {
+                return 0;
+            }
+        }
+
+        return GetRealScore(isMenzen);
     }
 } // namespace Mini

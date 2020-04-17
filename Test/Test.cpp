@@ -1037,7 +1037,7 @@ namespace Mini
     }
 
     /*
-    *  Yaku Test : ( Menzen, Yakuhai, Tanyao, Pinfu, Ipeko, Ryanpeko, Ikkitsukan, Sanshoku Doujun, Sanshoku Doukou, Chanta, JunChanta, HonRoutou, ChinRoutou, Tsuuiisou, Honiisou, Chiniisou, Chitoitsu, Toitoi, Sanankou, Suuankou), Shosangen, Daisangen
+    *  Yaku Test : ( Menzen, Yakuhai, Tanyao, Pinfu, Ipeko, Ryanpeko, Ikkitsukan, Sanshoku Doujun, Sanshoku Doukou, Chanta, JunChanta, HonRoutou, ChinRoutou, Tsuuiisou, Honiisou, Chiniisou, Chitoitsu, Toitoi, Sanankou, Suuankou), Shosangen, Daisangen, Kokushimusou
     */
     void Test11()
     {
@@ -1063,7 +1063,8 @@ namespace Mini
             new Sanankou("Sanankou", 2, 2, YakuType::GENERAL),
             new Suuankou("Suuankou", 13, 0, YakuType::YAKUMAN),
             new Shosangen("Shosangen", 2, 2, YakuType::GENERAL),
-            new Daisangen("Daisangen", 13, 13, YakuType::YAKUMAN)
+            new Daisangen("Daisangen", 13, 13, YakuType::YAKUMAN),
+            new Kokushimusou("Kokushimusou", 13, 0, YakuType::YAKUMAN)
         };
 
         {
@@ -1104,6 +1105,64 @@ namespace Mini
                 }
             };
             Tile* pickedTile = new DragonTile(DragonType::Red);
+            bool isMenzen = true;
+            bool isRon    = true;
+            WindType roundWind = WindType::East;
+            WindType selfWind  = WindType::West;
+            
+            CalcAndPrintYaku(yakuList, reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind);
+        }
+
+        {
+            puts("[  Yaku Test 03  ]");
+            ReassembledTileGroup reassembledTileGroup = {
+                { },
+                {
+                    new WindTile(WindType::East),
+                    new WindTile(WindType::South),
+                    new WindTile(WindType::West),
+                    new WindTile(WindType::North),
+                    new DragonTile(DragonType::White),
+                    new DragonTile(DragonType::Green),
+                    new DragonTile(DragonType::Red),
+                    new NumberTile(NumberType::Cracks, 1),
+                    new NumberTile(NumberType::Cracks, 9),
+                    new NumberTile(NumberType::Bamboo, 1),
+                    new NumberTile(NumberType::Bamboo, 9),
+                    new NumberTile(NumberType::Dots, 1),
+                    new NumberTile(NumberType::Dots, 9),
+                }
+            };
+            Tile* pickedTile = new DragonTile(DragonType::Red);
+            bool isMenzen = true;
+            bool isRon    = true;
+            WindType roundWind = WindType::East;
+            WindType selfWind  = WindType::West;
+            
+            CalcAndPrintYaku(yakuList, reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind);
+        }
+
+        {
+            puts("[  Yaku Test 04  ]");
+            ReassembledTileGroup reassembledTileGroup = {
+                { },
+                {
+                    new WindTile(WindType::East),
+                    new WindTile(WindType::South),
+                    new WindTile(WindType::West),
+                    new WindTile(WindType::North),
+                    new DragonTile(DragonType::White),
+                    new DragonTile(DragonType::Green),
+                    new DragonTile(DragonType::Red),
+                    new DragonTile(DragonType::Red),
+                    new NumberTile(NumberType::Cracks, 1),
+                    new NumberTile(NumberType::Cracks, 9),
+                    new NumberTile(NumberType::Bamboo, 1),
+                    new NumberTile(NumberType::Bamboo, 9),
+                    new NumberTile(NumberType::Dots, 1),
+                }
+            };
+            Tile* pickedTile = new NumberTile(NumberType::Dots, 9);
             bool isMenzen = true;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -1174,7 +1233,6 @@ namespace Mini
             printf("  <%s> %d\n", yakuPair.first->GetIdentifier().c_str(), yakuPair.second);
             totalScore += yakuPair.second;
         }
-
 
         printf("  Total Score : %d\n\n", totalScore);
     }

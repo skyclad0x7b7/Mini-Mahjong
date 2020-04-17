@@ -211,6 +211,34 @@ namespace Mini
         Kokushimusou(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
         virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
+
+    class Chuurenpotou : public Yaku
+    {
+    public:
+        Chuurenpotou(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+    };
+
+    class Ryuuiisou : public Yaku
+    {
+    public:
+        Ryuuiisou(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+    };
+
+    class Shousuushii : public Yaku
+    {
+    public:
+        Shousuushii(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+    };
+
+    class Daisuushii : public Yaku
+    {
+    public:
+        Daisuushii(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+    };
 }
 
 #endif // __MINI_MAHJONG_YAKU_H__

@@ -1108,6 +1108,10 @@ namespace Mini
             {
                 tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
             }
+            else // Shuntsu
+            {
+                return 0;
+            }
         }
 
         for (auto& tileGroup : tmpTileGroupList)
@@ -1186,6 +1190,10 @@ namespace Mini
             if (pickedTile->GetIdentifier() == restTileList[0]->GetIdentifier()) // Koutsu Check
             {
                 tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
+            }
+            else // Shuntsu
+            {
+                return 0;
             }
         }
 
@@ -1292,7 +1300,7 @@ namespace Mini
             }
         }
 
-        if ( (headCheck | bodyCheck) == 0b111 )
+        if ( headCheck > 0 && (headCheck | bodyCheck) == 0b111 )
         {
             return GetRealScore(isMenzen);
         }
@@ -1422,5 +1430,267 @@ namespace Mini
         }
 
         return GetRealScore(isMenzen);
+    }
+
+    /*
+    *  Chuurenpotou
+    */
+    int Chuurenpotou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+
+        std::vector<Tile *> allTilesList = reassembledTileGroup.restTiles;
+        for (auto& tileGroup : tileGroupList)
+        {
+            if (tileGroup.GetType() == TileGroupType::Kangtsu || tileGroup.GetIsCalled()) // No calling allowed, even Ankang
+            {
+                return 0;
+            }
+
+            allTilesList.insert(allTilesList.end(), tileGroup.GetReadOnlyTiles().begin(), tileGroup.GetReadOnlyTiles().end());
+        }
+        allTilesList.emplace_back(pickedTile);
+
+        NumberType   checkType = NumberType::None;
+        int8_t numberCount[9] = { 3, 1, 1, 1, 1, 1, 1, 1, 3 };
+        for (auto& tile : allTilesList)
+        {
+            NumberTile *numberTile = dynamic_cast<NumberTile*>(tile);
+            if (!numberTile)
+            {
+                return 0;
+            }
+
+            if (checkType == NumberType::None)
+            {
+                checkType = numberTile->GetType();
+            }
+            else if (checkType != numberTile->GetType())
+            {
+                return 0;
+            }
+            
+            --numberCount[numberTile->GetNumber() - 1];
+        }
+
+        bool once = false;
+        for (int8_t value : numberCount)
+        {
+            if (value != 0 && value != -1)
+            {
+                return 0;
+            }
+
+            if (value == -1)
+            {
+                if (std::exchange(once, true))
+                {
+                    return 0;
+                }
+            }
+        }
+
+        if (once)
+        {
+            return GetRealScore(isMenzen);
+        }
+
+        return 0;
+    }
+
+    /*
+    *  Ryuuiisou
+    */
+    int Ryuuiisou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+
+        std::vector<Tile *> allTilesList = reassembledTileGroup.restTiles;
+        for (auto& tileGroup : tileGroupList)
+        {
+            allTilesList.insert(allTilesList.end(), tileGroup.GetReadOnlyTiles().begin(), tileGroup.GetReadOnlyTiles().end());
+        }
+        allTilesList.emplace_back(pickedTile);
+
+        static const std::vector<uint8_t> checkTileIdList = {
+            NumberTile(NumberType::Bamboo, 2).GetIdentifier(),
+            NumberTile(NumberType::Bamboo, 3).GetIdentifier(),
+            NumberTile(NumberType::Bamboo, 4).GetIdentifier(),
+            NumberTile(NumberType::Bamboo, 6).GetIdentifier(),
+            NumberTile(NumberType::Bamboo, 8).GetIdentifier(),
+            DragonTile(DragonType::Green).GetIdentifier()
+        };
+
+        for (auto& tile : allTilesList)
+        {
+            if (std::find(checkTileIdList.begin(), checkTileIdList.end(), tile->GetIdentifier()) == checkTileIdList.end())
+            {
+                return 0;
+            }
+        }
+        return GetRealScore(isMenzen);
+    }
+
+    /*
+    *  Shousuushii
+    */
+    int Shousuushii::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+
+        // Add pickedTile into tileGroup if needed
+        std::vector<TileGroup> tmpTileGroupList = tileGroupList;
+        if (restTileList.size() == 2) // Last one is body
+        {
+            if (pickedTile->GetIdentifier() == restTileList[0]->GetIdentifier()) // Koutsu Check
+            {
+                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
+            }
+        }
+        else if (restTileList.size() == 1) // Last one is Head
+        {
+            tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Head, { restTileList[0], pickedTile }, nullptr, false));
+        }
+        else // Kokushimusou
+        {
+            return 0;
+        }
+
+        uint8_t headCheck = 0;
+        uint8_t bodyCheck = 0;
+        for (auto& tileGroup : tmpTileGroupList)
+        {
+            WindTile *tile = dynamic_cast<WindTile*>(tileGroup.GetReadOnlyTiles()[0]);
+            if (!tile)
+            {
+                continue;
+            }
+
+            if (tileGroup.GetType() == TileGroupType::Head)
+            {
+                switch(tile->GetType())
+                {
+                case WindType::East:
+                    headCheck |= 0b0001;
+                    break;
+                case WindType::South:
+                    headCheck |= 0b0010;
+                    break;
+                case WindType::West:
+                    headCheck |= 0b0100;
+                    break;
+                case WindType::North:
+                    headCheck |= 0b1000;
+                    break;
+                }
+            }
+            else if (tileGroup.GetType() == TileGroupType::Koutsu || tileGroup.GetType() == TileGroupType::Kangtsu)
+            {
+                switch(tile->GetType())
+                {
+                case WindType::East:
+                    bodyCheck |= 0b0001;
+                    break;
+                case WindType::South:
+                    bodyCheck |= 0b0010;
+                    break;
+                case WindType::West:
+                    bodyCheck |= 0b0100;
+                    break;
+                case WindType::North:
+                    bodyCheck |= 0b1000;
+                    break;
+                }
+            }
+        }
+
+        if ( headCheck > 0 && (headCheck | bodyCheck) == 0b1111 )
+        {
+            return GetRealScore(isMenzen);
+        }
+
+        return 0;
+    }
+
+    /*
+    *  Daisuushii
+    */
+    int Daisuushii::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        dbgprint("YakuCheck: %s\n", typeid(this).name());
+        if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
+        {
+            return 0;
+        }
+
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
+        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+
+        // Add pickedTile into tileGroup if needed
+        std::vector<TileGroup> tmpTileGroupList = tileGroupList;
+        if (restTileList.size() == 2) // Last one is body
+        {
+            if (pickedTile->GetIdentifier() == restTileList[0]->GetIdentifier()) // Koutsu Check
+            {
+                tmpTileGroupList.emplace_back(TileGroup(TileGroupType::Koutsu, { restTileList[0], restTileList[1] }, pickedTile, isRon));
+            }
+        }
+
+        uint8_t bodyCheck = 0;
+        for (auto& tileGroup : tmpTileGroupList)
+        {
+            WindTile *tile = dynamic_cast<WindTile*>(tileGroup.GetReadOnlyTiles()[0]);
+            if (!tile)
+            {
+                continue;
+            }
+
+            else if (tileGroup.GetType() == TileGroupType::Koutsu || tileGroup.GetType() == TileGroupType::Kangtsu)
+            {
+                switch(tile->GetType())
+                {
+                case WindType::East:
+                    bodyCheck |= 0b0001;
+                    break;
+                case WindType::South:
+                    bodyCheck |= 0b0010;
+                    break;
+                case WindType::West:
+                    bodyCheck |= 0b0100;
+                    break;
+                case WindType::North:
+                    bodyCheck |= 0b1000;
+                    break;
+                }
+            }
+        }
+
+        if ( bodyCheck == 0b1111 )
+        {
+            return GetRealScore(isMenzen);
+        }
+
+        return 0;
     }
 } // namespace Mini

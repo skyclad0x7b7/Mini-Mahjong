@@ -83,7 +83,7 @@ namespace Mini
     };
 
     // Some functions related with Tile class
-    std::vector<Tile *> GetCompleteTileLists();
+    std::vector<const Tile *> GetCompleteTileLists();
 
     const static std::vector<uint8_t> YaochuuTileIdList = { 
             DragonTile(DragonType::White).GetIdentifier(),

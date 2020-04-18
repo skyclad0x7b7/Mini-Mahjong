@@ -18,11 +18,11 @@ namespace Mini
     class TileGroup
     {
     private:
-        std::vector<Tile*> tgTiles;
+        std::vector<const Tile *> tgTiles;
         TileGroupType tgType;
         bool isCalled = false;
     public:
-        TileGroup(const TileGroupType type, const std::vector<Tile*>& tiles, Tile *calledTile = nullptr, bool argIsCalled = false);
+        TileGroup(const TileGroupType type, const std::vector<const Tile *>& tiles, const Tile *calledTile = nullptr, bool argIsCalled = false);
 
         // Setters
         void SetType(const TileGroupType type);
@@ -31,7 +31,7 @@ namespace Mini
         // Getters
         TileGroupType GetType() const;
         bool GetIsCalled() const;
-        const std::vector<Tile*>& GetReadOnlyTiles() const;
+        const std::vector<const Tile *>& GetReadOnlyTiles() const;
         
         std::string ToString() const;
 

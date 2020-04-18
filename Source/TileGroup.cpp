@@ -7,9 +7,9 @@ namespace Mini
     // ==================================================
     // class TileGroup implementation
     // ==================================================
-    TileGroup::TileGroup(const TileGroupType type, const std::vector<Tile*>& tiles, Tile *calledTile, bool argIsCalled)
+    TileGroup::TileGroup(const TileGroupType type, const std::vector<const Tile *>& tiles, const Tile *calledTile, bool argIsCalled)
     {
-        std::vector<Tile*> tmpTiles = tiles;
+        std::vector<const Tile *> tmpTiles = tiles;
 
         if (calledTile)
         {
@@ -71,7 +71,7 @@ namespace Mini
         return isCalled;
     }
 
-    const std::vector<Tile*>& TileGroup::GetReadOnlyTiles() const
+    const std::vector<const Tile *>& TileGroup::GetReadOnlyTiles() const
     {
         return tgTiles;
     }

@@ -8,7 +8,7 @@
 
 namespace Mini
 {
-    bool CheckChitoitsuPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<Tile*>& handTiles, const Tile* pickedTile, ReassembledTileGroup& result)
+    bool CheckChitoitsuPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, ReassembledTileGroup& reassembledTG)
     {
         if (!calledTileGroupList.empty()) // Chitoitsu can't be made when it's not menzen state
         {
@@ -33,26 +33,28 @@ namespace Mini
         }
 
         // It can be Chitoitsu
-        std::vector<Tile*> tmp = handTiles;
+        ReassembledTileGroup result;
+        std::vector<const Tile *> tmp = handTiles;
         while (!tmp.empty())
         {
-            Tile* firstTile = tmp.back();
+            const Tile *firstTile = tmp.back();
             tmp.pop_back();
 
-            auto secondTileIter = std::find_if(tmp.begin(), tmp.end(), [&](Tile* tile) { return tile->GetIdentifier() == firstTile->GetIdentifier(); });
+            auto secondTileIter = std::find_if(tmp.begin(), tmp.end(), [&](const Tile *tile) { return tile->GetIdentifier() == firstTile->GetIdentifier(); });
             if (secondTileIter == tmp.end())
             {
-                result.restTiles.emplace_back(*secondTileIter);
+                result.InsertRestTile(*secondTileIter);
                 continue;
             }
 
-            result.tileGroupList.emplace_back(TileGroup(TileGroupType::Head, {firstTile, *secondTileIter}, nullptr, false));
+            result.InsertTileGroup(TileGroup(TileGroupType::Head, {firstTile, *secondTileIter}, nullptr, false));
         }
 
+        reassembledTG = result;
         return true;
     }
 
-    bool CheckKokushimusouPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<Tile*>& handTiles, const Tile* pickedTile, ReassembledTileGroup& result)
+    bool CheckKokushimusouPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, ReassembledTileGroup& reassembledTG)
     {
         if (!calledTileGroupList.empty()) // Kokushimusou can't be made when it's not menzen state
         {
@@ -74,6 +76,8 @@ namespace Mini
 
         std::vector<uint8_t> checkTileIdentifierList = YaochuuTileIdList;
 
+        ReassembledTileGroup result;
+
         bool once = true;
         for (auto& tile : handTiles)
         {
@@ -82,7 +86,7 @@ namespace Mini
             {
                 if (std::exchange(once, false))
                 {
-                    result.restTiles.emplace_back(tile);
+                    result.InsertRestTile(tile);
                 }
                 else // two same tiles appeared second time
                 {
@@ -91,7 +95,7 @@ namespace Mini
             }
             else
             {
-                result.restTiles.emplace_back(tile);
+                result.InsertRestTile(tile);
                 checkTileIdentifierList.erase(iter);
             }
         }
@@ -99,17 +103,47 @@ namespace Mini
         if (checkTileIdentifierList.empty())
         {
             // 13-way wating
+            reassembledTG = result;
             return true;
         }
         else if (checkTileIdentifierList[0] == pickedTile->GetIdentifier())
         {
             // common kokushimusou
+            reassembledTG = result;
             return true;
         }
         else
         {
             return false;
         }
+    }
+
+    bool CheckGeneralPossibleRecursively(int& headCount, int& bodyCount, std::vector<const Tile *>& restTiles, ReassembledTileGroup& curRTG, std::vector<ReassembledTileGroup>& reassembledTG)
+    {
+        std::vector<const Tile *> curRestTiles = restTiles;
+
+        if (headCount == 0)
+        {
+            // Find Head first
+
+        }
+
+        return true;
+    }
+
+    bool CheckGeneralPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, std::vector<ReassembledTileGroup>& reassembledTG)
+    {
+        int headCount = 0;
+        int bodyCount = calledTileGroupList.size();
+
+        std::vector<const Tile *> restTiles = handTiles;
+        restTiles.emplace_back(pickedTile);
+
+        ReassembledTileGroup tmp;
+
+        CheckGeneralPossibleRecursively(headCount, bodyCount, restTiles, tmp, reassembledTG);
+
+        return true;
     }
     
     Yaku::Yaku(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : 
@@ -144,7 +178,7 @@ namespace Mini
         return isMenzen ? GetMenzenScore() : GetScore();
     }
 
-    int Yaku::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Yaku::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         // Common condition
         if (!isMenzen && GetScore() == 0)
@@ -158,7 +192,7 @@ namespace Mini
     /*
     *  Menzen
     */
-    int Menzen::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Menzen::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
         {
@@ -177,7 +211,7 @@ namespace Mini
     /*
     *  Tanyao
     */
-    int Tanyao::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Tanyao::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -186,7 +220,7 @@ namespace Mini
         }
 
         // Check if there are 1, 9, character tiles
-        for (auto& tileGroup : reassembledTileGroup.tileGroupList)
+        for (auto& tileGroup : reassembledTileGroup.GetReadOnlyTileGroupList())
         {
             for (auto& tile : tileGroup.GetReadOnlyTiles())
             {
@@ -197,7 +231,7 @@ namespace Mini
             }
         }
 
-        for (auto& tile : reassembledTileGroup.restTiles)
+        for (auto& tile : reassembledTileGroup.GetReadOnlyRestTiles())
         {
             if (std::find(YaochuuTileIdList.begin(), YaochuuTileIdList.end(), tile->GetIdentifier()) != YaochuuTileIdList.end())
             {
@@ -216,7 +250,7 @@ namespace Mini
     /*
     *  Yakuhai
     */
-    int Yakuhai::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Yakuhai::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -224,8 +258,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
         // Add pickedTile into tileGroup if needed
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
@@ -257,7 +291,7 @@ namespace Mini
     /*
     *  Pinfu
     */
-    int Pinfu::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Pinfu::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -268,14 +302,14 @@ namespace Mini
         std::vector<uint8_t> checkList = { DragonTile(DragonType::White).GetIdentifier(), DragonTile(DragonType::Green).GetIdentifier(), DragonTile(DragonType::Red).GetIdentifier(),
                                         WindTile(roundWind).GetIdentifier(), WindTile(selfWind).GetIdentifier() };
 
-        if (!isMenzen || reassembledTileGroup.restTiles.size() == 1)
+        if (!isMenzen || reassembledTileGroup.GetReadOnlyRestTiles().size() == 1)
         {
             return 0;
         }
 
         // Head Check
-        auto headGroupIter = std::find_if(reassembledTileGroup.tileGroupList.begin(), reassembledTileGroup.tileGroupList.end(), [](const TileGroup& tg){ return tg.GetType() == TileGroupType::Head; });
-        if (headGroupIter == reassembledTileGroup.tileGroupList.end())
+        auto headGroupIter = std::find_if(reassembledTileGroup.GetReadOnlyTileGroupList().begin(), reassembledTileGroup.GetReadOnlyTileGroupList().end(), [](const TileGroup& tg){ return tg.GetType() == TileGroupType::Head; });
+        if (headGroupIter == reassembledTileGroup.GetReadOnlyTileGroupList().end())
         {
             return 0;
         }
@@ -286,7 +320,7 @@ namespace Mini
 
         // Body Check
         bool once = true;
-        for (auto& tileGroup : reassembledTileGroup.tileGroupList)
+        for (auto& tileGroup : reassembledTileGroup.GetReadOnlyTileGroupList())
         {
             if (tileGroup.GetType() == TileGroupType::Head)
             {
@@ -307,11 +341,11 @@ namespace Mini
         }
 
         // Rest Tile Check
-        if (reassembledTileGroup.restTiles.size() != 2)
+        if (reassembledTileGroup.GetReadOnlyRestTiles().size() != 2)
         {
             return 0;
         }
-        std::vector<uint8_t> lastBodyIdList = { reassembledTileGroup.restTiles[0]->GetIdentifier(), reassembledTileGroup.restTiles[1]->GetIdentifier(), pickedTile->GetIdentifier() };
+        std::vector<uint8_t> lastBodyIdList = { reassembledTileGroup.GetReadOnlyRestTiles()[0]->GetIdentifier(), reassembledTileGroup.GetReadOnlyRestTiles()[1]->GetIdentifier(), pickedTile->GetIdentifier() };
         std::sort(lastBodyIdList.begin(), lastBodyIdList.end());
         if ( lastBodyIdList[0] == lastBodyIdList[1] ) // Not shuntsu
         {
@@ -329,7 +363,7 @@ namespace Mini
     /*
     *  Ipeko
     */
-    int Ipeko::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Ipeko::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -337,8 +371,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
         // Add pickedTile into tileGroup if needed
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
@@ -375,8 +409,8 @@ namespace Mini
                     continue;
                 }
 
-                const std::vector<Tile*>& firstTileList  = tmpTileGroupList[i].GetReadOnlyTiles();
-                const std::vector<Tile*>& secondTileList = tmpTileGroupList[j].GetReadOnlyTiles();
+                const std::vector<const Tile *>& firstTileList  = tmpTileGroupList[i].GetReadOnlyTiles();
+                const std::vector<const Tile *>& secondTileList = tmpTileGroupList[j].GetReadOnlyTiles();
                 if (firstTileList[0]->GetIdentifier() == secondTileList[0]->GetIdentifier() &&
                     firstTileList[1]->GetIdentifier() == secondTileList[1]->GetIdentifier() &&
                     firstTileList[2]->GetIdentifier() == secondTileList[2]->GetIdentifier())
@@ -392,7 +426,7 @@ namespace Mini
     /*
     *  Ryanpeko
     */
-    int Ryanpeko::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Ryanpeko::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -400,8 +434,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
         // Add pickedTile into tileGroup if needed
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
@@ -443,8 +477,8 @@ namespace Mini
                     continue;
                 }
 
-                const std::vector<Tile*>& firstTileList  = tmpTileGroupList[i].GetReadOnlyTiles();
-                const std::vector<Tile*>& secondTileList = tmpTileGroupList[j].GetReadOnlyTiles();
+                const std::vector<const Tile *>& firstTileList  = tmpTileGroupList[i].GetReadOnlyTiles();
+                const std::vector<const Tile *>& secondTileList = tmpTileGroupList[j].GetReadOnlyTiles();
                 if (firstTileList[0]->GetIdentifier() == secondTileList[0]->GetIdentifier() &&
                     firstTileList[1]->GetIdentifier() == secondTileList[1]->GetIdentifier() &&
                     firstTileList[2]->GetIdentifier() == secondTileList[2]->GetIdentifier())
@@ -465,7 +499,7 @@ namespace Mini
     /*
     *  Ikkitsuukan
     */
-    int Ikkitsuukan::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Ikkitsuukan::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -473,8 +507,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
         // Add pickedTile into tileGroup if needed
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
@@ -495,9 +529,9 @@ namespace Mini
             }
 
             tileGroup.Sort();
-            NumberTile *first  = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[0]);
-            NumberTile *second = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[1]);
-            NumberTile *third  = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[2]);
+            const NumberTile *first  = dynamic_cast<const NumberTile *>(tileGroup.GetReadOnlyTiles()[0]);
+            const NumberTile *second = dynamic_cast<const NumberTile *>(tileGroup.GetReadOnlyTiles()[1]);
+            const NumberTile *third  = dynamic_cast<const NumberTile *>(tileGroup.GetReadOnlyTiles()[2]);
             debug_assert(first  != nullptr, "tile must be number tile");
             debug_assert(second != nullptr, "tile must be number tile");
             debug_assert(third  != nullptr, "tile must be number tile");
@@ -530,7 +564,7 @@ namespace Mini
     /*
     *  Sanshoku Doujun
     */
-    int SanshokuDoujun::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int SanshokuDoujun::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -538,8 +572,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
         // Add pickedTile into tileGroup if needed
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
@@ -561,9 +595,9 @@ namespace Mini
             }
 
             tileGroup.Sort();
-            NumberTile *first  = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[0]);
-            NumberTile *second = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[1]);
-            NumberTile *third  = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[2]);
+            const NumberTile *first  = dynamic_cast<const NumberTile *>(tileGroup.GetReadOnlyTiles()[0]);
+            const NumberTile *second = dynamic_cast<const NumberTile *>(tileGroup.GetReadOnlyTiles()[1]);
+            const NumberTile *third  = dynamic_cast<const NumberTile *>(tileGroup.GetReadOnlyTiles()[2]);
             debug_assert(first  != nullptr, "tile must be number tile");
             debug_assert(second != nullptr, "tile must be number tile");
             debug_assert(third  != nullptr, "tile must be number tile");
@@ -619,7 +653,7 @@ namespace Mini
     /*
     *  Sanshoku Doukou
     */
-    int SanshokuDoukou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int SanshokuDoukou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -627,8 +661,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
         // Add pickedTile into tileGroup if needed
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
@@ -648,7 +682,7 @@ namespace Mini
                 continue;
             }
 
-            NumberTile *first  = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[0]);
+            const NumberTile *first  = dynamic_cast<const NumberTile *>(tileGroup.GetReadOnlyTiles()[0]);
             if (first == nullptr) // It's not NumberTile
             {
                 continue;
@@ -705,7 +739,7 @@ namespace Mini
     /*
     *  Chanta
     */
-    int Chanta::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Chanta::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -713,8 +747,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
         
         // Check TileGroupList
         for (auto& tileGroup : tileGroupList)
@@ -755,7 +789,7 @@ namespace Mini
     /*
     *  JunChanta
     */
-    int JunChanta::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int JunChanta::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -763,8 +797,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
         
         // Check TileGroupList
         for (auto& tileGroup : tileGroupList)
@@ -805,7 +839,7 @@ namespace Mini
     /*
     *  HonRoutou
     */
-    int HonRoutou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int HonRoutou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -813,8 +847,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
         
         // Check TileGroupList
         for (auto& tileGroup : tileGroupList)
@@ -849,7 +883,7 @@ namespace Mini
     /*
     *  ChinRoutou
     */
-    int ChinRoutou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int ChinRoutou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -857,8 +891,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
         
         // Check TileGroupList
         for (auto& tileGroup : tileGroupList)
@@ -893,7 +927,7 @@ namespace Mini
     /*
     *  Tsuuiisou
     */
-    int Tsuuiisou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Tsuuiisou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -901,8 +935,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
         
         // Check TileGroupList
         for (auto& tileGroup : tileGroupList)
@@ -927,7 +961,7 @@ namespace Mini
     /*
     *  Honiisou
     */
-    int Honiisou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Honiisou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -935,15 +969,15 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
         NumberType numberType = NumberType::None;
 
         // Check TileGroupList
         for (auto& tileGroup : tileGroupList)
         {
-            NumberTile *tile = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[0]);
+            const NumberTile *tile = dynamic_cast<const NumberTile *>(tileGroup.GetReadOnlyTiles()[0]);
             if (!tile)
             {
                 continue;
@@ -964,7 +998,7 @@ namespace Mini
 
         // Check RestTileList & PickedTile
         // Don't need to check all tiles in RestTile and PickedTile
-        if (NumberTile *tile = dynamic_cast<NumberTile*>(pickedTile))
+        if (const NumberTile *tile = dynamic_cast<const NumberTile *>(pickedTile))
         {
             if (numberType == NumberType::None)
             {
@@ -988,7 +1022,7 @@ namespace Mini
     /*
     *  Chiniisou
     */
-    int Chiniisou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Chiniisou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -996,15 +1030,15 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
         NumberType numberType = NumberType::None;
 
         // Check TileGroupList
         for (auto& tileGroup : tileGroupList)
         {
-            NumberTile *tile = dynamic_cast<NumberTile*>(tileGroup.GetReadOnlyTiles()[0]);
+            const NumberTile *tile = dynamic_cast<const NumberTile *>(tileGroup.GetReadOnlyTiles()[0]);
             if (!tile)
             {
                 return 0;
@@ -1025,7 +1059,7 @@ namespace Mini
 
         // Check RestTileList & PickedTile
         // Don't need to check all tiles in RestTile and PickedTile
-        if (NumberTile *tile = dynamic_cast<NumberTile*>(pickedTile))
+        if (const NumberTile *tile = dynamic_cast<const NumberTile *>(pickedTile))
         {
             if (numberType == NumberType::None)
             {
@@ -1054,7 +1088,7 @@ namespace Mini
     /*
     *  Chitoitsu
     */
-    int Chitoitsu::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Chitoitsu::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -1062,8 +1096,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
         if (!isMenzen) // Chitoitsu must be in Menzen state
         {
@@ -1089,7 +1123,7 @@ namespace Mini
     /*
     *  Toitoi
     */
-    int Toitoi::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Toitoi::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -1097,8 +1131,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
         // Add pickedTile into tileGroup if needed
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
@@ -1128,7 +1162,7 @@ namespace Mini
     /*
     *  Sanankou
     */
-    int Sanankou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Sanankou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -1136,8 +1170,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
         // Add pickedTile into tileGroup if needed
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
@@ -1172,7 +1206,7 @@ namespace Mini
     /*
     *  Suuankou
     */
-    int Suuankou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Suuankou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -1180,8 +1214,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
         // Add pickedTile into tileGroup if needed
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
@@ -1220,7 +1254,7 @@ namespace Mini
     /*
     *  Shosangen
     */
-    int Shosangen::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Shosangen::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -1228,8 +1262,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
         // Add pickedTile into tileGroup if needed
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
@@ -1255,7 +1289,7 @@ namespace Mini
         {
             if (tileGroup.GetType() == TileGroupType::Head)
             {
-                if (DragonTile* tile = dynamic_cast<DragonTile*>(tileGroup.GetReadOnlyTiles()[0]))
+                if (const DragonTile *tile = dynamic_cast<const DragonTile *>(tileGroup.GetReadOnlyTiles()[0]))
                 {
                     switch(tile->GetType())
                     {
@@ -1279,7 +1313,7 @@ namespace Mini
 
             if (tileGroup.GetType() == TileGroupType::Koutsu || tileGroup.GetType() == TileGroupType::Kangtsu)
             {
-                DragonTile *first  = dynamic_cast<DragonTile*>(tileGroup.GetReadOnlyTiles()[0]);
+                const DragonTile *first  = dynamic_cast<const DragonTile *>(tileGroup.GetReadOnlyTiles()[0]);
                 if (first == nullptr) // It's not DragonTile
                 {
                     continue;
@@ -1311,7 +1345,7 @@ namespace Mini
     /*
     *  Daisangen
     */
-    int Daisangen::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Daisangen::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -1319,8 +1353,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
         // Add pickedTile into tileGroup if needed
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
@@ -1345,7 +1379,7 @@ namespace Mini
         {
             if (tileGroup.GetType() == TileGroupType::Koutsu || tileGroup.GetType() == TileGroupType::Kangtsu)
             {
-                DragonTile *first  = dynamic_cast<DragonTile*>(tileGroup.GetReadOnlyTiles()[0]);
+                const DragonTile *first  = dynamic_cast<const DragonTile *>(tileGroup.GetReadOnlyTiles()[0]);
                 if (first == nullptr) // It's not DragonTile
                 {
                     continue;
@@ -1377,7 +1411,7 @@ namespace Mini
     /*
     *  Kokushimusou
     */
-    int Kokushimusou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Kokushimusou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -1385,8 +1419,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
         if (tileGroupList.size() > 0)
         {
@@ -1435,7 +1469,7 @@ namespace Mini
     /*
     *  Chuurenpotou
     */
-    int Chuurenpotou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Chuurenpotou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -1443,10 +1477,10 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
-        std::vector<Tile *> allTilesList = reassembledTileGroup.restTiles;
+        std::vector<const Tile *> allTilesList = reassembledTileGroup.GetReadOnlyRestTiles();
         for (auto& tileGroup : tileGroupList)
         {
             if (tileGroup.GetType() == TileGroupType::Kangtsu || tileGroup.GetIsCalled()) // No calling allowed, even Ankang
@@ -1462,7 +1496,7 @@ namespace Mini
         int8_t numberCount[9] = { 3, 1, 1, 1, 1, 1, 1, 1, 3 };
         for (auto& tile : allTilesList)
         {
-            NumberTile *numberTile = dynamic_cast<NumberTile*>(tile);
+            const NumberTile *numberTile = dynamic_cast<const NumberTile *>(tile);
             if (!numberTile)
             {
                 return 0;
@@ -1508,7 +1542,7 @@ namespace Mini
     /*
     *  Ryuuiisou
     */
-    int Ryuuiisou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Ryuuiisou::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -1516,10 +1550,10 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
-        std::vector<Tile *> allTilesList = reassembledTileGroup.restTiles;
+        std::vector<const Tile *> allTilesList = reassembledTileGroup.GetReadOnlyRestTiles();
         for (auto& tileGroup : tileGroupList)
         {
             allTilesList.insert(allTilesList.end(), tileGroup.GetReadOnlyTiles().begin(), tileGroup.GetReadOnlyTiles().end());
@@ -1548,7 +1582,7 @@ namespace Mini
     /*
     *  Shousuushii
     */
-    int Shousuushii::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Shousuushii::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -1556,8 +1590,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
         // Add pickedTile into tileGroup if needed
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
@@ -1581,7 +1615,7 @@ namespace Mini
         uint8_t bodyCheck = 0;
         for (auto& tileGroup : tmpTileGroupList)
         {
-            WindTile *tile = dynamic_cast<WindTile*>(tileGroup.GetReadOnlyTiles()[0]);
+            const WindTile *tile = dynamic_cast<const WindTile *>(tileGroup.GetReadOnlyTiles()[0]);
             if (!tile)
             {
                 continue;
@@ -1636,7 +1670,7 @@ namespace Mini
     /*
     *  Daisuushii
     */
-    int Daisuushii::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    int Daisuushii::GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         dbgprint("YakuCheck: %s\n", typeid(this).name());
         if (Yaku::GetScoreIfPossible(reassembledTileGroup, pickedTile, isMenzen, isRon, roundWind, selfWind) != 0)
@@ -1644,8 +1678,8 @@ namespace Mini
             return 0;
         }
 
-        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.tileGroupList;
-        const std::vector<Tile*>&      restTileList = reassembledTileGroup.restTiles;
+        const std::vector<TileGroup>& tileGroupList = reassembledTileGroup.GetReadOnlyTileGroupList();
+        const std::vector<const Tile *>&      restTileList = reassembledTileGroup.GetReadOnlyRestTiles();
 
         // Add pickedTile into tileGroup if needed
         std::vector<TileGroup> tmpTileGroupList = tileGroupList;
@@ -1660,7 +1694,7 @@ namespace Mini
         uint8_t bodyCheck = 0;
         for (auto& tileGroup : tmpTileGroupList)
         {
-            WindTile *tile = dynamic_cast<WindTile*>(tileGroup.GetReadOnlyTiles()[0]);
+            const WindTile *tile = dynamic_cast<const WindTile *>(tileGroup.GetReadOnlyTiles()[0]);
             if (!tile)
             {
                 continue;

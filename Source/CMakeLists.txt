@@ -14,6 +14,8 @@ add_library(Mini-Mahjong STATIC
     Utils.h
     Yaku.cpp
     Yaku.h
+    ReassembledTileGroup.cpp
+    ReassembledTileGroup.h
 )
 
 set_target_properties (Mini-Mahjong PROPERTIES CXX_STANDARD 17)

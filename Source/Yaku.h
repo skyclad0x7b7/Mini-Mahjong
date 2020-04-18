@@ -2,19 +2,17 @@
 #define __MINI_MAHJONG_YAKU_H__
 
 #include <Source/TileGroup.h>
+#include <Source/ReassembledTileGroup.h>
 
 #include <string>
 
 namespace Mini
 {
-    struct ReassembledTileGroup
-    {
-        std::vector<TileGroup> tileGroupList;
-        std::vector<Tile*> restTiles;
-    };
 
-    bool CheckChitoitsuPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<Tile*>& handTiles, const Tile* pickedTile, ReassembledTileGroup& result);
-    bool CheckKokushimusouPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<Tile*>& handTiles, const Tile* pickedTile, ReassembledTileGroup& result);
+    bool CheckChitoitsuPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, ReassembledTileGroup& reassembledTG);
+    bool CheckKokushimusouPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, ReassembledTileGroup& reassembledTG);
+    bool CheckGeneralPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, std::vector<ReassembledTileGroup>& reassembledTG);
+
 
     /*
     *  Some Yaku, such as Ipeko and Ryanpeko can't be counted at the same time
@@ -48,196 +46,196 @@ namespace Mini
         int GetScore() const;
         int GetRealScore(bool isMenzen) const;
 
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind) = 0;
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind) = 0;
     };
 
     class Menzen : public Yaku
     {
     public:
         Menzen(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Yakuhai : public Yaku
     {
     public:
         Yakuhai(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Tanyao : public Yaku
     {
     public:
         Tanyao(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Pinfu : public Yaku
     {
     public:
         Pinfu(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Ipeko : public Yaku
     {
     public:
         Ipeko(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Ryanpeko : public Yaku
     {
     public:
         Ryanpeko(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Ikkitsuukan : public Yaku
     {
     public:
         Ikkitsuukan(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class SanshokuDoujun : public Yaku
     {
     public:
         SanshokuDoujun(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class SanshokuDoukou : public Yaku
     {
     public:
         SanshokuDoukou(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Chanta : public Yaku
     {
     public:
         Chanta(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class JunChanta : public Yaku
     {
     public:
         JunChanta(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class HonRoutou : public Yaku
     {
     public:
         HonRoutou(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class ChinRoutou : public Yaku
     {
     public:
         ChinRoutou(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Tsuuiisou : public Yaku
     {
     public:
         Tsuuiisou(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Honiisou : public Yaku
     {
     public:
         Honiisou(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Chiniisou : public Yaku
     {
     public:
         Chiniisou(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Chitoitsu : public Yaku
     {
     public:
         Chitoitsu(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Toitoi : public Yaku
     {
     public:
         Toitoi(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Sanankou : public Yaku
     {
     public:
         Sanankou(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Suuankou : public Yaku
     {
     public:
         Suuankou(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Shosangen : public Yaku
     {
     public:
         Shosangen(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Daisangen : public Yaku
     {
     public:
         Daisangen(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Kokushimusou : public Yaku
     {
     public:
         Kokushimusou(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Chuurenpotou : public Yaku
     {
     public:
         Chuurenpotou(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Ryuuiisou : public Yaku
     {
     public:
         Ryuuiisou(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Shousuushii : public Yaku
     {
     public:
         Shousuushii(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 
     class Daisuushii : public Yaku
     {
     public:
         Daisuushii(std::string argIdentifier, int argMenzenScore, int argScore, YakuType argYakuType) : Yaku(argIdentifier, argMenzenScore, argScore, argYakuType) { };
-        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
+        virtual int GetScoreIfPossible(const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     };
 }
 

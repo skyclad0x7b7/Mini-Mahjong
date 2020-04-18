@@ -249,9 +249,9 @@ namespace Mini
     // ==================================================
     // Some functions related with Tile class implementation
     // ==================================================
-    std::vector<Tile *> GetCompleteTileLists()
+    std::vector<const Tile *> GetCompleteTileLists()
     {
-        std::vector<Tile *> ret;
+        std::vector<const Tile *> ret;
 
         for (int i = 0; i < 4; ++i)
         {

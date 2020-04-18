@@ -13,20 +13,20 @@ namespace Mini
     private:
         Hand pHand;
         std::vector<TileGroup> calledTileGroup;
-        std::vector<Tile*> droppedTiles;
+        std::vector<const Tile *> droppedTiles;
         bool isMenzen;
 
         int pScore;
     public:
-        Player(const std::vector<Tile*>& initTiles);
+        Player(const std::vector<const Tile *>& initTiles);
 
-        const std::vector<Tile*>& GetReadOnlyTiles() const;
-        const std::vector<Tile*>& GetReadOnlyDroppedTiles() const;
+        const std::vector<const Tile *>& GetReadOnlyTiles() const;
+        const std::vector<const Tile *>& GetReadOnlyDroppedTiles() const;
         const std::vector<TileGroup>& GetReadOnlyCalledTileGroup() const;
         
-        void AddTile(Tile* tile);
-        void DropTile(const Tile* tile);
-        void AddToDroppedTile(Tile* tile);
+        void AddTile(const Tile *tile);
+        void DropTile(const Tile *tile);
+        void AddToDroppedTile(const Tile *tile);
 
         void SortHand();
 
@@ -34,8 +34,8 @@ namespace Mini
         bool GetIsMenzen() const;
 
         // Event Handler
-        void OnOtherPlayerDroppedTile(Tile* tile);
-        void OnOtherPlayerCalledKang(Tile* tile);
+        void OnOtherPlayerDroppedTile(const Tile *tile);
+        void OnOtherPlayerCalledKang(const Tile *tile);
 
     };
 

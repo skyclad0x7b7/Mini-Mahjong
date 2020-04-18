@@ -41,12 +41,12 @@ namespace Mini
     void Test02()
     {
         puts(" ========== < Test 02 > ========== ");
-        std::vector<Tile *> tileList = GetCompleteTileLists();
+        std::vector<const Tile *> tileList = GetCompleteTileLists();
         std::random_device rd; 
         std::mt19937 g(rd());
         std::shuffle(tileList.begin(), tileList.end(), g);
 
-        Hand hand(std::vector<Tile*>(tileList.begin(), tileList.begin() + 13));
+        Hand hand(std::vector<const Tile *>(tileList.begin(), tileList.begin() + 13));
         hand.Sort();
         for (int i = 0; i < 13; ++i)
         {
@@ -66,18 +66,18 @@ namespace Mini
     */
     void Test03()
     {
-        std::vector<Tile*> orgTileList = GetCompleteTileLists();
-        std::vector<Tile*> tileList = orgTileList;
+        std::vector<const Tile *> orgTileList = GetCompleteTileLists();
+        std::vector<const Tile *> tileList = orgTileList;
         std::random_device rd; 
         std::mt19937 g(rd());
         std::shuffle(tileList.begin(), tileList.end(), g);
 
-        Player player(std::vector<Tile*>(tileList.begin(), tileList.begin() + 13));
-        tileList = std::vector<Tile*>(tileList.begin() + 13, tileList.end());
+        Player player(std::vector<const Tile *>(tileList.begin(), tileList.begin() + 13));
+        tileList = std::vector<const Tile *>(tileList.begin() + 13, tileList.end());
 
         while (tileList.size() != 0)
         {
-            Tile *newTile = tileList[tileList.size() - 1];
+            const Tile *newTile = tileList[tileList.size() - 1];
             tileList.pop_back();
 
             player.SortHand();
@@ -95,7 +95,7 @@ namespace Mini
                 scanf("%d", &index);
             }
 
-            Tile *droppedTile = nullptr;
+            const Tile *droppedTile = nullptr;
             if (index == handTiles.size())
             {
                 // Tsumogiri
@@ -128,12 +128,12 @@ namespace Mini
         /* Chitoitsu Test */
         {
             puts("[  Chitoitsu Test 01  ]");
-            std::vector<Tile*> chitoitsuTest01List = { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1),
+            std::vector<const Tile *> chitoitsuTest01List = { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1),
                                                         new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Bamboo, 4),
                                                         new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Dots, 8), new NumberTile(NumberType::Dots, 8),
                                                         new WindTile(WindType::West), new WindTile(WindType::West), new DragonTile(DragonType::Red),
                                                         new DragonTile(DragonType::Red), };
-            Tile* pickedTile = new NumberTile(NumberType::Cracks, 1);
+            const Tile *pickedTile = new NumberTile(NumberType::Cracks, 1);
             printf("[*] Tiles: ");
             for (auto& tile : chitoitsuTest01List)
             {
@@ -148,12 +148,12 @@ namespace Mini
 
         {
             puts("[  Chitoitsu Test 02  ]");
-            std::vector<Tile*> chitoitsuTest02List = { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1),
+            std::vector<const Tile *> chitoitsuTest02List = { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1),
                                                         new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Bamboo, 4),
                                                         new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Dots, 8), new NumberTile(NumberType::Dots, 8),
                                                         new WindTile(WindType::West), new WindTile(WindType::West), new DragonTile(DragonType::Red),
                                                         new DragonTile(DragonType::Red), };
-            Tile* pickedTile = new NumberTile(NumberType::Cracks, 3);
+            const Tile *pickedTile = new NumberTile(NumberType::Cracks, 3);
             printf("[*] Tiles: ");
             for (auto& tile : chitoitsuTest02List)
             {
@@ -168,12 +168,12 @@ namespace Mini
 
         {
             puts("[  Chitoitsu Test 03  ]");
-            std::vector<Tile*> chitoitsuTest03List = { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 3),
+            std::vector<const Tile *> chitoitsuTest03List = { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 3),
                                                         new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Bamboo, 4),
                                                         new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Dots, 8), new NumberTile(NumberType::Dots, 8),
                                                         new WindTile(WindType::West), new WindTile(WindType::West), new DragonTile(DragonType::Red),
                                                         new DragonTile(DragonType::Red), };
-            Tile* pickedTile = new NumberTile(NumberType::Cracks, 1);
+            const Tile *pickedTile = new NumberTile(NumberType::Cracks, 1);
             printf("[*] Tiles: ");
             for (auto& tile : chitoitsuTest03List)
             {
@@ -189,12 +189,12 @@ namespace Mini
         /* Kokushimusou Test */
         {
             puts("[  Kokushimusou Test 01  ]");
-            std::vector<Tile*> chitoitsuTest01List = { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 9), new NumberTile(NumberType::Bamboo, 1),
+            std::vector<const Tile *> chitoitsuTest01List = { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 9), new NumberTile(NumberType::Bamboo, 1),
                                                         new NumberTile(NumberType::Bamboo, 9), new NumberTile(NumberType::Dots, 1), new NumberTile(NumberType::Dots, 9),
                                                         new WindTile(WindType::East), new WindTile(WindType::South), new WindTile(WindType::West),
                                                         new WindTile(WindType::North), new DragonTile(DragonType::White), new DragonTile(DragonType::Green),
                                                         new DragonTile(DragonType::Red), };
-            Tile* pickedTile = new NumberTile(NumberType::Cracks, 1);
+            const Tile *pickedTile = new NumberTile(NumberType::Cracks, 1);
             printf("[*] Tiles: ");
             for (auto& tile : chitoitsuTest01List)
             {
@@ -209,12 +209,12 @@ namespace Mini
 
         {
             puts("[  Kokushimusou Test 02  ]");
-            std::vector<Tile*> chitoitsuTest02List = { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 9), new NumberTile(NumberType::Bamboo, 1),
+            std::vector<const Tile *> chitoitsuTest02List = { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 9), new NumberTile(NumberType::Bamboo, 1),
                                                         new NumberTile(NumberType::Bamboo, 9), new NumberTile(NumberType::Dots, 1), new NumberTile(NumberType::Dots, 9),
                                                         new WindTile(WindType::East), new WindTile(WindType::South), new WindTile(WindType::West),
                                                         new WindTile(WindType::North), new DragonTile(DragonType::White), new DragonTile(DragonType::Green),
                                                         new DragonTile(DragonType::Red), };
-            Tile* pickedTile = new NumberTile(NumberType::Cracks, 1);
+            const Tile *pickedTile = new NumberTile(NumberType::Cracks, 1);
             printf("[*] Tiles: ");
             for (auto& tile : chitoitsuTest02List)
             {
@@ -229,12 +229,12 @@ namespace Mini
 
         {
             puts("[  Kokushimusou Test 03  ]");
-            std::vector<Tile*> chitoitsuTest03List = { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Bamboo, 1),
+            std::vector<const Tile *> chitoitsuTest03List = { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Bamboo, 1),
                                                         new NumberTile(NumberType::Bamboo, 9), new NumberTile(NumberType::Dots, 1), new NumberTile(NumberType::Dots, 9),
                                                         new WindTile(WindType::East), new WindTile(WindType::South), new WindTile(WindType::West),
                                                         new WindTile(WindType::North), new DragonTile(DragonType::White), new DragonTile(DragonType::Green),
                                                         new DragonTile(DragonType::Red), };
-            Tile* pickedTile = new NumberTile(NumberType::Cracks, 9);
+            const Tile *pickedTile = new NumberTile(NumberType::Cracks, 9);
             printf("[*] Tiles: ");
             for (auto& tile : chitoitsuTest03List)
             {
@@ -262,19 +262,19 @@ namespace Mini
 
         {
             puts("[  Yaku Test 01  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Bamboo, 5) }, nullptr, false),
-                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Dots, 6), new NumberTile(NumberType::Bamboo, 7), new NumberTile(NumberType::Bamboo, 8) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 6), new NumberTile(NumberType::Bamboo, 7), new NumberTile(NumberType::Bamboo, 8) }, nullptr, false),
                 },
                 {
                     new NumberTile(NumberType::Dots, 6),
                     new NumberTile(NumberType::Dots, 7)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Dots, 5);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Dots, 5);
             bool isMenzen = true;
             bool isRon    = false;
             WindType roundWind = WindType::East;
@@ -285,19 +285,19 @@ namespace Mini
 
         {
             puts("[  Yaku Test 02  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Bamboo, 5) }, nullptr, false),
-                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Dots, 6), new NumberTile(NumberType::Bamboo, 7), new NumberTile(NumberType::Bamboo, 8) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 6), new NumberTile(NumberType::Bamboo, 7), new NumberTile(NumberType::Bamboo, 8) }, nullptr, false),
                 },
                 {
                     new NumberTile(NumberType::Dots, 6),
                     new NumberTile(NumberType::Dots, 7)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Dots, 5);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Dots, 5);
             bool isMenzen = true;
             bool isRon    = false;
             WindType roundWind = WindType::East;
@@ -308,18 +308,18 @@ namespace Mini
 
         {
             puts("[  Yaku Test 03  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 3), new NumberTile(NumberType::Cracks, 4) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Bamboo, 5) }, nullptr, false),
-                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Dots, 6), new NumberTile(NumberType::Bamboo, 7), new NumberTile(NumberType::Bamboo, 8) }, nullptr, false),
+                    TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 6), new NumberTile(NumberType::Bamboo, 7), new NumberTile(NumberType::Bamboo, 8) }, nullptr, false),
                 },
                 {
                     new NumberTile(NumberType::Dots, 6),
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Dots, 6);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Dots, 6);
             bool isMenzen = true;
             bool isRon    = false;
             WindType roundWind = WindType::East;
@@ -330,7 +330,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 04  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
@@ -341,8 +341,8 @@ namespace Mini
                     new NumberTile(NumberType::Dots, 6),
                     new NumberTile(NumberType::Dots, 7)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Dots, 5);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Dots, 5);
             bool isMenzen = true;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -369,7 +369,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 01  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Bamboo, 5) }, nullptr, false),
@@ -380,8 +380,8 @@ namespace Mini
                     new NumberTile(NumberType::Dots, 6),
                     new NumberTile(NumberType::Dots, 7)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Dots, 8);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Dots, 8);
             bool isMenzen = true;
             bool isRon    = false;
             WindType roundWind = WindType::East;
@@ -392,7 +392,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 02  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
@@ -403,8 +403,8 @@ namespace Mini
                     new NumberTile(NumberType::Dots, 6),
                     new NumberTile(NumberType::Dots, 7)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Dots, 5);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Dots, 5);
             bool isMenzen = true;
             bool isRon    = false;
             WindType roundWind = WindType::East;
@@ -415,7 +415,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 03  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
@@ -426,8 +426,8 @@ namespace Mini
                     new NumberTile(NumberType::Dots, 6),
                     new NumberTile(NumberType::Dots, 7)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Dots, 5);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Dots, 5);
             bool isMenzen = true;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -438,7 +438,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 04  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 3), new NumberTile(NumberType::Cracks, 4) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
@@ -448,8 +448,8 @@ namespace Mini
                 {
                     new NumberTile(NumberType::Dots, 7)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Dots, 7);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Dots, 7);
             bool isMenzen = true;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -460,7 +460,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 05  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 3), new NumberTile(NumberType::Cracks, 4) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 3), new NumberTile(NumberType::Cracks, 4) }, nullptr, false),
@@ -470,8 +470,8 @@ namespace Mini
                 {
                     new NumberTile(NumberType::Dots, 7)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Dots, 7);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Dots, 7);
             bool isMenzen = true;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -482,7 +482,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 06  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 3) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Cracks, 4), new NumberTile(NumberType::Cracks, 5), new NumberTile(NumberType::Cracks, 6) }, nullptr, false),
@@ -492,8 +492,8 @@ namespace Mini
                 {
                     new NumberTile(NumberType::Dots, 7)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Dots, 7);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Dots, 7);
             bool isMenzen = true;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -504,7 +504,7 @@ namespace Mini
         
         {
             puts("[  Yaku Test 07  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 3), new NumberTile(NumberType::Cracks, 4) }, nullptr, false),
@@ -515,8 +515,8 @@ namespace Mini
                     new NumberTile(NumberType::Bamboo, 1),
                     new NumberTile(NumberType::Bamboo, 3)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Bamboo, 2);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Bamboo, 2);
             bool isMenzen = true;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -545,7 +545,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 01  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
@@ -556,8 +556,8 @@ namespace Mini
                     new NumberTile(NumberType::Cracks, 3),
                     new NumberTile(NumberType::Cracks, 2)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Cracks, 4);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Cracks, 4);
             bool isMenzen = true;
             bool isRon    = false;
             WindType roundWind = WindType::East;
@@ -568,7 +568,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 02 ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
@@ -579,8 +579,8 @@ namespace Mini
                     new NumberTile(NumberType::Cracks, 4),
                     new NumberTile(NumberType::Cracks, 2)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Cracks, 3);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Cracks, 3);
             bool isMenzen = true;
             bool isRon    = false;
             WindType roundWind = WindType::East;
@@ -591,7 +591,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 03 ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
@@ -602,8 +602,8 @@ namespace Mini
                     new NumberTile(NumberType::Cracks, 5),
                     new NumberTile(NumberType::Cracks, 6)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Cracks, 4);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Cracks, 4);
             bool isMenzen = true;
             bool isRon    = false;
             WindType roundWind = WindType::East;
@@ -614,7 +614,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 04 ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 5), new NumberTile(NumberType::Cracks, 5) }, nullptr, false),
                     TileGroup(TileGroupType::Koutsu, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2) }, nullptr, false),
@@ -625,8 +625,8 @@ namespace Mini
                     new NumberTile(NumberType::Dots, 2),
                     new NumberTile(NumberType::Dots, 2)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Dots, 2);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Dots, 2);
             bool isMenzen = true;
             bool isRon    = false;
             WindType roundWind = WindType::East;
@@ -637,7 +637,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 05 ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Koutsu, { new NumberTile(NumberType::Cracks, 4), new NumberTile(NumberType::Cracks, 4), new NumberTile(NumberType::Cracks, 4) }, nullptr, false),
                     TileGroup(TileGroupType::Koutsu, { new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Bamboo, 4), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
@@ -647,8 +647,8 @@ namespace Mini
                 {
                     new NumberTile(NumberType::Cracks, 5)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Cracks, 5);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Cracks, 5);
             bool isMenzen = true;
             bool isRon    = false;
             WindType roundWind = WindType::East;
@@ -681,7 +681,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 01  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new WindTile(WindType::South), new WindTile(WindType::South) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 1), new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3) }, nullptr, false),
@@ -692,8 +692,8 @@ namespace Mini
                     new WindTile(WindType::East),
                     new WindTile(WindType::East)
                 }
-            };
-            Tile* pickedTile = new WindTile(WindType::East);
+            );
+            const Tile *pickedTile = new WindTile(WindType::East);
             bool isMenzen = true;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -704,7 +704,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 02  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new WindTile(WindType::South), new WindTile(WindType::South) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 1), new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3) }, nullptr, false),
@@ -715,8 +715,8 @@ namespace Mini
                     new WindTile(WindType::East),
                     new WindTile(WindType::East)
                 }
-            };
-            Tile* pickedTile = new WindTile(WindType::East);
+            );
+            const Tile *pickedTile = new WindTile(WindType::East);
             bool isMenzen = false;
             bool isRon    = false;
             WindType roundWind = WindType::East;
@@ -727,7 +727,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 03  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Dots, 1), new NumberTile(NumberType::Dots, 1) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 3) }, nullptr, false),
@@ -738,8 +738,8 @@ namespace Mini
                     new NumberTile(NumberType::Dots, 1),
                     new NumberTile(NumberType::Dots, 2)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Dots, 3);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Dots, 3);
             bool isMenzen = false;
             bool isRon    = false;
             WindType roundWind = WindType::East;
@@ -750,7 +750,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 04  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new WindTile(WindType::South), new WindTile(WindType::South) }, nullptr, false),
                     TileGroup(TileGroupType::Koutsu, { new NumberTile(NumberType::Bamboo, 1), new NumberTile(NumberType::Bamboo, 1), new NumberTile(NumberType::Bamboo, 1) }, nullptr, false),
@@ -761,8 +761,8 @@ namespace Mini
                     new WindTile(WindType::East),
                     new WindTile(WindType::East)
                 }
-            };
-            Tile* pickedTile = new WindTile(WindType::East);
+            );
+            const Tile *pickedTile = new WindTile(WindType::East);
             bool isMenzen = false;
             bool isRon    = false;
             WindType roundWind = WindType::East;
@@ -773,7 +773,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 05  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1) }, nullptr, false),
                     TileGroup(TileGroupType::Koutsu, { new NumberTile(NumberType::Cracks, 9), new NumberTile(NumberType::Cracks, 9), new NumberTile(NumberType::Cracks, 9) }, nullptr, false),
@@ -784,8 +784,8 @@ namespace Mini
                     new NumberTile(NumberType::Dots, 9),
                     new NumberTile(NumberType::Dots, 9)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Dots, 9);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Dots, 9);
             bool isMenzen = false;
             bool isRon    = false;
             WindType roundWind = WindType::East;
@@ -824,7 +824,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 01  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new WindTile(WindType::South), new WindTile(WindType::South) }, nullptr, false),
                     TileGroup(TileGroupType::Koutsu, { new WindTile(WindType::North), new WindTile(WindType::North) }, new WindTile(WindType::North), true),
@@ -835,8 +835,8 @@ namespace Mini
                     new WindTile(WindType::East),
                     new WindTile(WindType::East)
                 }
-            };
-            Tile* pickedTile = new WindTile(WindType::East);
+            );
+            const Tile *pickedTile = new WindTile(WindType::East);
             bool isMenzen = false;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -847,7 +847,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 02  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new WindTile(WindType::South), new WindTile(WindType::South) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 1), new NumberTile(NumberType::Bamboo, 2)},  new NumberTile(NumberType::Bamboo, 3), true),
@@ -858,8 +858,8 @@ namespace Mini
                     new WindTile(WindType::East),
                     new WindTile(WindType::East)
                 }
-            };
-            Tile* pickedTile = new WindTile(WindType::East);
+            );
+            const Tile *pickedTile = new WindTile(WindType::East);
             bool isMenzen = false;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -870,7 +870,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 03  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 1), new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3)}, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 1), new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3)}, nullptr, false),
@@ -880,8 +880,8 @@ namespace Mini
                 {
                     new NumberTile(NumberType::Bamboo, 9),
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Bamboo, 9);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Bamboo, 9);
             bool isMenzen = true;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -892,7 +892,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 04  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new WindTile(WindType::South), new WindTile(WindType::South) }, nullptr, false),
                     TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1) }, nullptr, false),
@@ -905,8 +905,8 @@ namespace Mini
                 {
                     new WindTile(WindType::East),
                 }
-            };
-            Tile* pickedTile = new WindTile(WindType::East);
+            );
+            const Tile *pickedTile = new WindTile(WindType::East);
             bool isMenzen = true;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -946,7 +946,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 01  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new WindTile(WindType::South), new WindTile(WindType::South) }, nullptr, false),
                     TileGroup(TileGroupType::Koutsu, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1) }, nullptr, false),
@@ -957,8 +957,8 @@ namespace Mini
                     new WindTile(WindType::East),
                     new WindTile(WindType::East)
                 }
-            };
-            Tile* pickedTile = new WindTile(WindType::East);
+            );
+            const Tile *pickedTile = new WindTile(WindType::East);
             bool isMenzen = true;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -969,7 +969,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 02  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new WindTile(WindType::South), new WindTile(WindType::South) }, nullptr, false),
                     TileGroup(TileGroupType::Koutsu, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1) }, nullptr, false),
@@ -980,8 +980,8 @@ namespace Mini
                     new WindTile(WindType::East),
                     new WindTile(WindType::East)
                 }
-            };
-            Tile* pickedTile = new WindTile(WindType::East);
+            );
+            const Tile *pickedTile = new WindTile(WindType::East);
             bool isMenzen = true;
             bool isRon    = false;
             WindType roundWind = WindType::East;
@@ -992,7 +992,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 03  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Kangtsu, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1) }, new NumberTile(NumberType::Cracks, 1), true),
                     TileGroup(TileGroupType::Koutsu, { new NumberTile(NumberType::Cracks, 4), new NumberTile(NumberType::Cracks, 4), new NumberTile(NumberType::Cracks, 4) }, nullptr, false),
@@ -1002,8 +1002,8 @@ namespace Mini
                 {
                     new WindTile(WindType::East)
                 }
-            };
-            Tile* pickedTile = new WindTile(WindType::East);
+            );
+            const Tile *pickedTile = new WindTile(WindType::East);
             bool isMenzen = false;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -1014,7 +1014,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 04  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new WindTile(WindType::South), new WindTile(WindType::South) }, nullptr, false),
                     TileGroup(TileGroupType::Kangtsu, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1) }, new NumberTile(NumberType::Cracks, 1), true),
@@ -1025,8 +1025,8 @@ namespace Mini
                     new WindTile(WindType::East),
                     new WindTile(WindType::East)
                 }
-            };
-            Tile* pickedTile = new WindTile(WindType::East);
+            );
+            const Tile *pickedTile = new WindTile(WindType::East);
             bool isMenzen = false;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -1069,7 +1069,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 01  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new DragonTile(DragonType::Red), new DragonTile(DragonType::Red) }, nullptr, false),
                     TileGroup(TileGroupType::Koutsu, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1) }, nullptr, false),
@@ -1080,8 +1080,8 @@ namespace Mini
                     new WindTile(WindType::East),
                     new WindTile(WindType::East)
                 }
-            };
-            Tile* pickedTile = new WindTile(WindType::East);
+            );
+            const Tile *pickedTile = new WindTile(WindType::East);
             bool isMenzen = true;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -1092,7 +1092,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 02  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1) }, nullptr, false),
                     TileGroup(TileGroupType::Koutsu, { new WindTile(WindType::South), new WindTile(WindType::South), new WindTile(WindType::South) }, nullptr, false),
@@ -1103,8 +1103,8 @@ namespace Mini
                     new DragonTile(DragonType::Red),
                     new DragonTile(DragonType::Red)
                 }
-            };
-            Tile* pickedTile = new DragonTile(DragonType::Red);
+            );
+            const Tile *pickedTile = new DragonTile(DragonType::Red);
             bool isMenzen = true;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -1115,7 +1115,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 03  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { },
                 {
                     new WindTile(WindType::East),
@@ -1132,8 +1132,8 @@ namespace Mini
                     new NumberTile(NumberType::Dots, 1),
                     new NumberTile(NumberType::Dots, 9),
                 }
-            };
-            Tile* pickedTile = new DragonTile(DragonType::Red);
+            );
+            const Tile *pickedTile = new DragonTile(DragonType::Red);
             bool isMenzen = true;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -1144,7 +1144,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 04  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { },
                 {
                     new WindTile(WindType::East),
@@ -1161,8 +1161,8 @@ namespace Mini
                     new NumberTile(NumberType::Bamboo, 9),
                     new NumberTile(NumberType::Dots, 1),
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Dots, 9);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Dots, 9);
             bool isMenzen = true;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -1210,7 +1210,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 01  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 1) }, nullptr, false),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Cracks, 1), new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 3) }, nullptr, false),
@@ -1221,8 +1221,8 @@ namespace Mini
                     new NumberTile(NumberType::Cracks, 9),
                     new NumberTile(NumberType::Cracks, 9)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Cracks, 9);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Cracks, 9);
             bool isMenzen = true;
             bool isRon    = false;
             WindType roundWind = WindType::East;
@@ -1233,7 +1233,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 02  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3) }, new NumberTile(NumberType::Bamboo, 4), true),
                     TileGroup(TileGroupType::Shuntsu, { new NumberTile(NumberType::Bamboo, 2), new NumberTile(NumberType::Bamboo, 3), new NumberTile(NumberType::Bamboo, 4) }, nullptr, false),
@@ -1243,8 +1243,8 @@ namespace Mini
                 {
                     new NumberTile(NumberType::Bamboo, 8)
                 }
-            };
-            Tile* pickedTile = new NumberTile(NumberType::Bamboo, 8);
+            );
+            const Tile *pickedTile = new NumberTile(NumberType::Bamboo, 8);
             bool isMenzen = false;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -1255,7 +1255,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 03  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Koutsu, { new WindTile(WindType::East), new WindTile(WindType::East) }, new WindTile(WindType::East), true),
                     TileGroup(TileGroupType::Koutsu, { new WindTile(WindType::West), new WindTile(WindType::West), new WindTile(WindType::West) }, nullptr, false),
@@ -1265,8 +1265,8 @@ namespace Mini
                 {
                     new WindTile(WindType::South)
                 }
-            };
-            Tile* pickedTile = new WindTile(WindType::South);
+            );
+            const Tile *pickedTile = new WindTile(WindType::South);
             bool isMenzen = false;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -1277,7 +1277,7 @@ namespace Mini
 
         {
             puts("[  Yaku Test 04  ]");
-            ReassembledTileGroup reassembledTileGroup = {
+            ReassembledTileGroup reassembledTileGroup(
                 { 
                     TileGroup(TileGroupType::Head, { new NumberTile(NumberType::Cracks, 2), new NumberTile(NumberType::Cracks, 2) }, nullptr, false),
                     TileGroup(TileGroupType::Koutsu, { new WindTile(WindType::East), new WindTile(WindType::East) }, new WindTile(WindType::East), true),
@@ -1288,8 +1288,8 @@ namespace Mini
                     new WindTile(WindType::South),
                     new WindTile(WindType::South)
                 }
-            };
-            Tile* pickedTile = new WindTile(WindType::South);
+            );
+            const Tile *pickedTile = new WindTile(WindType::South);
             bool isMenzen = false;
             bool isRon    = true;
             WindType roundWind = WindType::East;
@@ -1300,16 +1300,16 @@ namespace Mini
     }
 
     /* Utility for Test */
-    void CalcAndPrintYaku(std::vector<Yaku*> yakuList, const ReassembledTileGroup& reassembledTileGroup, Tile* pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    void CalcAndPrintYaku(std::vector<Yaku*> yakuList, const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
         printf(" ( RoundWind: %s, SelfWind: %s )\n", GetWindTypeString(roundWind).c_str(), GetWindTypeString(selfWind).c_str());
         printf("Tiles: ");
-        for (auto tileGroup: reassembledTileGroup.tileGroupList)
+        for (auto tileGroup: reassembledTileGroup.GetReadOnlyTileGroupList())
         {
             tileGroup.Sort();
             printf("%s ", tileGroup.ToString().c_str());
         }
-        for (auto& tile: reassembledTileGroup.restTiles)
+        for (auto& tile: reassembledTileGroup.GetReadOnlyRestTiles())
         {
             printf("%s ", tile->ToString().c_str());
         }

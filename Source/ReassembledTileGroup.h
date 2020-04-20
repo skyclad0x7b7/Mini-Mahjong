@@ -27,6 +27,9 @@ namespace Mini
 
         int GetCountTileGroup() const;
         int GetCountTileGroup(TileGroupType type) const;
+
+        void SortTileGroupList();
+        std::string GetIdentifier();
     };
 
 } // namespace Mini

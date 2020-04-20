@@ -35,6 +35,8 @@ namespace Mini
         
         std::string ToString() const;
 
+        uint16_t GetIdentifier() const;
+
         void Sort();
     };
 

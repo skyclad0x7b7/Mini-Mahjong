@@ -120,18 +120,109 @@ namespace Mini
 
     bool CheckGeneralPossibleRecursively(int& headCount, int& bodyCount, std::vector<const Tile *>& restTiles, ReassembledTileGroup& curRTG, std::vector<ReassembledTileGroup>& reassembledTG)
     {
-        std::vector<const Tile *> curRestTiles = restTiles;
+        SortTiles(restTiles);
+
+        // printf("[*] headCount %d, bodyCount %d, Tiles: ", headCount, bodyCount);
+        // for (auto tileGroup: curRTG.GetReadOnlyTileGroupList())
+        // {
+        //     tileGroup.Sort();
+        //     printf("%s ", tileGroup.ToString().c_str());
+        // }
+        // for (auto& tile: restTiles)
+        // {
+        //     printf("%s ", tile->ToString().c_str());
+        // }
+        // printf("\n");
+
 
         if (headCount == 0)
         {
             // Find Head first
+            for (int i = 0; i < restTiles.size();)
+            {
+                int count = std::count_if(restTiles.begin() + i, restTiles.end(), [&](const Tile *t){ return restTiles[i]->GetIdentifier() == t->GetIdentifier(); });
+                if (count >= 2)
+                {
+                    std::vector<const Tile *> curRestTiles;
+                    curRestTiles.insert(curRestTiles.end(), restTiles.begin(), restTiles.begin() + i);
+                    curRestTiles.insert(curRestTiles.end(), restTiles.begin() + i + 2, restTiles.end());
 
+                    {
+                        ++headCount;
+                        ReassembledTileGroup newRTG = curRTG;
+                        newRTG.InsertTileGroup(TileGroup(TileGroupType::Head, {restTiles[i], restTiles[i + 1]}, nullptr, false));
+                        CheckGeneralPossibleRecursively(headCount, bodyCount, curRestTiles, newRTG, reassembledTG);
+                        --headCount;
+                    }
+                }
+                i += count;
+            }
         }
+        else if (bodyCount < 4)
+        {
+            // Find Body - Koutsu
+            for (int i = 0; i < restTiles.size();)
+            {
+                int count = std::count_if(restTiles.begin() + i, restTiles.end(), [&](const Tile *t){ return restTiles[i]->GetIdentifier() == t->GetIdentifier(); });
+                if (count >= 3)
+                {
+                    std::vector<const Tile *> curRestTiles;
+                    curRestTiles.insert(curRestTiles.end(), restTiles.begin(), restTiles.begin() + i);
+                    curRestTiles.insert(curRestTiles.end(), restTiles.begin() + i + 3, restTiles.end());
 
+                    {
+                        ++bodyCount;
+                        ReassembledTileGroup newRTG = curRTG;
+                        newRTG.InsertTileGroup(TileGroup(TileGroupType::Koutsu, {restTiles[i], restTiles[i + 1], restTiles[i + 2]}, nullptr, false));
+                        CheckGeneralPossibleRecursively(headCount, bodyCount, curRestTiles, newRTG, reassembledTG);
+                        --bodyCount;
+                    }
+                }
+                i += count;
+            }
+
+            // Find Body - Shuntsu
+            for (int i = 0; i < restTiles.size(); ++i)
+            {
+                const NumberTile* firstNumberTile = dynamic_cast<const NumberTile *>(restTiles[i]);
+                if (!firstNumberTile || firstNumberTile->GetNumber() > 7)
+                {
+                    continue;
+                }
+
+                const auto& secondIter = std::find_if(restTiles.begin() + i, restTiles.end(), [firstNumberTile](const Tile *t){ return (firstNumberTile->GetIdentifier() + 1) == t->GetIdentifier(); });
+                const auto& thirdIter  = std::find_if(restTiles.begin() + i, restTiles.end(), [firstNumberTile](const Tile *t){ return (firstNumberTile->GetIdentifier() + 2) == t->GetIdentifier(); });
+                if (secondIter != restTiles.end() && thirdIter != restTiles.end())
+                {
+                    std::vector<const Tile *> curRestTiles = restTiles;
+                    curRestTiles.erase(std::find_if(curRestTiles.begin(), curRestTiles.end(), [firstNumberTile](const Tile *t){ return firstNumberTile->GetIdentifier() == t->GetIdentifier(); }));
+                    curRestTiles.erase(std::find_if(curRestTiles.begin(), curRestTiles.end(), [secondIter](const Tile *t){ return (*secondIter)->GetIdentifier() == t->GetIdentifier(); }));
+                    curRestTiles.erase(std::find_if(curRestTiles.begin(), curRestTiles.end(), [thirdIter](const Tile *t){ return (*thirdIter)->GetIdentifier() == t->GetIdentifier(); }));
+
+                    ++bodyCount;
+                    ReassembledTileGroup newRTG = curRTG;
+                    newRTG.InsertTileGroup(TileGroup(TileGroupType::Shuntsu, {firstNumberTile, *secondIter, *thirdIter}, nullptr, false));
+                    CheckGeneralPossibleRecursively(headCount, bodyCount, curRestTiles, newRTG, reassembledTG);
+                    --bodyCount;
+                }
+            }
+        }
+        else
+        {
+            debug_assert(headCount == 1 && bodyCount == 4, "Not matching with general form");
+            std::string identifier = curRTG.GetIdentifier();
+            if (std::find_if(reassembledTG.begin(), reassembledTG.end(), [&](ReassembledTileGroup& rtg){ return identifier == rtg.GetIdentifier(); }) == reassembledTG.end())
+            {
+                reassembledTG.emplace_back(curRTG);
+            }
+
+            return true;
+        }
+        
         return true;
     }
 
-    bool CheckGeneralPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, std::vector<ReassembledTileGroup>& reassembledTG)
+    bool CheckGeneralPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, std::vector<ReassembledTileGroup>& result)
     {
         int headCount = 0;
         int bodyCount = calledTileGroupList.size();
@@ -139,9 +230,52 @@ namespace Mini
         std::vector<const Tile *> restTiles = handTiles;
         restTiles.emplace_back(pickedTile);
 
+        std::vector<ReassembledTileGroup> reassembledTG;
         ReassembledTileGroup tmp;
 
         CheckGeneralPossibleRecursively(headCount, bodyCount, restTiles, tmp, reassembledTG);
+
+        // Post-Process
+        if (reassembledTG.size() == 0)
+        {
+            return false;
+        }
+        else
+        {
+            for (auto& rtg : reassembledTG)
+            {
+                for (int i = 0; i < rtg.GetReadOnlyTileGroupList().size(); ++i)
+                {
+                    auto& tgTiles = rtg.GetReadOnlyTileGroupList()[i].GetReadOnlyTiles();
+                    bool once = true;
+                    if (std::find_if(tgTiles.begin(), tgTiles.end(), [pickedTile](const Tile *t){ return pickedTile->GetIdentifier() == t->GetIdentifier(); }) != tgTiles.end())
+                    {
+                        ReassembledTileGroup newRTG;
+                        // Copy TileGroup except one including pickedTile
+                        for (int j = 0; j < rtg.GetReadOnlyTileGroupList().size(); ++j)
+                        {
+                            if (i != j)
+                            {
+                                newRTG.InsertTileGroup(rtg.GetReadOnlyTileGroupList()[j]);
+                            }
+                        }
+                        // Insert Rest tiles except pickedTile
+                        for (auto& tile : tgTiles)
+                        {
+                            if (tile->GetIdentifier() != pickedTile->GetIdentifier())
+                            {
+                                newRTG.InsertRestTile(tile);
+                            }
+                            else if (!std::exchange(once, false))
+                            {
+                                newRTG.InsertRestTile(tile);
+                            }
+                        }
+                        result.emplace_back(newRTG);
+                    }
+                }
+            }
+        }
 
         return true;
     }

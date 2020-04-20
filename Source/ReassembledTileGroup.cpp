@@ -1,4 +1,5 @@
 #include <Source/ReassembledTileGroup.h>
+#include <Source/Utils.h>
 
 #include <algorithm>
 
@@ -43,5 +44,24 @@ namespace Mini
     int ReassembledTileGroup::GetCountTileGroup(TileGroupType type) const
     {
         return std::count_if(tileGroupList.begin(), tileGroupList.end(), [type](const TileGroup& tg){ return tg.GetType() == type; });
+    }
+
+    void ReassembledTileGroup::SortTileGroupList()
+    {
+        Mini::SortTileGroupList(tileGroupList);
+    }
+
+    std::string ReassembledTileGroup::GetIdentifier()
+    {
+        SortTileGroupList();
+        std::string ret;
+        for (auto& tg : tileGroupList)
+        {
+            for (auto& tile : tg.GetReadOnlyTiles())
+            {
+                ret += tile->GetIdentifier();
+            }
+        }
+        return ret;
     }
 }

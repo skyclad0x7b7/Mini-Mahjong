@@ -86,6 +86,20 @@ namespace Mini
         return ret;
     }
 
+    uint16_t TileGroup::GetIdentifier() const
+    {
+        uint16_t result = 0;
+
+        result += (tgType != TileGroupType::Head) ? 0x1000 : 0;
+
+        for (auto& tile : tgTiles)
+        {
+            result += tile->GetIdentifier();
+        }
+
+        return result;
+    }
+
     void TileGroup::Sort()
     {
         SortTiles(tgTiles);

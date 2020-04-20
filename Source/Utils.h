@@ -2,6 +2,7 @@
 #define __MINI_MAHJONG_UTILS_H__
 
 #include <Source/Tile.h>
+#include <Source/TileGroup.h>
 
 #include <stdio.h>
 #include <vector>
@@ -16,7 +17,7 @@ namespace Mini
 #endif
     
     void SortTiles(std::vector<const Tile *>& tileList);
-
+    void SortTileGroupList(std::vector<TileGroup>& tileGroupList);
 }
 
 #endif // __MINI_MAHJONG_UTILS_H__

@@ -1299,6 +1299,137 @@ namespace Mini
         }
     }
 
+    /*
+    *  CheckGeneralPossible Test
+    */
+    void Test13()
+    {
+        {
+            printf(" [   Test 01   ]\n");
+            std::vector<TileGroup> tileGroups = {
+
+            };
+            std::vector<const Tile *> handTiles = {
+                new NumberTile(NumberType::Bamboo, 1),
+                new NumberTile(NumberType::Bamboo, 2),
+                new NumberTile(NumberType::Bamboo, 3),
+                new NumberTile(NumberType::Cracks, 6),
+                new NumberTile(NumberType::Cracks, 6),
+                new NumberTile(NumberType::Cracks, 6),
+                new NumberTile(NumberType::Cracks, 7),
+                new NumberTile(NumberType::Cracks, 7),
+                new NumberTile(NumberType::Cracks, 8),
+                new NumberTile(NumberType::Cracks, 8),
+                new NumberTile(NumberType::Dots, 8),
+                new NumberTile(NumberType::Dots, 8),
+                new NumberTile(NumberType::Dots, 8),
+            };
+            Tile *pickedTile = new NumberTile(NumberType::Cracks, 8);
+            std::vector<ReassembledTileGroup> result;
+            CheckPossibleAndPrintResult(tileGroups, handTiles, pickedTile, result);
+        }
+
+        {
+            printf(" [   Test 02   ]\n");
+            std::vector<TileGroup> tileGroups = {
+
+            };
+            std::vector<const Tile *> handTiles = {
+                new NumberTile(NumberType::Cracks, 3),
+                new NumberTile(NumberType::Cracks, 3),
+                new NumberTile(NumberType::Cracks, 3),
+                new NumberTile(NumberType::Bamboo, 3),
+                new NumberTile(NumberType::Bamboo, 3),
+                new NumberTile(NumberType::Bamboo, 3),
+                new NumberTile(NumberType::Bamboo, 4),
+                new NumberTile(NumberType::Bamboo, 4),
+                new NumberTile(NumberType::Bamboo, 4),
+                new NumberTile(NumberType::Bamboo, 5),
+                new NumberTile(NumberType::Bamboo, 5),
+                new NumberTile(NumberType::Bamboo, 5),
+                new NumberTile(NumberType::Dots, 8),
+            };
+            Tile *pickedTile = new NumberTile(NumberType::Dots, 8);
+            std::vector<ReassembledTileGroup> result;
+            CheckPossibleAndPrintResult(tileGroups, handTiles, pickedTile, result);
+        }
+
+        {
+            printf(" [   Test 03   ]\n");
+            std::vector<TileGroup> tileGroups = {
+
+            };
+            std::vector<const Tile *> handTiles = {
+                new NumberTile(NumberType::Cracks, 1),
+                new NumberTile(NumberType::Cracks, 1),
+                new NumberTile(NumberType::Cracks, 1),
+                new NumberTile(NumberType::Cracks, 2),
+                new NumberTile(NumberType::Cracks, 3),
+                new NumberTile(NumberType::Cracks, 4),
+                new NumberTile(NumberType::Cracks, 5),
+                new NumberTile(NumberType::Cracks, 6),
+                new NumberTile(NumberType::Cracks, 7),
+                new NumberTile(NumberType::Cracks, 8),
+                new NumberTile(NumberType::Cracks, 9),
+                new NumberTile(NumberType::Cracks, 9),
+                new NumberTile(NumberType::Cracks, 9),
+            };
+            Tile *pickedTile = new NumberTile(NumberType::Cracks, 9);
+            std::vector<ReassembledTileGroup> result;
+            CheckPossibleAndPrintResult(tileGroups, handTiles, pickedTile, result);
+        }
+
+        {
+            printf(" [   Test 04   ]\n");
+            std::vector<TileGroup> tileGroups = {
+
+            };
+            std::vector<const Tile *> handTiles = {
+                new NumberTile(NumberType::Cracks, 1),
+                new NumberTile(NumberType::Cracks, 1),
+                new NumberTile(NumberType::Cracks, 1),
+                new NumberTile(NumberType::Cracks, 2),
+                new NumberTile(NumberType::Cracks, 3),
+                new NumberTile(NumberType::Cracks, 4),
+                new NumberTile(NumberType::Cracks, 5),
+                new NumberTile(NumberType::Cracks, 6),
+                new NumberTile(NumberType::Cracks, 7),
+                new NumberTile(NumberType::Cracks, 8),
+                new NumberTile(NumberType::Cracks, 9),
+                new NumberTile(NumberType::Cracks, 9),
+                new NumberTile(NumberType::Cracks, 9),
+            };
+            Tile *pickedTile = new NumberTile(NumberType::Cracks, 5);
+            std::vector<ReassembledTileGroup> result;
+            CheckPossibleAndPrintResult(tileGroups, handTiles, pickedTile, result);
+        }
+
+        {
+            printf(" [   Test 05   ]\n");
+            std::vector<TileGroup> tileGroups = {
+
+            };
+            std::vector<const Tile *> handTiles = {
+                new NumberTile(NumberType::Cracks, 1),
+                new NumberTile(NumberType::Cracks, 1),
+                new NumberTile(NumberType::Cracks, 1),
+                new NumberTile(NumberType::Cracks, 2),
+                new NumberTile(NumberType::Cracks, 3),
+                new NumberTile(NumberType::Cracks, 4),
+                new NumberTile(NumberType::Cracks, 5),
+                new NumberTile(NumberType::Cracks, 6),
+                new NumberTile(NumberType::Cracks, 7),
+                new NumberTile(NumberType::Cracks, 8),
+                new NumberTile(NumberType::Cracks, 9),
+                new NumberTile(NumberType::Cracks, 9),
+                new NumberTile(NumberType::Cracks, 9),
+            };
+            Tile *pickedTile = new NumberTile(NumberType::Cracks, 3);
+            std::vector<ReassembledTileGroup> result;
+            CheckPossibleAndPrintResult(tileGroups, handTiles, pickedTile, result);
+        }
+    }
+
     /* Utility for Test */
     void CalcAndPrintYaku(std::vector<Yaku*> yakuList, const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
@@ -1362,6 +1493,38 @@ namespace Mini
         }
 
         printf("  Total Score : %d\n\n", totalScore);
+    }
+
+    void CheckPossibleAndPrintResult(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, std::vector<ReassembledTileGroup>& result)
+    {
+        printf("Tiles: ");
+        for (auto tileGroup: calledTileGroupList)
+        {
+            tileGroup.Sort();
+            printf("%s ", tileGroup.ToString().c_str());
+        }
+        for (auto& tile: handTiles)
+        {
+            printf("%s ", tile->ToString().c_str());
+        }
+        printf("    %s \n", pickedTile->ToString().c_str());
+
+        CheckGeneralPossible(calledTileGroupList, handTiles, pickedTile, result);
+
+        for (int i = 0; i < result.size(); i++)
+        {
+            printf(" >> Result 0x%02X: ", i + 1);
+            for (auto tileGroup: result[i].GetReadOnlyTileGroupList())
+            {
+                tileGroup.Sort();
+                printf("%s ", tileGroup.ToString().c_str());
+            }
+            for (auto& tile: result[i].GetReadOnlyRestTiles())
+            {
+                printf("%s ", tile->ToString().c_str());
+            }
+            printf("    %s\n", pickedTile->ToString().c_str());
+        }
     }
 
 } // namespace Mini

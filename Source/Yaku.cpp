@@ -122,22 +122,10 @@ namespace Mini
     {
         SortTiles(restTiles);
 
-        // printf("[*] headCount %d, bodyCount %d, Tiles: ", headCount, bodyCount);
-        // for (auto tileGroup: curRTG.GetReadOnlyTileGroupList())
-        // {
-        //     tileGroup.Sort();
-        //     printf("%s ", tileGroup.ToString().c_str());
-        // }
-        // for (auto& tile: restTiles)
-        // {
-        //     printf("%s ", tile->ToString().c_str());
-        // }
-        // printf("\n");
-
-
         if (headCount == 0)
         {
             // Find Head first
+            bool foundGeneralForm = false;
             for (int i = 0; i < restTiles.size();)
             {
                 int count = std::count_if(restTiles.begin() + i, restTiles.end(), [&](const Tile *t){ return restTiles[i]->GetIdentifier() == t->GetIdentifier(); });
@@ -151,18 +139,26 @@ namespace Mini
                         ++headCount;
                         ReassembledTileGroup newRTG = curRTG;
                         newRTG.InsertTileGroup(TileGroup(TileGroupType::Head, {restTiles[i], restTiles[i + 1]}, nullptr, false));
-                        CheckGeneralPossibleRecursively(headCount, bodyCount, curRestTiles, newRTG, reassembledTG);
+                        if (CheckGeneralPossibleRecursively(headCount, bodyCount, curRestTiles, newRTG, reassembledTG))
+                        {
+                            foundGeneralForm = true;
+                        }
                         --headCount;
                     }
                 }
                 i += count;
             }
+            return foundGeneralForm;
         }
         else if (bodyCount < 4)
         {
-            // Find Body - Koutsu
-            for (int i = 0; i < restTiles.size();)
+            // Find Body
+            for (int i = 0; i < restTiles.size(); ++i)
             {
+                bool foundKoutsu  = false;
+                bool foundShuntsu = false;
+
+                // Find Koutsu
                 int count = std::count_if(restTiles.begin() + i, restTiles.end(), [&](const Tile *t){ return restTiles[i]->GetIdentifier() == t->GetIdentifier(); });
                 if (count >= 3)
                 {
@@ -174,52 +170,51 @@ namespace Mini
                         ++bodyCount;
                         ReassembledTileGroup newRTG = curRTG;
                         newRTG.InsertTileGroup(TileGroup(TileGroupType::Koutsu, {restTiles[i], restTiles[i + 1], restTiles[i + 2]}, nullptr, false));
-                        CheckGeneralPossibleRecursively(headCount, bodyCount, curRestTiles, newRTG, reassembledTG);
+                        foundKoutsu = CheckGeneralPossibleRecursively(headCount, bodyCount, curRestTiles, newRTG, reassembledTG);
                         --bodyCount;
                     }
                 }
-                i += count;
-            }
 
-            // Find Body - Shuntsu
-            for (int i = 0; i < restTiles.size(); ++i)
-            {
+                // Find Shuntsu
                 const NumberTile* firstNumberTile = dynamic_cast<const NumberTile *>(restTiles[i]);
-                if (!firstNumberTile || firstNumberTile->GetNumber() > 7)
+                if (firstNumberTile && firstNumberTile->GetNumber() <= 7)
                 {
-                    continue;
+                    const auto& secondIter = std::find_if(restTiles.begin() + i, restTiles.end(), [firstNumberTile](const Tile *t){ return (firstNumberTile->GetIdentifier() + 1) == t->GetIdentifier(); });
+                    const auto& thirdIter  = std::find_if(restTiles.begin() + i, restTiles.end(), [firstNumberTile](const Tile *t){ return (firstNumberTile->GetIdentifier() + 2) == t->GetIdentifier(); });
+                    if (secondIter != restTiles.end() && thirdIter != restTiles.end())
+                    {
+                        std::vector<const Tile *> curRestTiles = restTiles;
+                        curRestTiles.erase(std::find_if(curRestTiles.begin(), curRestTiles.end(), [firstNumberTile](const Tile *t){ return firstNumberTile->GetIdentifier() == t->GetIdentifier(); }));
+                        curRestTiles.erase(std::find_if(curRestTiles.begin(), curRestTiles.end(), [secondIter](const Tile *t){ return (*secondIter)->GetIdentifier() == t->GetIdentifier(); }));
+                        curRestTiles.erase(std::find_if(curRestTiles.begin(), curRestTiles.end(), [thirdIter](const Tile *t){ return (*thirdIter)->GetIdentifier() == t->GetIdentifier(); }));
+
+                        ++bodyCount;
+                        ReassembledTileGroup newRTG = curRTG;
+                        newRTG.InsertTileGroup(TileGroup(TileGroupType::Shuntsu, {firstNumberTile, *secondIter, *thirdIter}, nullptr, false));
+                        foundShuntsu = CheckGeneralPossibleRecursively(headCount, bodyCount, curRestTiles, newRTG, reassembledTG);
+                        --bodyCount;
+                    }
                 }
 
-                const auto& secondIter = std::find_if(restTiles.begin() + i, restTiles.end(), [firstNumberTile](const Tile *t){ return (firstNumberTile->GetIdentifier() + 1) == t->GetIdentifier(); });
-                const auto& thirdIter  = std::find_if(restTiles.begin() + i, restTiles.end(), [firstNumberTile](const Tile *t){ return (firstNumberTile->GetIdentifier() + 2) == t->GetIdentifier(); });
-                if (secondIter != restTiles.end() && thirdIter != restTiles.end())
+                // Check Koutsu or Shuntsu found
+                if (!foundKoutsu && !foundShuntsu)
                 {
-                    std::vector<const Tile *> curRestTiles = restTiles;
-                    curRestTiles.erase(std::find_if(curRestTiles.begin(), curRestTiles.end(), [firstNumberTile](const Tile *t){ return firstNumberTile->GetIdentifier() == t->GetIdentifier(); }));
-                    curRestTiles.erase(std::find_if(curRestTiles.begin(), curRestTiles.end(), [secondIter](const Tile *t){ return (*secondIter)->GetIdentifier() == t->GetIdentifier(); }));
-                    curRestTiles.erase(std::find_if(curRestTiles.begin(), curRestTiles.end(), [thirdIter](const Tile *t){ return (*thirdIter)->GetIdentifier() == t->GetIdentifier(); }));
-
-                    ++bodyCount;
-                    ReassembledTileGroup newRTG = curRTG;
-                    newRTG.InsertTileGroup(TileGroup(TileGroupType::Shuntsu, {firstNumberTile, *secondIter, *thirdIter}, nullptr, false));
-                    CheckGeneralPossibleRecursively(headCount, bodyCount, curRestTiles, newRTG, reassembledTG);
-                    --bodyCount;
+                    return false;
+                }
+                else
+                {
+                    return true;
                 }
             }
         }
         else
         {
             debug_assert(headCount == 1 && bodyCount == 4, "Not matching with general form");
-            std::string identifier = curRTG.GetIdentifier();
-            if (std::find_if(reassembledTG.begin(), reassembledTG.end(), [&](ReassembledTileGroup& rtg){ return identifier == rtg.GetIdentifier(); }) == reassembledTG.end())
-            {
-                reassembledTG.emplace_back(curRTG);
-            }
-
+            reassembledTG.emplace_back(curRTG);
             return true;
         }
-        
-        return true;
+        // unreachable
+        assert_unreachable();
     }
 
     bool CheckGeneralPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, std::vector<ReassembledTileGroup>& result)

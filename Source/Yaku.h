@@ -8,11 +8,11 @@
 
 namespace Mini
 {
-
-    bool CheckChitoitsuPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, ReassembledTileGroup& reassembledTG);
-    bool CheckKokushimusouPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, ReassembledTileGroup& reassembledTG);
+    bool CheckChitoitsuPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, std::vector<ReassembledTileGroup>& reassembledTG);
+    bool CheckKokushimusouPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, std::vector<ReassembledTileGroup>& reassembledTG);
     bool CheckGeneralPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, std::vector<ReassembledTileGroup>& reassembledTG);
 
+    
 
     /*
     *  Some Yaku, such as Ipeko and Ryanpeko can't be counted at the same time

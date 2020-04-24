@@ -8,7 +8,7 @@
 
 namespace Mini
 {
-    bool CheckChitoitsuPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, ReassembledTileGroup& reassembledTG)
+    bool CheckChitoitsuPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, std::vector<ReassembledTileGroup>& reassembledTG)
     {
         if (!calledTileGroupList.empty()) // Chitoitsu can't be made when it's not menzen state
         {
@@ -50,11 +50,11 @@ namespace Mini
             result.InsertTileGroup(TileGroup(TileGroupType::Head, {firstTile, *secondTileIter}, nullptr, false));
         }
 
-        reassembledTG = result;
+        reassembledTG.emplace_back(result);
         return true;
     }
 
-    bool CheckKokushimusouPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, ReassembledTileGroup& reassembledTG)
+    bool CheckKokushimusouPossible(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, std::vector<ReassembledTileGroup>& reassembledTG)
     {
         if (!calledTileGroupList.empty()) // Kokushimusou can't be made when it's not menzen state
         {
@@ -103,13 +103,13 @@ namespace Mini
         if (checkTileIdentifierList.empty())
         {
             // 13-way wating
-            reassembledTG = result;
+            reassembledTG.emplace_back(result);
             return true;
         }
         else if (checkTileIdentifierList[0] == pickedTile->GetIdentifier())
         {
             // common kokushimusou
-            reassembledTG = result;
+            reassembledTG.emplace_back(result);
             return true;
         }
         else

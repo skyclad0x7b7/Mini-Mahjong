@@ -1,7 +1,7 @@
 #include <Test/Test.h>
 
 #include <Source/Tile.h>
-#include <Source/Hand.h>
+#include <Source/TileGroup.h>
 #include <Source/Player.h>
 #include <Source/Utils.h>
 
@@ -46,11 +46,11 @@ namespace Mini
         std::mt19937 g(rd());
         std::shuffle(tileList.begin(), tileList.end(), g);
 
-        Hand hand(std::vector<const Tile *>(tileList.begin(), tileList.begin() + 13));
-        hand.Sort();
+        Player p(std::vector<const Tile *>(tileList.begin(), tileList.begin() + 13));
+        p.SortHandTiles();
         for (int i = 0; i < 13; ++i)
         {
-            printf(" %s", hand.GetReadOnlyTiles()[i]->ToString().c_str());
+            printf(" %s", p.GetReadOnlyTiles()[i]->ToString().c_str());
         }
         printf("\n\n");
 
@@ -80,7 +80,7 @@ namespace Mini
             const Tile *newTile = tileList[tileList.size() - 1];
             tileList.pop_back();
 
-            player.SortHand();
+            player.SortHandTiles();
             const auto& handTiles = player.GetReadOnlyTiles();
             for (int i = 0; i < handTiles.size(); ++i)
             {
@@ -141,7 +141,7 @@ namespace Mini
             }
             printf("    %s\n", pickedTile->ToString().c_str());
 
-            ReassembledTileGroup result;
+            std::vector<ReassembledTileGroup> result;
             bool isPassed = CheckChitoitsuPossible({}, chitoitsuTest01List, pickedTile, result);
             printf("[*] Result: %s\n\n", isPassed ? "TRUE" : "FALSE");
         }
@@ -161,7 +161,7 @@ namespace Mini
             }
             printf("    %s\n", pickedTile->ToString().c_str());
 
-            ReassembledTileGroup result;
+            std::vector<ReassembledTileGroup> result;
             bool isPassed = CheckChitoitsuPossible({}, chitoitsuTest02List, pickedTile, result);
             printf("[*] Result: %s\n\n", isPassed ? "TRUE" : "FALSE");
         }
@@ -181,7 +181,7 @@ namespace Mini
             }
             printf("    %s\n", pickedTile->ToString().c_str());
 
-            ReassembledTileGroup result;
+            std::vector<ReassembledTileGroup> result;
             bool isPassed = CheckChitoitsuPossible({}, chitoitsuTest03List, pickedTile, result);
             printf("[*] Result: %s\n\n", isPassed ? "TRUE" : "FALSE");
         }
@@ -202,7 +202,7 @@ namespace Mini
             }
             printf("    %s\n", pickedTile->ToString().c_str());
 
-            ReassembledTileGroup result;
+            std::vector<ReassembledTileGroup> result;
             bool isPassed = CheckKokushimusouPossible({}, chitoitsuTest01List, pickedTile, result);
             printf("[*] Result: %s\n\n", isPassed ? "TRUE" : "FALSE");
         }
@@ -222,7 +222,7 @@ namespace Mini
             }
             printf("    %s\n", pickedTile->ToString().c_str());
 
-            ReassembledTileGroup result;
+            std::vector<ReassembledTileGroup> result;
             bool isPassed = CheckKokushimusouPossible({}, chitoitsuTest02List, pickedTile, result);
             printf("[*] Result: %s\n\n", isPassed ? "TRUE" : "FALSE");
         }
@@ -242,7 +242,7 @@ namespace Mini
             }
             printf("    %s\n", pickedTile->ToString().c_str());
 
-            ReassembledTileGroup result;
+            std::vector<ReassembledTileGroup> result;
             bool isPassed = CheckKokushimusouPossible({}, chitoitsuTest03List, pickedTile, result);
             printf("[*] Result: %s\n\n", isPassed ? "TRUE" : "FALSE");
         }
@@ -1430,6 +1430,100 @@ namespace Mini
         }
     }
 
+    /*
+    *  One player game. Player just drops a tile and takes new one, and can win
+    */
+    void Test14()
+    {
+        std::vector<Yaku*> yakuList = {
+            new Menzen("Menzen", 1, 0, YakuType::GENERAL),
+            new Yakuhai("Yakuhai", 1, 1, YakuType::GENERAL),
+            new Tanyao("Tanyao", 1, 1, YakuType::GENERAL),
+            new Pinfu("Pinfu", 1, 0, YakuType::GENERAL),
+            new Ipeko("Ipeko", 1, 0, YakuType::N_PEKO),
+            new Ryanpeko("Ryanpeko", 3, 0, YakuType::N_PEKO),
+            new Ikkitsuukan("Ikkitsuukan", 2, 1, YakuType::GENERAL),
+            new SanshokuDoujun("SanshokuDoujun", 2, 1, YakuType::GENERAL),
+            new SanshokuDoukou("SanshokuDoukou", 2, 2, YakuType::GENERAL),
+            new Chanta("Chanta", 2, 1, YakuType::CHANTA),
+            new JunChanta("JunChanta", 3, 2, YakuType::CHANTA),
+            new HonRoutou("HonRoutou", 2, 2, YakuType::CHANTA),
+            new ChinRoutou("ChinRoutou", 13, 13, YakuType::YAKUMAN),
+            new Tsuuiisou("Tsuuiisou", 13, 13, YakuType::YAKUMAN),
+            new Honiisou("Honiisou", 3, 2, YakuType::IISOU),
+            new Chiniisou("Chiniisou", 6, 5, YakuType::IISOU),
+            new Chitoitsu("Chitoitsu", 2, 0, YakuType::GENERAL),
+            new Toitoi("Toitoi", 2, 2, YakuType::TOITOI),
+            new Sanankou("Sanankou", 2, 2, YakuType::GENERAL),
+            new Suuankou("Suuankou", 13, 0, YakuType::YAKUMAN),
+            new Shosangen("Shosangen", 2, 2, YakuType::GENERAL),
+            new Daisangen("Daisangen", 13, 13, YakuType::YAKUMAN),
+            new Kokushimusou("Kokushimusou", 13, 0, YakuType::YAKUMAN),
+            new Chuurenpotou("Chuurenpotou", 13, 0, YakuType::YAKUMAN),
+            new Ryuuiisou("Ryuuiisou", 13, 13,  YakuType::YAKUMAN),
+            new Shousuushii("Shousuushii", 13, 13, YakuType::YAKUMAN),
+            new Daisuushii("Daisuushii", 13, 13, YakuType::YAKUMAN)
+        };
+
+        std::vector<const Tile *> orgTileList = GetCompleteTileLists();
+        std::vector<const Tile *> tileList = orgTileList;
+        std::random_device rd; 
+        std::mt19937 g(rd());
+        std::shuffle(tileList.begin(), tileList.end(), g);
+
+        Player player(std::vector<const Tile *>(tileList.begin(), tileList.begin() + 13));
+        tileList = std::vector<const Tile *>(tileList.begin() + 13, tileList.end());
+        std::vector<TileGroup> calledList;
+
+        while (tileList.size() != 0)
+        {
+            const Tile *newTile = tileList[tileList.size() - 1];
+            tileList.pop_back();
+
+            player.SortHandTiles();
+            const auto& handTiles = player.GetReadOnlyTiles();
+            for (int i = 0; i < handTiles.size(); ++i)
+            {
+                printf("%s ", handTiles[i]->ToString().c_str());
+            }
+            printf("   %s\n\n", newTile->ToString().c_str());
+
+            {
+                CheckPossibleYakuAndPrintResult(yakuList, calledList, handTiles, newTile, true, false, WindType::East, WindType::West);
+            }
+            
+            int index = -1;
+            while (index < 0 || index > handTiles.size())
+            {
+                printf(" Index of tile to drop: ");
+                scanf("%d", &index);
+            }
+
+            const Tile *droppedTile = nullptr;
+            if (index == handTiles.size())
+            {
+                // Tsumogiri
+                droppedTile = newTile;
+            }
+            else
+            {
+                droppedTile = handTiles[index];
+                player.DropTile(droppedTile);
+                player.AddTile(newTile);
+            }
+            
+            player.AddToDroppedTile(droppedTile);
+            puts(" ----------------------------- ");
+        }
+
+        for (auto& tile : orgTileList)
+        {
+            delete tile;
+        }
+
+        puts(" ================================= ");
+    }
+
     /* Utility for Test */
     void CalcAndPrintYaku(std::vector<Yaku*> yakuList, const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
     {
@@ -1527,4 +1621,75 @@ namespace Mini
         }
     }
 
+    void CheckPossibleYakuAndPrintResult(const std::vector<Yaku*> yakuList, const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind)
+    {
+        std::vector<ReassembledTileGroup> result;
+        CheckKokushimusouPossible({}, handTiles, pickedTile, result);
+        CheckChitoitsuPossible({}, handTiles, pickedTile, result);
+        CheckGeneralPossible({}, handTiles, pickedTile, result);
+
+        if (result.size() > 0)
+        {
+            int totalScore = 0;
+            for (auto& reassembledTileGroup : result)
+            {
+                std::vector<std::pair<Yaku*, int>> countedYakuList;
+                for (auto& yaku: yakuList)
+                {
+                    if (int score = yaku->GetScoreIfPossible(reassembledTileGroup, pickedTile, true, false, WindType::East, WindType::West))
+                    {
+                        YakuType yakuType = yaku->GetYakuType();
+                        if (yakuType == YakuType::GENERAL)
+                        {
+                            countedYakuList.emplace_back(std::pair<Yaku*, int>(yaku, score));
+                            continue;
+                        }
+
+                        if (auto dup = std::find_if(countedYakuList.begin(), countedYakuList.end(), [&](std::pair<Yaku*,int>& y) { return y.first->GetYakuType() == yakuType; }); dup != countedYakuList.end())
+                        {
+                            if (score > dup->second)
+                            {
+                                countedYakuList.erase(dup);
+                                countedYakuList.emplace_back(std::pair<Yaku*, int>(yaku, score));
+                            }
+                        }
+                        else
+                        {
+                            countedYakuList.emplace_back(std::pair<Yaku*, int>(yaku, score));
+                            continue;
+                        }
+                    }
+                }
+
+                // Yakuman post-process
+                if (std::find_if(countedYakuList.begin(), countedYakuList.end(), [](const std::pair<Yaku*, int>& y){ return y.first->GetYakuType() == YakuType::YAKUMAN; }) != countedYakuList.end())
+                {
+                    auto iter = std::find_if(countedYakuList.begin(), countedYakuList.end(), [](const std::pair<Yaku*, int>& y){ return y.first->GetYakuType() != YakuType::YAKUMAN; });
+                    while (iter != countedYakuList.end())
+                    {
+                        countedYakuList.erase(iter);
+                        iter = std::find_if(countedYakuList.begin(), countedYakuList.end(), [](const std::pair<Yaku*, int>& y){ return y.first->GetYakuType() != YakuType::YAKUMAN; });
+                    }
+                }
+
+                printf("Tiles: ");
+                for (auto tileGroup: reassembledTileGroup.GetReadOnlyTileGroupList())
+                {
+                    tileGroup.Sort();
+                    printf("%s ", tileGroup.ToString().c_str());
+                }
+                for (auto& tile: reassembledTileGroup.GetReadOnlyRestTiles())
+                {
+                    printf("%s ", tile->ToString().c_str());
+                }
+                printf("    %s\n", pickedTile->ToString().c_str());
+
+                for (auto& yakuPair : countedYakuList)
+                {
+                    printf("  <%s> %d\n\n", yakuPair.first->GetIdentifier().c_str(), yakuPair.second);
+                    totalScore += yakuPair.second;
+                }
+            }
+        }
+    }
 } // namespace Mini

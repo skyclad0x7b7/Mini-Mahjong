@@ -2,6 +2,8 @@
 #define __MINI_MAHJONG_TEST_H__
 
 #include <Source/Yaku.h>
+#include <Source/Tile.h>
+#include <Source/TileGroup.h>
 
 #include <vector>
 
@@ -20,10 +22,12 @@ namespace Mini
     void Test11();
     void Test12();
     void Test13();
+    void Test14();
 
     /* Utility for Test */
     void CalcAndPrintYaku(std::vector<Yaku*> yakuList, const ReassembledTileGroup& reassembledTileGroup, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
     void CheckPossibleAndPrintResult(const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, std::vector<ReassembledTileGroup>& result);
+    void CheckPossibleYakuAndPrintResult(const std::vector<Yaku*> yakuList, const std::vector<TileGroup>& calledTileGroupList, const std::vector<const Tile *>& handTiles, const Tile *pickedTile, bool isMenzen, bool isRon, WindType roundWind, WindType selfWind);
 }
 
 #endif // __MINI_MAHJONG_TEST_H__

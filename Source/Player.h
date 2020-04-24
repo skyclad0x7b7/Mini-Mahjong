@@ -1,7 +1,7 @@
 #ifndef __MINI_MAHJONG_PLAYER_H__
 #define __MINI_MAHJONG_PLAYER_H__
 
-#include <Source/Hand.h>
+#include <Source/Tile.h>
 #include <Source/TileGroup.h>
 
 #include <vector>
@@ -11,9 +11,9 @@ namespace Mini
     class Player
     {
     private:
-        Hand pHand;
-        std::vector<TileGroup> calledTileGroup;
+        std::vector<const Tile *> handTiles;
         std::vector<const Tile *> droppedTiles;
+        std::vector<TileGroup> calledTileGroup;
         bool isMenzen;
 
         int pScore;
@@ -28,7 +28,7 @@ namespace Mini
         void DropTile(const Tile *tile);
         void AddToDroppedTile(const Tile *tile);
 
-        void SortHand();
+        void SortHandTiles();
 
         void SetIsMenzen(bool value);
         bool GetIsMenzen() const;
